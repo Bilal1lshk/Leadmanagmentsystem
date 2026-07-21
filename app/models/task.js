@@ -1,0 +1,16 @@
+import mongoose from "mongoose";
+
+const taskSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true, trim: true },
+    leadId: { type: mongoose.Schema.Types.ObjectId, ref: "Lead", required: true },
+    dueDate: { type: Date, required: true },
+    assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    completed: { type: Boolean, default: false },
+  },
+  { timestamps: true }
+);
+
+taskSchema.index({ assignedTo: 1, dueDate: 1 });
+
+export default mongoose.models.Task || mongoose.model("Task", taskSchema);
