@@ -1,12 +1,11 @@
-import { ChartAreaLine, Bell } from "lucide-react";
-
+import { ChartLine, Bell } from "lucide-react";
 export default function Navbar() {
   return (
     <nav className="flex items-center justify-between gap-4 rounded-xl bg-[#FFF3C8] px-5 py-3.5 flex-wrap">
       {/* Logo */}
       <div className="flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#458393]">
-          <ChartAreaLine className="h-4.5 w-4.5 text-[#FFF3C8]" />
+          <ChartLine className="h-4.5 w-4.5 text-[#FFF3C8]" />
         </div>
         <span className="text-[17px] font-medium text-[#2A3F45]">Leadwise</span>
       </div>
