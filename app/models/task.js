@@ -10,7 +10,4 @@ const taskSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-taskSchema.index({ assignedTo: 1, dueDate: 1 });
-
 export default mongoose.models.Task || mongoose.model("Task", taskSchema);

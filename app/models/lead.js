@@ -21,7 +21,4 @@ const leadSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-leadSchema.index({ status: 1, assignedTo: 1 });
-
 export default mongoose.models.Lead || mongoose.model("Lead", leadSchema);
