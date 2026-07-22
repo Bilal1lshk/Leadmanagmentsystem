@@ -9,7 +9,6 @@ export async function POST(request) {
     await connectDB();
 
     const { email, password } = await request.json();
-    console.log("working",email)
 
     // Validate fields
     if (!email || !password) {

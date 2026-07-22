@@ -24,8 +24,9 @@ export default function Login() {
     setError("");
     setSuccess("");
     setLoading(true);
-
-    try {
+    const data=JSON.stringify(form)
+    console.log(data)
+     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
