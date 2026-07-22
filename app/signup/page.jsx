@@ -8,7 +8,11 @@ export default function SignupPage() {
     name: "",
     email: "",
     password: "",
+    role: "agent",
   });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     setForm({
@@ -17,11 +21,38 @@ export default function SignupPage() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
+    setLoading(true);
 
-    // POST to /api/auth/signup
-    console.log(form);
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Failed to sign up");
+      }
+
+      setSuccess("Account created successfully!");
+      
+      // Redirect after brief delay
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1500);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -77,6 +108,18 @@ export default function SignupPage() {
             Start managing your leads in minutes.
           </p>
 
+          {error && (
+            <div className="mt-4 rounded-lg bg-red-50 p-3 text-xs font-medium text-red-600 border border-red-200">
+              {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="mt-4 rounded-lg bg-emerald-50 p-3 text-xs font-medium text-emerald-600 border border-emerald-200">
+              {success}
+            </div>
+          )}
+
           <form
             onSubmit={handleSubmit}
             className="mt-7 flex flex-col gap-4"
@@ -95,7 +138,8 @@ export default function SignupPage() {
                 onChange={handleChange}
                 placeholder="Bilal Sheikh"
                 required
-                className="w-full rounded-lg border border-[#E5CB90] bg-[#FFF3C8]/30 px-4 py-2.5 text-sm text-[#2A3F45] outline-none transition-all placeholder:text-[#8A8A82] focus:border-[#458393] focus:bg-white focus:ring-2 focus:ring-[#458393]/10"
+                disabled={loading}
+                className="w-full rounded-lg border border-[#E5CB90] bg-[#FFF3C8]/30 px-4 py-2.5 text-sm text-[#2A3F45] outline-none transition-all placeholder:text-[#8A8A82] focus:border-[#458393] focus:bg-white focus:ring-2 focus:ring-[#458393]/10 disabled:opacity-50"
               />
             </div>
 
@@ -112,7 +156,8 @@ export default function SignupPage() {
                 onChange={handleChange}
                 placeholder="you@company.com"
                 required
-                className="w-full rounded-lg border border-[#E5CB90] bg-[#FFF3C8]/30 px-4 py-2.5 text-sm text-[#2A3F45] outline-none transition-all placeholder:text-[#8A8A82] focus:border-[#458393] focus:bg-white focus:ring-2 focus:ring-[#458393]/10"
+                disabled={loading}
+                className="w-full rounded-lg border border-[#E5CB90] bg-[#FFF3C8]/30 px-4 py-2.5 text-sm text-[#2A3F45] outline-none transition-all placeholder:text-[#8A8A82] focus:border-[#458393] focus:bg-white focus:ring-2 focus:ring-[#458393]/10 disabled:opacity-50"
               />
             </div>
 
@@ -130,16 +175,37 @@ export default function SignupPage() {
                 placeholder="At least 8 characters"
                 required
                 minLength={8}
-                className="w-full rounded-lg border border-[#E5CB90] bg-[#FFF3C8]/30 px-4 py-2.5 text-sm text-[#2A3F45] outline-none transition-all placeholder:text-[#8A8A82] focus:border-[#458393] focus:bg-white focus:ring-2 focus:ring-[#458393]/10"
+                disabled={loading}
+                className="w-full rounded-lg border border-[#E5CB90] bg-[#FFF3C8]/30 px-4 py-2.5 text-sm text-[#2A3F45] outline-none transition-all placeholder:text-[#8A8A82] focus:border-[#458393] focus:bg-white focus:ring-2 focus:ring-[#458393]/10 disabled:opacity-50"
               />
+            </div>
+
+            {/* Role Selection */}
+            <div>
+              <label className="mb-1.5 block text-xs font-medium text-[#2A3F45]">
+                Account role
+              </label>
+
+              <select
+                name="role"
+                value={form.role}
+                onChange={handleChange}
+                required
+                disabled={loading}
+                className="w-full rounded-lg border border-[#E5CB90] bg-[#FFF3C8]/30 px-4 py-2.5 text-sm text-[#2A3F45] outline-none transition-all focus:border-[#458393] focus:bg-white focus:ring-2 focus:ring-[#458393]/10 disabled:opacity-50"
+              >
+                <option value="agent">Agent (Sales Rep)</option>
+                <option value="admin">Admin (Manager)</option>
+              </select>
             </div>
 
             {/* Submit */}
             <button
               type="submit"
-              className="mt-2 rounded-lg bg-[#34A99D] py-2.5 text-sm font-medium text-[#04342C] transition-all duration-200 hover:bg-[#2F958A] hover:shadow-md active:scale-[0.98]"
+              disabled={loading}
+              className="mt-2 rounded-lg bg-[#34A99D] py-2.5 text-sm font-medium text-[#04342C] transition-all duration-200 hover:bg-[#2F958A] hover:shadow-md active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Create account
+              {loading ? "Creating account..." : "Create account"}
             </button>
           </form>
 
