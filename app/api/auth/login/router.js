@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import connectDB from "@/lib/db";
-import User from "@/models/User";
+import connectDB from "@/app/config/mongodbconnection";
+import User from "@/app/models/user";
 
 export async function POST(request) {
   try {
     await connectDB();
 
     const { email, password } = await request.json();
+    console.log("working",email)
 
     // Validate fields
     if (!email || !password) {

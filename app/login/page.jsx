@@ -3,11 +3,14 @@
 import { useState } from "react";
 import { ChartLine } from "lucide-react";
 
-export default function Logina() {
+export default function Login() {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     setForm({
@@ -16,11 +19,40 @@ export default function Logina() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
+    setLoading(true);
 
-    // POST to /api/auth/login
-    console.log(form);
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Failed to log in");
+      }
+
+      setSuccess("Login successful!");
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // Redirect after brief delay to let user see success message
+      setTimeout(() => {
+        window.location.href = "/leads";
+      }, 1000);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -77,6 +109,18 @@ export default function Logina() {
             Log in to continue managing your leads.
           </p>
 
+          {error && (
+            <div className="mt-4 rounded-lg bg-red-50 p-3 text-xs font-medium text-red-600 border border-red-200">
+              {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="mt-4 rounded-lg bg-emerald-50 p-3 text-xs font-medium text-emerald-600 border border-emerald-200">
+              {success}
+            </div>
+          )}
+
           <form
             onSubmit={handleSubmit}
             className="mt-7 flex flex-col gap-4"
@@ -95,7 +139,8 @@ export default function Logina() {
                 onChange={handleChange}
                 placeholder="you@company.com"
                 required
-                className="w-full rounded-lg border border-[#E5CB90] bg-[#FFF3C8]/30 px-4 py-2.5 text-sm text-[#2A3F45] outline-none transition-all placeholder:text-[#8A8A82] focus:border-[#458393] focus:bg-white focus:ring-2 focus:ring-[#458393]/10"
+                disabled={loading}
+                className="w-full rounded-lg border border-[#E5CB90] bg-[#FFF3C8]/30 px-4 py-2.5 text-sm text-[#2A3F45] outline-none transition-all placeholder:text-[#8A8A82] focus:border-[#458393] focus:bg-white focus:ring-2 focus:ring-[#458393]/10 disabled:opacity-50"
               />
             </div>
 
@@ -121,22 +166,24 @@ export default function Logina() {
                 onChange={handleChange}
                 placeholder="Enter your password"
                 required
-                className="w-full rounded-lg border border-[#E5CB90] bg-[#FFF3C8]/30 px-4 py-2.5 text-sm text-[#2A3F45] outline-none transition-all placeholder:text-[#8A8A82] focus:border-[#458393] focus:bg-white focus:ring-2 focus:ring-[#458393]/10"
+                disabled={loading}
+                className="w-full rounded-lg border border-[#E5CB90] bg-[#FFF3C8]/30 px-4 py-2.5 text-sm text-[#2A3F45] outline-none transition-all placeholder:text-[#8A8A82] focus:border-[#458393] focus:bg-white focus:ring-2 focus:ring-[#458393]/10 disabled:opacity-50"
               />
             </div>
 
             {/* Submit */}
             <button
               type="submit"
-              className="mt-2 rounded-lg bg-[#34A99D] py-2.5 text-sm font-medium text-[#04342C] transition-all duration-200 hover:bg-[#2F958A] hover:shadow-md active:scale-[0.98]"
+              disabled={loading}
+              className="mt-2 rounded-lg bg-[#34A99D] py-2.5 text-sm font-medium text-[#04342C] transition-all duration-200 hover:bg-[#2F958A] hover:shadow-md active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Log in
+              {loading ? "Logging in..." : "Log in"}
             </button>
           </form>
 
           {/* Signup */}
           <p className="mt-6 text-center text-xs text-[#8A8A82]">
-            Don't have an account?{" "}
+            Dont have an account?
             <a
               href="/signup"
               className="font-medium text-[#458393] transition-colors hover:text-[#2A3F45]"
