@@ -1,4 +1,5 @@
 import { Search, Bell, ChevronDown } from "lucide-react";
+import Link from "next/link";
 
 export default function Header({ name = "Bilal" }) {
   return (
@@ -19,7 +20,7 @@ export default function Header({ name = "Bilal" }) {
         </div>
 
         <div className="relative">
-          <Bell size={19} className="text-slate-400" />
+         <Link href={"/dashboard/notification"}> <Bell size={19} className="text-slate-400" /></Link>
           <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-red-500" />
         </div>
 
