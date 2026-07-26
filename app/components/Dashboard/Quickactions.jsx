@@ -1,3 +1,4 @@
+"use client"
 import { Plus, Upload, Download, PenSquare } from "lucide-react";
 import Card from "./Card";
 

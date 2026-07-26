@@ -1,5 +1,5 @@
 import { Users, Sparkles, Target, Wallet, CheckCircle2 } from "lucide-react";
-import Card from "./Card";
+import Card from "./Card.jsx";
 
 const stats = [
   { icon: Users, color: "text-blue-400", label: "Total Leads", value: "1,248" },

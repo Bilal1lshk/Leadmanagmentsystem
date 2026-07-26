@@ -2,12 +2,12 @@ import Sidebar from "../components/Dashboard/Sidebar.jsx";
 import Header from "../components/Dashboard/Header.jsx";
 import StatCards from "../components/Dashboard/Statcard.jsx";
 import PipelineBoard from "../components/Dashboard/PipelineBoard.jsx";
-import QuickActions from "../components/Dashboard/QuickActions.jsx";
+import QuickActions from "../components/Dashboard/Quickactions.jsx";
 import AIInsights from "../components/Dashboard/Aiinshights.jsx";
-import RecentLeadsTable from "../components/Dashboard/RecentLeadsTable.jsx";
-import LeadSourcesChart from "../components/Dashboard/LeadSourcesChart.jsx";
-import FollowUps from "./components/FollowUps";
-import LeadsChart from "./components/LeadsChart";
+import RecentLeadsTable from "../components/Dashboard/Recentleadtable.jsx";
+import LeadSourcesChart from "../components/Dashboard/Leadsourcechart.jsx";
+import FollowUps from "../components/Dashboard/Followup.jsx";
+import LeadsChart from "../components/Dashboard/Leadchart.jsx";
 import LeadPriority from "../components/Dashboard/Leadpriority.jsx";
 
 export default function Dashboard() {
@@ -16,7 +16,7 @@ export default function Dashboard() {
       <Sidebar />
 
       <main className="flex-1 p-6 flex flex-col gap-4">
-        <Headers />
+        <Header />
 
         <StatCards />
 
