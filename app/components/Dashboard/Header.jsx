@@ -1,5 +1,6 @@
 import { Search, Bell, ChevronDown } from "lucide-react";
 import Link from "next/link";
+import Notifications from "../ui/Notification/Notification";
 
 export default function Header({ name = "Bilal" }) {
   return (
@@ -20,7 +21,7 @@ export default function Header({ name = "Bilal" }) {
         </div>
 
         <div className="relative">
-         <Link href={"/dashboard/notification"}> <Bell size={19} className="text-slate-400" /></Link>
+     <Notifications/>
           <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-red-500" />
         </div>
 
