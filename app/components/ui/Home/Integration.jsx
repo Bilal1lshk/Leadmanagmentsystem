@@ -1,8 +1,7 @@
-"use client"
 import {
   Mail,
   MessageCircle,
-  Slack,
+  Hash,
   Calendar,
   Database,
   Zap,
@@ -15,7 +14,7 @@ import {
 const integrations = [
   { name: "Gmail", icon: Mail, color: "text-red-400" },
   { name: "WhatsApp", icon: MessageCircle, color: "text-emerald-400" },
-  { name: "Slack", icon: Slack, color: "text-violet-400" },
+  { name: "Slack", icon: Hash, color: "text-violet-400" },
   { name: "Calendar", icon: Calendar, color: "text-blue-400" },
   { name: "HubSpot", icon: Database, color: "text-orange-400" },
   { name: "Zapier", icon: Zap, color: "text-amber-400" },
