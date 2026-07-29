@@ -1,9 +1,8 @@
-export default async function Post(Request) {
+export default async function POST(Request) {
+    console.log("request hitted")
     try {
-        const { email, password } = await Request.json();
-        console.log(email, password)
-
-
+        const { source, status } = await Request.json();
+        console.log(source, status)
     }
     catch (err) {
         console.log(err)

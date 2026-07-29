@@ -16,6 +16,7 @@ import {
   Check,
   Loader2,
 } from "lucide-react";
+import axios from "axios";
 
 // Replace with data fetched from your /api/persons and /api/users endpoints
 const MOCK_PEOPLE = [
@@ -94,9 +95,7 @@ export default function CreateLeadPage() {
     e.preventDefault();
     if (!form.personId) return;
     setStatus("saving");
-
-    // Replace with your actual API call:
-    // await fetch("/api/leads", { method: "POST", body: JSON.stringify(form) });
+    await axios.post("/api/dashboardapi/Leads/CreateLead",form);
     await new Promise((r) => setTimeout(r, 900));
 
     setStatus("saved");
