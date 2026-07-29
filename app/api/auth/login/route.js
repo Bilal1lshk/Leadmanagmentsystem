@@ -3,7 +3,6 @@ import bcrypt from 'bcryptjs'
 import jwt from "jsonwebtoken";
 import connectDB from "@/app/config/mongodbconnection";
 import User from "@/app/models/user";
-import lead  from "@/app/models/"
 export async function POST(request) {
   try {
     await connectDB();
