@@ -19,18 +19,16 @@ import {
 import axios from "axios";
 
 // Replace with data fetched from your /api/persons and /api/users endpoints
-const MOCK_PEOPLE = [
-  { _id: "p1", name: "John Smith", email: "john@techcorp.com" },
-  { _id: "p2", name: "Sarah Khan", email: "sarah@digitalco.com" },
-  { _id: "p3", name: "Mike Brown", email: "mike@brownlabs.io" },
-];
+
  const resposne= await fetch("/api/User/AllUser",{
   method:"Get",
   headers:{
     "content-type":"application/json"},
  })
- console.log(resposne)
+const dataofapi = await resposne.json();
+const data=dataofapi?.allusers
 
+console.log(data);
 
 const MOCK_USERS = [
   { _id: "u1", name: "Bilal" },
@@ -91,9 +89,9 @@ export default function CreateLeadPage() {
   const [personQuery, setPersonQuery] = useState("");
   const [personOpen, setPersonOpen] = useState(false);
 
-  const selectedPerson = MOCK_PEOPLE.find((p) => p._id === form.personId);
-  const filteredPeople = MOCK_PEOPLE.filter((p) =>
-    p.name.toLowerCase().includes(personQuery.toLowerCase())
+  const selectedPerson =data?.find((p) => p?._id === form?.personId);
+  const filteredPeople =data?.filter((p) =>
+    p?.name?.toLowerCase()?.includes(personQuery.toLowerCase())
   );
 
   const set = (field) => (val) => setForm((f) => ({ ...f, [field]: val }));
