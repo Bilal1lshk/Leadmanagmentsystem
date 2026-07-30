@@ -24,6 +24,13 @@ const MOCK_PEOPLE = [
   { _id: "p2", name: "Sarah Khan", email: "sarah@digitalco.com" },
   { _id: "p3", name: "Mike Brown", email: "mike@brownlabs.io" },
 ];
+ const resposne= await fetch("/api/User/AllUser",{
+  method:"Get",
+  headers:{
+    "content-type":"application/json"},
+ })
+ console.log(resposne)
+
 
 const MOCK_USERS = [
   { _id: "u1", name: "Bilal" },
