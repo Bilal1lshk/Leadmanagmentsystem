@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import jwt from "jsonwebtoken"
 import {
   ArrowLeft,
   User,
@@ -27,7 +28,8 @@ import axios from "axios";
  })
 const dataofapi = await resposne.json();
 const data=dataofapi?.allusers
-
+const token=jwt.decode("token",process.env.JWT_SECRET)
+console.log(token)
 console.log(data);
 
 const MOCK_USERS = [
@@ -338,9 +340,9 @@ export default function CreateLeadPage() {
                 className={`${inputClass} pl-9`}
               >
                 <option value="">Unassigned</option>
-                {MOCK_USERS.map((u) => (
+                {data.map((u) => (
                   <option key={u._id} value={u._id}>
-                    {u.name}
+                    {u.fullname}
                   </option>
                 ))}
               </select>

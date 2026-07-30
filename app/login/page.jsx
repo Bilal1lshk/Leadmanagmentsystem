@@ -47,7 +47,7 @@ export default function Login() {
 
       // Redirect after brief delay to let user see success message
       setTimeout(() => {
-        window.location.href = "/leads";
+        window.location.href = "/";
       }, 1000);
     } catch (err) {
       setError(err.message);
