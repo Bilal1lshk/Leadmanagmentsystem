@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import jwt from "jsonwebtoken"
 import {
   ArrowLeft,
   User,
@@ -19,25 +19,6 @@ import {
 } from "lucide-react";
 import axios from "axios";
 
-// Replace with data fetched from your /api/persons and /api/users endpoints
-
- const resposne= await fetch("/api/User/AllUser",{
-  method:"Get",
-  headers:{
-    "content-type":"application/json"},
- })
-const dataofapi = await resposne.json();
-
-const data=dataofapi?.allusers
-const token=jwt.decode("token",process.env.JWT_SECRET)
-console.log(token,"token")
-console.log(data);
-
-const MOCK_USERS = [
-  { _id: "u1", name: "Bilal" },
-  { _id: "u2", name: "Ayesha" },
-];
-
 const SOURCES = [
   { value: "website", label: "Website", icon: Globe },
   { value: "referral", label: "Referral", icon: Users },
@@ -46,7 +27,6 @@ const SOURCES = [
   { value: "other", label: "Other", icon: MoreHorizontal },
 ];
 
-// bg/text pairs chosen for AA contrast on a light card
 const PRIORITIES = [
   { value: "low", label: "Low", activeBg: "#E9ECEE", activeText: "#3D4D51" },
   { value: "medium", label: "Medium", activeBg: "#C9A24A", activeText: "#FFFFFF" },
@@ -68,7 +48,7 @@ const item = {
   show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: "easeOut" } },
 };
 
-function Field({ label, children }) {
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <motion.div variants={item}>
       <label className="text-xs text-[#5C6D71] mb-2 block font-medium">{label}</label>
@@ -78,8 +58,10 @@ function Field({ label, children }) {
 }
 
 export default function CreateLeadPage() {
+  const [users, setUsers] = useState<any[]>([]);
   const [form, setForm] = useState({
     personId: "",
+    sourcedby: "",
     source: "website",
     status: "new",
     priority: "medium",
@@ -92,22 +74,42 @@ export default function CreateLeadPage() {
   const [personQuery, setPersonQuery] = useState("");
   const [personOpen, setPersonOpen] = useState(false);
 
-  const selectedPerson =data?.find((p) => p?._id === form?.personId);
-  const filteredPeople =data?.filter((p) =>
+  // Fetch users on component mount (client-side)
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const res = await fetch("/api/User/AllUser", {
+          headers: { "content-type": "application/json" },
+        });
+        const dataofapi = await res.json();
+        setUsers(dataofapi?.allusers || []);
+      } catch (error) {
+        console.error("Failed to load users:", error);
+      }
+    }
+    fetchUsers();
+  }, []);
+
+  const selectedPerson = users?.find((p) => p?._id === form?.personId);
+  const filteredPeople = users?.filter((p) =>
     p?.name?.toLowerCase()?.includes(personQuery.toLowerCase())
   );
 
-  const set = (field) => (val) => setForm((f) => ({ ...f, [field]: val }));
+  const set = (field: string) => (val: any) => setForm((f) => ({ ...f, [field]: val }));
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.personId) return;
     setStatus("saving");
-    await axios.post("/api/dashboardapi/Leads/CreateLead",form);
-    await new Promise((r) => setTimeout(r, 900));
-
-    setStatus("saved");
-    setTimeout(() => setStatus("idle"), 1800);
+    try {
+      await axios.post("/api/dashboardapi/Leads/CreateLead", form);
+      setStatus("saved");
+    } catch (err) {
+      console.error(err);
+      setStatus("idle");
+    } finally {
+      setTimeout(() => setStatus("idle"), 1800);
+    }
   };
 
   const inputClass =
@@ -115,7 +117,6 @@ export default function CreateLeadPage() {
 
   return (
     <div className="relative min-h-screen bg-[#FFF3C8] text-[#22303A] px-6 py-10 flex justify-center overflow-hidden">
-      {/* decorative blobs — same as HeroSection */}
       <div className="pointer-events-none absolute -left-16 bottom-0 h-64 w-64 rounded-full bg-[#458393]/15" />
       <div className="pointer-events-none absolute right-10 top-10 h-40 w-40 rounded-full bg-[#458393]/10" />
 
@@ -181,10 +182,10 @@ export default function CreateLeadPage() {
                       className="w-full bg-transparent px-3.5 py-2.5 text-sm text-[#22303A] placeholder:text-[#9A9A8F] outline-none border-b border-[#EDE6D6]"
                     />
                     <div className="max-h-40 overflow-y-auto">
-                      {filteredPeople.length === 0 ? (
+                      {filteredPeople?.length === 0 ? (
                         <div className="px-3.5 py-3 text-xs text-[#9A9A8F]">No matches</div>
                       ) : (
-                        filteredPeople.map((p) => (
+                        filteredPeople?.map((p) => (
                           <button
                             type="button"
                             key={p._id}
@@ -207,7 +208,7 @@ export default function CreateLeadPage() {
             </div>
           </Field>
 
-          {/* Source — segmented control */}
+          {/* Source */}
           <Field label="Source">
             <div className="grid grid-cols-5 gap-1.5">
               {SOURCES.map(({ value, label, icon: Icon }) => {
@@ -238,7 +239,7 @@ export default function CreateLeadPage() {
             </div>
           </Field>
 
-          {/* Priority — segmented pill control */}
+          {/* Priority */}
           <Field label="Priority">
             <div className="flex gap-2">
               {PRIORITIES.map(({ value, label, activeBg, activeText }) => {
@@ -278,7 +279,7 @@ export default function CreateLeadPage() {
             </select>
           </Field>
 
-          {/* Lost reason — animates in only when status is lost */}
+          {/* Lost reason */}
           <AnimatePresence>
             {form.status === "lost" && (
               <motion.div
@@ -341,9 +342,9 @@ export default function CreateLeadPage() {
                 className={`${inputClass} pl-9`}
               >
                 <option value="">Unassigned</option>
-                {data.map((u) => (
+                {users?.map((u) => (
                   <option key={u._id} value={u._id}>
-                    {u.fullname}
+                    {u.fullname || u.name}
                   </option>
                 ))}
               </select>

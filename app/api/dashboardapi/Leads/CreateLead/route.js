@@ -12,7 +12,7 @@ export async function POST(Request) {
             assignedTo,
             lastContactedAt,
             lostReason, } = await Request.json();
-            
+
         const created = await leadmodel.create({
             source, status, personId, source, status, priority,
             estimatedValue,
