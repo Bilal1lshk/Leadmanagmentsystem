@@ -59,7 +59,6 @@ export async function POST(request) {
       }
     );
 
-    console.log(token)
 
     const response = NextResponse.json(
       {
@@ -71,7 +70,9 @@ export async function POST(request) {
           email: user.email,
         },
       },
-      { status: 200 }
+      {
+        status: 200
+      }
     );
 
     response.cookies.set("token", token, {
@@ -79,6 +80,7 @@ export async function POST(request) {
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 7, // 7 days
     });
+    return response
 
   } catch (error) {
     console.error(error);

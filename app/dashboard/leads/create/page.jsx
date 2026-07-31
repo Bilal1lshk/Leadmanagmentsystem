@@ -27,9 +27,10 @@ import axios from "axios";
     "content-type":"application/json"},
  })
 const dataofapi = await resposne.json();
+
 const data=dataofapi?.allusers
 const token=jwt.decode("token",process.env.JWT_SECRET)
-console.log(token)
+console.log(token,"token")
 console.log(data);
 
 const MOCK_USERS = [
