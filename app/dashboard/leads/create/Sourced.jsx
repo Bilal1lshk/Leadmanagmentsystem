@@ -1,9 +1,11 @@
 import { headers } from 'next/headers';
-
-export default async function Sourced({userid}) {
+import {GetuserId} from "../../../context/Usercontext.jsx"
+export default async function Sourced() {
+    const [userId, setUserId]=GetuserId()
   const headersList = await headers();
   
 const userAgent = headersList.get('userid');
+setUserId(userAgent)
 console.log(userAgent);
 
   return (

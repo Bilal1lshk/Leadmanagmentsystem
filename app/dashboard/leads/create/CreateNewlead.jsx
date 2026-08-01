@@ -1,6 +1,8 @@
 "use client"
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { GetuserId } from "../../../context/Usercontext.jsx"
+
 import {
     ArrowLeft,
     User,
@@ -29,6 +31,8 @@ function Field({ label, children }) {
     );
 }
 export default function CreateLeadPage() {
+    const [userId, setUserId] = GetuserId()
+    console.log(userId)
     const MOCK_USERS = [
         { _id: "u1", name: "Bilal" },
         { _id: "u2", name: "Ayesha" },
