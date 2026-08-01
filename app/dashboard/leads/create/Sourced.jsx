@@ -1,10 +1,10 @@
 import { headers } from 'next/headers';
-export default function Sourced() {
-  const gettingheaders= async ()=>{
-  const header=await headers()
-  console.log(header)
-  }
-  gettingheaders()
+
+export default async function Sourced({userid}) {
+  const headersList = await headers();
+  
+const userAgent = headersList.get('userid');
+console.log(userAgent);
 
   return (
     <div>Sourced</div>

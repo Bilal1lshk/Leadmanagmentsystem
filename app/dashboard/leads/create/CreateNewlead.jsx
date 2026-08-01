@@ -65,6 +65,7 @@ export default function CreateLeadPage() {
     };
 
     const [data, setdata] = useState()
+    console.log(data)
     useEffect(() => {
         const fetchingdata = async () => {
             const resposne = await fetch("/api/User/AllUser", {
@@ -95,8 +96,8 @@ export default function CreateLeadPage() {
     const [status, setStatus] = useState("idle"); // idle | saving | saved
     const [personQuery, setPersonQuery] = useState("");
     const [personOpen, setPersonOpen] = useState(false);
-
     const selectedPerson = data?.find((p) => p?._id === form?.personId);
+    console.log(selectedPerson)
     const filteredPeople = data?.filter((p) =>
         p?.name?.toLowerCase()?.includes(personQuery.toLowerCase())
     );
@@ -151,63 +152,21 @@ export default function CreateLeadPage() {
                     className="bg-white border border-[#E5CB90]/60 rounded-2xl p-6 flex flex-col gap-5 shadow-md"
                 >
                     {/* Person selector */}
-                    <Field label="Person">
+                    <Field label="Person or organization name">
                         <div className="relative">
-                            <button
-                                type="button"
-                                onClick={() => setPersonOpen((v) => !v)}
-                                className={`${inputClass} flex items-center justify-between text-left`}
-                            >
-                                <span className="flex items-center gap-2">
-                                    <User size={14} className="text-[#9A9A8F]" />
-                                    {selectedPerson ? (
-                                        <span className="text-[#22303A]">{selectedPerson.name}</span>
-                                    ) : (
-                                        <span className="text-[#9A9A8F]">Select a person...</span>
-                                    )}
-                                </span>
-                            </button>
+                            <div className={`${inputClass} flex items-center gap-2`}>
+                                <User size={14} className="text-[#9A9A8F]" />
+                                <input
+                                    type="text"
 
-                            <AnimatePresence>
-                                {personOpen && (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: -6, scale: 0.98 }}
-                                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                                        exit={{ opacity: 0, y: -6, scale: 0.98 }}
-                                        transition={{ duration: 0.15 }}
-                                        className="absolute z-20 mt-2 w-full bg-white border border-[#E5CB90]/60 rounded-xl overflow-hidden shadow-lg"
-                                    >
-                                        <input
-                                            autoFocus
-                                            value={personQuery}
-                                            onChange={(e) => setPersonQuery(e.target.value)}
-                                            placeholder="Search people..."
-                                            className="w-full bg-transparent px-3.5 py-2.5 text-sm text-[#22303A] placeholder:text-[#9A9A8F] outline-none border-b border-[#EDE6D6]"
-                                        />
-                                        <div className="max-h-40 overflow-y-auto">
-                                            {filteredPeople.length === 0 ? (
-                                                <div className="px-3.5 py-3 text-xs text-[#9A9A8F]">No matches</div>
-                                            ) : (
-                                                filteredPeople?.map((p) => (
-                                                    <button
-                                                        type="button"
-                                                        key={p._id}
-                                                        onClick={() => {
-                                                            set("personId")(p._id);
-                                                            setPersonOpen(false);
-                                                            setPersonQuery("");
-                                                        }}
-                                                        className="w-full flex flex-col items-start px-3.5 py-2.5 hover:bg-[#FFF3C8]/60 text-left transition-colors"
-                                                    >
-                                                        <span className="text-sm text-[#22303A]">{p.name}</span>
-                                                        <span className="text-[11px] text-[#9A9A8F]">{p.email}</span>
-                                                    </button>
-                                                ))
-                                            )}
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
+                                    onChange={(e) => {
+                                        console.log(e.target.value)
+                                    }}
+                                    onFocus={() => setPersonOpen(true)}
+                                    placeholder="Select a person..."
+                                    className="w-full bg-transparent outline-none text-[#22303A] placeholder-[#9A9A8F]"
+                                />
+                            </div>
                         </div>
                     </Field>
 
