@@ -1,30 +1,47 @@
 import { NextResponse } from "next/server";
-import leadmodel from "../../../../models/lead.js"
+import leadmodel from "../../../../models/lead.js";
 export async function POST(Request) {
-    console.log("request hitted")
-    try {
-        const {
-            source,
-            status,
-            personId,
-            priority,
-            estimatedValue,
-            assignedTo,
-            lastContactedAt,
-            lostReason, } = await Request.json();
+  console.log("request hitted");
+  try {
+    const {
+      sourcedby,
+      source,
+      status,
+      personId,
+      priority,
+      estimatedValue,
+      assignedTo,
+      lastContactedAt,
+      lostReason,
+    } = await Request.json();
+    if (!sourcedby || !source || !status || !personId || !priority) {
+      return NextResponse.json(
+        { message: "all fields should be filled" },
+        { status: 400 }
+      );
+    }
 
-        const created = await leadmodel.create({
-            source, status, personId, source, status, priority,
-            estimatedValue,
-            assignedTo,
-            lastContactedAt,
-            lostReason,
-        })
-        console.log(created)
-        return NextResponse.json({ message: "done done" });
+    if (status === "lost" && !lostReason) {
+      return NextResponse.json(
+        { message: "all fields should be filled" },
+        { status: 400 }
+      );
     }
-    catch (err) {
-        console.log(err)
-        return NextResponse.json({ message: "Error" }, { status: 500 });
-    }
+
+    const created = await leadmodel.create({
+      sourcedby,
+      source,
+      status,
+      priority,
+      estimatedValue,
+      lostReason,
+    })
+
+    if(!created) return NextResponse.json({message:"Something went wrong in lead creation try again "})
+    console.log(created);
+    return NextResponse.json({ message: "lead created succesfully" });
+  } catch (err) {
+    console.log(err);
+    return NextResponse.json({ message: "Error" }, { status: 500 });
+  }
 }

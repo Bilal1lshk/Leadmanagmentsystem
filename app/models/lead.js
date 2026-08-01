@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const leadSchema = new mongoose.Schema(
   {
-    personId: { type: mongoose.Schema.Types.ObjectId, ref: "Person", required: true },
+    sourcedby: { type: mongoose.Schema.Types.ObjectId, ref: "Person", required: true },
     source: {
       type: String,
       enum: ["website", "referral", "ad", "cold_call", "other"],

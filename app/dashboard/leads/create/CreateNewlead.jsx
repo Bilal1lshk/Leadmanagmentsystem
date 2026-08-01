@@ -65,7 +65,6 @@ export default function CreateLeadPage() {
     };
 
     const [data, setdata] = useState()
-    console.log(data)
     useEffect(() => {
         const fetchingdata = async () => {
             const resposne = await fetch("/api/User/AllUser", {
@@ -82,9 +81,8 @@ export default function CreateLeadPage() {
 
     }, [])
     const [form, setForm] = useState({
-
+        sourcedby: userId,
         personId: "",
-        sourcedby: "",
         source: "website",
         status: "new",
         priority: "medium",
@@ -93,20 +91,31 @@ export default function CreateLeadPage() {
         lastContactedAt: "",
         lostReason: "",
     });
+
+    useEffect(() => {
+        if (userId) {
+            setForm((f) => ({ ...f, sourcedby: userId }));
+        }
+    }, [userId]);
+
     const [status, setStatus] = useState("idle"); // idle | saving | saved
     const selectedPerson = data?.find((p) => p?._id === form?.personId);
-    console.log(selectedPerson)
-
     const set = (field) => (val) => setForm((f) => ({ ...f, [field]: val }));
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!form.personId) return;
         setStatus("saving");
-        await axios.post("/api/dashboardapi/Leads/CreateLead", form);
-        await new Promise((r) => setTimeout(r, 900));
+        try {
+            const response = await axios.post("/api/dashboardapi/Leads/CreateLead", form);
+            console.log(response.data);
+            setStatus("saved");
+        } catch (error) {
+            console.error(error.response?.data || error.message);
+            setStatus("idle");
+        }
 
-        setStatus("saved");
+        await new Promise((r) => setTimeout(r, 900));
         setTimeout(() => setStatus("idle"), 1800);
     };
 
@@ -153,11 +162,8 @@ export default function CreateLeadPage() {
                                 <User size={14} className="text-[#9A9A8F]" />
                                 <input
                                     type="text"
-
-                                    onChange={(e) => {
-                                        console.log(e.target.value)
-                                    }}
-                                    onFocus={() => setPersonOpen(true)}
+                                    value={form.personId}
+                                    onChange={(e) => set("personId")(e.target.value)}
                                     placeholder="Select a person..."
                                     className="w-full bg-transparent outline-none text-[#22303A] placeholder-[#9A9A8F]"
                                 />
