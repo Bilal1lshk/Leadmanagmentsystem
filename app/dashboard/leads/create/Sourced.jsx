@@ -5,7 +5,7 @@ export default async function Sourced() {
   const headersList = await headers();
   
 const userAgent = headersList.get('userid');
-setUserId(userAgent)
+setUserId(user)
 console.log(userAgent);
 
   return (

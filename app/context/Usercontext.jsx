@@ -1,14 +1,19 @@
-import React, { useContext, useState, useContext } from 'react'
-export default function Userprovider({ children }) {
-    const [userId, setUserId] = useState(null)
+"use client"
+import React, { useContext, useState, createContext } from 'react'
 
-    const UserId = useContext()
-    return (
-        <UserId.provider value={{ userId, setUserId }}>
-            {children}
-        </UserId.provider>
-    )
+// create context OUTSIDE the component, at module level
+const UserId = createContext()
+
+export default function Userprovider({ children }) {
+  const [userId, setUserId] = useState(null)
+
+  return (
+    <UserId.Provider value={{ userId, setUserId }}>
+      {children}
+    </UserId.Provider>
+  )
 }
+
 export function GetuserId() {
-    useContext(UserId)
+  return useContext(UserId)  // must return the value
 }
