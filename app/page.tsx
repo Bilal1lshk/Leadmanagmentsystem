@@ -5,9 +5,7 @@ export default function Home() {
   connectdb();
   return (
     <div>
-      <Userprovider >
         <Homee />
-      </Userprovider>
     </div>
   );
 }

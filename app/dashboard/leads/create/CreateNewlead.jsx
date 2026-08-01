@@ -31,12 +31,8 @@ function Field({ label, children }) {
     );
 }
 export default function CreateLeadPage() {
-    const [userId, setUserId] = GetuserId()
+    const { userId } = GetuserId()
     console.log(userId)
-    const MOCK_USERS = [
-        { _id: "u1", name: "Bilal" },
-        { _id: "u2", name: "Ayesha" },
-    ];
 
     const SOURCES = [
         { value: "website", label: "Website", icon: Globe },
@@ -98,13 +94,8 @@ export default function CreateLeadPage() {
         lostReason: "",
     });
     const [status, setStatus] = useState("idle"); // idle | saving | saved
-    const [personQuery, setPersonQuery] = useState("");
-    const [personOpen, setPersonOpen] = useState(false);
     const selectedPerson = data?.find((p) => p?._id === form?.personId);
     console.log(selectedPerson)
-    const filteredPeople = data?.filter((p) =>
-        p?.name?.toLowerCase()?.includes(personQuery.toLowerCase())
-    );
 
     const set = (field) => (val) => setForm((f) => ({ ...f, [field]: val }));
 

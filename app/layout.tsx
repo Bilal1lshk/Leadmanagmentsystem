@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Userprovider from "./context/Usercontext.jsx";
 
 export const metadata: Metadata = {
   title: "Lead managment system",
@@ -17,7 +17,9 @@ export default function RootLayout({
       lang="en"
       className={`h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Userprovider>{children}</Userprovider>
+      </body>
     </html>
   );
 }

@@ -1,14 +1,15 @@
 import { headers } from 'next/headers';
-import {GetuserId} from "../../../context/Usercontext.jsx"
+import SourceClient from './SourceClient.jsx'
 export default async function Sourced() {
-    const [userId, setUserId]=GetuserId()
   const headersList = await headers();
   
 const userAgent = headersList.get('userid');
-setUserId(user)
+
 console.log(userAgent);
 
   return (
-    <div>Sourced</div>
+    <>
+    <SourceClient userAgent={userAgent}/>
+    </>
   )
 }
