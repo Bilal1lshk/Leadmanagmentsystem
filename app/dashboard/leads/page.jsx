@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react"
 import {
   Search,
   SlidersHorizontal,
@@ -18,75 +18,7 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-
-const leadsData = [
-  {
-    id: 1,
-    name: "John Smith",
-    email: "john.smith@gmail.com",
-    phone: "+44 7700 900123",
-    source: "website",
-    status: "new",
-    priority: "high",
-    estimatedValue: 2500,
-    assignedTo: "Bilal Ahmad",
-    lastContactedAt: null,
-    createdAt: "2026-07-26",
-  },
-  {
-    id: 2,
-    name: "Sarah Khan",
-    email: "sarah.khan@techcorp.com",
-    phone: "+44 7700 900456",
-    source: "referral",
-    status: "qualified",
-    priority: "high",
-    estimatedValue: 5000,
-    assignedTo: "Bilal Ahmad",
-    lastContactedAt: "2026-07-24",
-    createdAt: "2026-07-20",
-  },
-  {
-    id: 3,
-    name: "Michael Brown",
-    email: "michael@startup.io",
-    phone: "+44 7700 900789",
-    source: "ad",
-    status: "proposal",
-    priority: "medium",
-    estimatedValue: 3200,
-    assignedTo: "Ali Raza",
-    lastContactedAt: "2026-07-22",
-    createdAt: "2026-07-18",
-  },
-  {
-    id: 4,
-    name: "Emma Wilson",
-    email: "emma@creative.co",
-    phone: "+44 7700 900111",
-    source: "cold_call",
-    status: "contacted",
-    priority: "low",
-    estimatedValue: 1800,
-    assignedTo: "Hamza Khan",
-    lastContactedAt: "2026-07-25",
-    createdAt: "2026-07-15",
-  },
-  {
-    id: 5,
-    name: "David Taylor",
-    email: "david@business.com",
-    phone: "+44 7700 900222",
-    source: "website",
-    status: "won",
-    priority: "high",
-    estimatedValue: 7500,
-    assignedTo: "Bilal Ahmad",
-    lastContactedAt: "2026-07-21",
-    createdAt: "2026-07-10",
-  },
-];
-
+import axios from "axios";
 const statusStyles = {
   new: "bg-blue-500/10 text-blue-400 border-blue-500/20",
   contacted: "bg-slate-500/10 text-slate-300 border-slate-500/20",
@@ -115,28 +47,37 @@ const formatCurrency = (value) => {
 };
 
 export default function LeadsPage() {
-  const [leads, setLeads] = useState(leadsData);
+  const [leads, setLeads] = useState();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [sourceFilter, setSourceFilter] = useState("all");
   const [selectedLeads, setSelectedLeads] = useState([]);
+ useEffect(()=>{
+const gettingdata= async ()=>{
+  const data= await axios.get(`/api/dashboardapi/Leads/AllLead`,{
+  withCredentials:true
+})
+setLeads(data.data)
+}
+gettingdata()
 
+ },[])
   const filteredLeads = useMemo(() => {
-    return leads.filter((lead) => {
+    return leads?.filter((lead) => {
       const matchesSearch =
         lead.name.toLowerCase().includes(search.toLowerCase()) ||
         lead.email.toLowerCase().includes(search.toLowerCase()) ||
         lead.assignedTo.toLowerCase().includes(search.toLowerCase());
 
       const matchesStatus =
-        statusFilter === "all" || lead.status === statusFilter;
+        statusFilter === "all" || lead?.status === statusFilter;
 
       const matchesPriority =
-        priorityFilter === "all" || lead.priority === priorityFilter;
+        priorityFilter === "all" || lead?.priority === priorityFilter;
 
       const matchesSource =
-        sourceFilter === "all" || lead.source === sourceFilter;
+        sourceFilter === "all" || lead?.source === sourceFilter;
 
       return (
         matchesSearch &&
@@ -147,32 +88,32 @@ export default function LeadsPage() {
     });
   }, [leads, search, statusFilter, priorityFilter, sourceFilter]);
 
-  const totalValue = leads.reduce(
-    (total, lead) => total + lead.estimatedValue,
+  const totalValue = leads?.reduce(
+    (total, lead) => total + (lead?.estimatedValue ?? 0),
     0
   );
 
-  const qualifiedLeads = leads.filter(
-    (lead) => lead.status === "qualified"
+  const qualifiedLeads = leads?.filter(
+    (lead) => lead?.status === "qualified"
   ).length;
 
-  const highPriorityLeads = leads.filter(
-    (lead) => lead.priority === "high"
+  const highPriorityLeads = leads?.filter(
+    (lead) => lead?.priority === "high"
   ).length;
 
   const toggleSelectLead = (id) => {
     setSelectedLeads((prev) =>
       prev.includes(id)
-        ? prev.filter((leadId) => leadId !== id)
+        ? prev?.filter((leadId) => leadId !== id)
         : [...prev, id]
     );
   };
 
   const toggleSelectAll = () => {
-    if (selectedLeads.length === filteredLeads.length) {
+    if (selectedLeads?.length === filteredLeads?.length) {
       setSelectedLeads([]);
     } else {
-      setSelectedLeads(filteredLeads.map((lead) => lead.id));
+      setSelectedLeads(filteredLeads?.map((lead) => lead?.id));
     }
   };
 
@@ -196,7 +137,7 @@ export default function LeadsPage() {
             </h1>
 
             <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
-              {leads.length} total
+              {leads?.length} total
             </span>
           </div>
 
@@ -218,7 +159,7 @@ export default function LeadsPage() {
         <StatCard
           icon={Users}
           label="Total Leads"
-          value={leads.length}
+          value={leads?.length}
           description="All active leads"
           iconStyle="bg-blue-500/10 text-blue-400"
         />
@@ -333,7 +274,7 @@ export default function LeadsPage() {
             <span className="text-sm text-slate-400">
               Showing{" "}
               <span className="text-white font-medium">
-                {filteredLeads.length}
+                {filteredLeads?.length}
               </span>{" "}
               leads
             </span>
@@ -365,8 +306,8 @@ export default function LeadsPage() {
                   <input
                     type="checkbox"
                     checked={
-                      filteredLeads.length > 0 &&
-                      selectedLeads.length === filteredLeads.length
+                      filteredLeads?.length > 0 &&
+                      selectedLeads?.length === filteredLeads?.length
                     }
                     onChange={toggleSelectAll}
                     className="accent-blue-500"
@@ -388,7 +329,7 @@ export default function LeadsPage() {
 
             <tbody>
 
-              {filteredLeads.map((lead) => (
+              {filteredLeads?.map((lead) => (
 
                 <tr
                   key={lead.id}
@@ -410,7 +351,7 @@ export default function LeadsPage() {
                     <div className="flex items-center gap-3">
 
                       <div className="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-sm font-semibold text-blue-400">
-                        {lead.name
+                        {lead?.name
                           .split(" ")
                           .map((name) => name[0])
                           .join("")}
@@ -418,11 +359,11 @@ export default function LeadsPage() {
 
                       <div>
                         <p className="text-sm font-medium text-white">
-                          {lead.name}
+                          {lead?.name}
                         </p>
 
                         <p className="text-xs text-slate-500 mt-0.5">
-                          {lead.email}
+                          {lead?.email}
                         </p>
                       </div>
 
@@ -432,16 +373,16 @@ export default function LeadsPage() {
                   {/* Source */}
                   <td className="px-5 py-4">
                     <span className="text-sm text-slate-300 capitalize">
-                      {lead.source.replace("_", " ")}
+                      {lead?.source.replace("_", " ")}
                     </span>
                   </td>
 
                   {/* Status */}
                   <td className="px-5 py-4">
                     <span
-                      className={`inline-flex px-2.5 py-1 rounded-full border text-xs font-medium ${statusStyles[lead.status]}`}
+                      className={`inline-flex px-2.5 py-1 rounded-full border text-xs font-medium ${statusStyles[lead?.status]}`}
                     >
-                      {formatLabel(lead.status)}
+                      {formatLabel(lead?.status)}
                     </span>
                   </td>
 
@@ -451,18 +392,18 @@ export default function LeadsPage() {
 
                       <span
                         className={`w-2 h-2 rounded-full ${
-                          lead.priority === "high"
+                          lead?.priority === "high"
                             ? "bg-red-400"
-                            : lead.priority === "medium"
+                            : lead?.priority === "medium"
                             ? "bg-amber-400"
                             : "bg-slate-500"
                         }`}
                       />
 
                       <span
-                        className={`text-sm capitalize ${priorityStyles[lead.priority]}`}
+                        className={`text-sm capitalize ${priorityStyles[lead?.priority]}`}
                       >
-                        {lead.priority}
+                        {lead?.priority}
                       </span>
 
                     </div>
@@ -471,21 +412,21 @@ export default function LeadsPage() {
                   {/* Value */}
                   <td className="px-5 py-4">
                     <span className="text-sm font-medium text-slate-200">
-                      {formatCurrency(lead.estimatedValue)}
+                      {formatCurrency(lead?.estimatedValue ?? 0)}
                     </span>
                   </td>
 
                   {/* Assigned */}
                   <td className="px-5 py-4">
                     <span className="text-sm text-slate-300">
-                      {lead.assignedTo}
+                      {lead?.assignedTo}
                     </span>
                   </td>
 
                   {/* Last Contact */}
                   <td className="px-5 py-4">
                     <span className="text-xs text-slate-500">
-                      {lead.lastContactedAt
+                      {lead?.lastContactedAt
                         ? new Date(
                             lead.lastContactedAt
                           ).toLocaleDateString("en-GB")
@@ -513,10 +454,10 @@ export default function LeadsPage() {
         {/* Mobile Cards */}
         <div className="lg:hidden divide-y divide-[#263248]">
 
-          {filteredLeads.map((lead) => (
+          {filteredLeads?.map((lead) => (
 
             <div
-              key={lead.id}
+              key={lead?.id}
               className="p-4 hover:bg-[#151F31] transition-colors"
             >
 
@@ -533,11 +474,11 @@ export default function LeadsPage() {
 
                   <div>
                     <p className="text-sm font-medium text-white">
-                      {lead.name}
+                      {lead?.name}
                     </p>
 
                     <p className="text-xs text-slate-500">
-                      {lead.email}
+                      {lead?.email}
                     </p>
                   </div>
 
@@ -552,17 +493,17 @@ export default function LeadsPage() {
               <div className="flex flex-wrap gap-2 mt-4">
 
                 <span
-                  className={`px-2.5 py-1 rounded-full border text-xs ${statusStyles[lead.status]}`}
+                  className={`px-2.5 py-1 rounded-full border text-xs ${statusStyles[lead?.status]}`}
                 >
-                  {formatLabel(lead.status)}
+                  {formatLabel(lead?.status)}
                 </span>
 
                 <span className="px-2.5 py-1 rounded-full bg-[#182235] text-xs text-slate-400 capitalize">
-                  {lead.priority} priority
+                  {lead?.priority} priority
                 </span>
 
                 <span className="px-2.5 py-1 rounded-full bg-[#182235] text-xs text-slate-400">
-                  {formatCurrency(lead.estimatedValue)}
+                  {formatCurrency(lead?.estimatedValue ?? 0)}
                 </span>
 
               </div>
@@ -635,7 +576,7 @@ export default function LeadsPage() {
 
         </div>
 
-        {filteredLeads.length === 0 && (
+        {filteredLeads?.length === 0 && (
           <div className="py-16 text-center">
 
             <Users
