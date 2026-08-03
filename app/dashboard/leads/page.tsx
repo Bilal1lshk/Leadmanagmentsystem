@@ -1,7 +1,8 @@
 ﻿"use client";
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { setAllLeads } from "@/app/redux/leads.js";
+
+import { setAllLeads } from "@/app/redux/leads";
 import type { LucideIcon } from "lucide-react";
 import {
   Search,
@@ -20,8 +21,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 type LeadStatus =
   | "new"
   | "contacted"
@@ -81,7 +81,8 @@ export default function LeadsPage() {
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [sourceFilter, setSourceFilter] = useState("all");
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     const getLeads = async () => {
       try {

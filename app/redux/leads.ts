@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const LeadSlice=createSlice({
     name:"Lead",
     initialState:{
-        AllLeads:null
+        Lead: []
     },
     reducers:{
         setAllLeads:(state,action)=>{
