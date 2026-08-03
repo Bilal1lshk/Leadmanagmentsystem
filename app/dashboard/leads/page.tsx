@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { setAllLeads } from "@/app/redux/leads.js";
 import type { LucideIcon } from "lucide-react";
 import {
   Search,
@@ -19,6 +20,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
+import { useDispatch } from "react-redux";
 
 type LeadStatus =
   | "new"
@@ -79,7 +81,7 @@ export default function LeadsPage() {
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [sourceFilter, setSourceFilter] = useState("all");
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const getLeads = async () => {
       try {
@@ -90,6 +92,7 @@ export default function LeadsPage() {
         }>("/api/dashboardapi/Leads/AllLead", {
           withCredentials: true,
         });
+        dispatch(setAllLeads(response.data.data ?? []));
         setLeads(response.data.data ?? []);
       } catch (error) {
         console.error(error);
@@ -115,33 +118,28 @@ export default function LeadsPage() {
       const matchesSource =
         sourceFilter === "all" || lead.source === sourceFilter;
 
-      return (
-        matchesSearch &&
-        matchesStatus &&
-        matchesPriority &&
-        matchesSource
-      );
+      return matchesSearch && matchesStatus && matchesPriority && matchesSource;
     });
   }, [leads, search, statusFilter, priorityFilter, sourceFilter]);
 
   const totalValue = leads?.reduce(
     (total, lead) => total + (lead.estimatedValue ?? 0),
-    0
+    0,
   );
 
   const qualifiedLeads = leads?.filter(
-    (lead) => lead.status === "qualified"
+    (lead) => lead.status === "qualified",
   ).length;
 
   const highPriorityLeads = leads?.filter(
-    (lead) => lead.priority === "high"
+    (lead) => lead.priority === "high",
   ).length;
 
   const toggleSelectLead = (id: string) => {
     setSelectedLeads((prev) =>
       prev.includes(id)
         ? prev.filter((leadId) => leadId !== id)
-        : [...prev, id]
+        : [...prev, id],
     );
   };
 
@@ -291,8 +289,10 @@ export default function LeadsPage() {
             <SlidersHorizontal size={17} className="text-slate-500" />
 
             <span className="text-sm text-slate-400">
-              Showing {" "}
-              <span className="text-white font-medium">{filteredLeads?.length}</span>{" "}
+              Showing{" "}
+              <span className="text-white font-medium">
+                {filteredLeads?.length}
+              </span>{" "}
               leads
             </span>
 
@@ -344,8 +344,7 @@ export default function LeadsPage() {
                   <td className="px-5 py-4">
                     <input
                       type="checkbox"
-                      checked={selectedLeads
-                        ?.includes(lead.id)}
+                      checked={selectedLeads?.includes(lead.id)}
                       onChange={() => toggleSelectLead(lead.id)}
                       className="accent-blue-500"
                     />
@@ -361,8 +360,12 @@ export default function LeadsPage() {
                       </div>
 
                       <div>
-                        <p className="text-sm font-medium text-white">{lead.name}</p>
-                        <p className="text-xs text-slate-500 mt-0.5">{lead.email}</p>
+                        <p className="text-sm font-medium text-white">
+                          {lead.name}
+                        </p>
+                        <p className="text-xs text-slate-500 mt-0.5">
+                          {lead.email}
+                        </p>
                       </div>
                     </div>
                   </td>
@@ -375,7 +378,8 @@ export default function LeadsPage() {
 
                   <td className="px-5 py-4">
                     <span
-                      className={`inline-flex px-2.5 py-1 rounded-full border text-xs font-medium ${statusStyles[lead.status]}`}>
+                      className={`inline-flex px-2.5 py-1 rounded-full border text-xs font-medium ${statusStyles[lead.status]}`}
+                    >
                       {formatLabel(lead.status)}
                     </span>
                   </td>
@@ -387,12 +391,14 @@ export default function LeadsPage() {
                           lead.priority === "high"
                             ? "bg-red-400"
                             : lead.priority === "medium"
-                            ? "bg-amber-400"
-                            : "bg-slate-500"
+                              ? "bg-amber-400"
+                              : "bg-slate-500"
                         }`}
                       />
 
-                      <span className={`text-sm capitalize ${priorityStyles[lead.priority]}`}>
+                      <span
+                        className={`text-sm capitalize ${priorityStyles[lead.priority]}`}
+                      >
                         {lead.priority}
                       </span>
                     </div>
@@ -405,13 +411,17 @@ export default function LeadsPage() {
                   </td>
 
                   <td className="px-5 py-4">
-                    <span className="text-sm text-slate-300">{lead.assignedTo}</span>
+                    <span className="text-sm text-slate-300">
+                      {lead.assignedTo}
+                    </span>
                   </td>
 
                   <td className="px-5 py-4">
                     <span className="text-xs text-slate-500">
                       {lead.lastContactedAt
-                        ? new Date(lead.lastContactedAt).toLocaleDateString("en-GB")
+                        ? new Date(lead.lastContactedAt).toLocaleDateString(
+                            "en-GB",
+                          )
                         : "Never contacted"}
                     </span>
                   </td>
@@ -443,7 +453,9 @@ export default function LeadsPage() {
                   </div>
 
                   <div>
-                    <p className="text-sm font-medium text-white">{lead.name}</p>
+                    <p className="text-sm font-medium text-white">
+                      {lead.name}
+                    </p>
                     <p className="text-xs text-slate-500">{lead.email}</p>
                   </div>
                 </div>
@@ -455,7 +467,8 @@ export default function LeadsPage() {
 
               <div className="flex flex-wrap gap-2 mt-4">
                 <span
-                  className={`px-2.5 py-1 rounded-full border text-xs ${statusStyles[lead.status]}`}>
+                  className={`px-2.5 py-1 rounded-full border text-xs ${statusStyles[lead.status]}`}
+                >
                   {formatLabel(lead.status)}
                 </span>
 
@@ -478,14 +491,18 @@ export default function LeadsPage() {
 
                 <div>
                   <p className="text-[11px] text-slate-500">Assigned To</p>
-                  <p className="text-xs text-slate-300 mt-1">{lead.assignedTo}</p>
+                  <p className="text-xs text-slate-300 mt-1">
+                    {lead.assignedTo}
+                  </p>
                 </div>
 
                 <div>
                   <p className="text-[11px] text-slate-500">Last Contact</p>
                   <p className="text-xs text-slate-300 mt-1">
                     {lead.lastContactedAt
-                      ? new Date(lead.lastContactedAt).toLocaleDateString("en-GB")
+                      ? new Date(lead.lastContactedAt).toLocaleDateString(
+                          "en-GB",
+                        )
                       : "Never"}
                   </p>
                 </div>
@@ -551,7 +568,9 @@ function StatCard({
           <p className="text-[11px] text-slate-500 mt-1">{description}</p>
         </div>
 
-        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${iconStyle}`}>
+        <div
+          className={`w-10 h-10 rounded-xl flex items-center justify-center ${iconStyle}`}
+        >
           <Icon size={19} />
         </div>
       </div>
