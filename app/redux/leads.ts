@@ -1,15 +1,35 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-const LeadSlice=createSlice({
-    name:"Lead",
-    initialState:{
-        Lead: []
+interface Lead {
+  id: string;
+  name: string;
+  email: string;
+  assignedTo: string;
+  status: string;
+  priority: string;
+  source: string;
+  estimatedValue?: number;
+  lastContactedAt?: string;
+  createdAt: string;
+}
+
+interface LeadState {
+  Lead: Lead[];
+}
+
+const initialState: LeadState = {
+  Lead: [],
+};
+
+const LeadSlice = createSlice({
+  name: "Lead",
+  initialState,
+  reducers: {
+    setAllLeads: (state, action: PayloadAction<Lead[]>) => {
+      state.Lead = action.payload;
     },
-    reducers:{
-        setAllLeads:(state,action)=>{
-        state.Lead=action.payload
-    }}
-    
-})
-export  const {setAllLeads}=LeadSlice.actions
-export default LeadSlice.reducer
+  },
+});
+
+export const { setAllLeads } = LeadSlice.actions;
+export default LeadSlice.reducer;

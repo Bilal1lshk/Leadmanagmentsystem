@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
+import { useAppSelector } from "@/app/redux/hooks";
 type LeadStatus =
   | "new"
   | "contacted"
@@ -79,7 +80,11 @@ export default function LeadsPage() {
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [sourceFilter, setSourceFilter] = useState("all");
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
-
+  const data = useAppSelector((store) => store.LeadSlice.Lead);
+  console.log(data);
+  const newLeads = data?.filter((lead) => lead?.status === "new");
+  const qualifiedleads = data?.filter((lead) => lead.status === "qualified");
+const totalvalue = leads.reduce((sum, lead) => sum + (lead?.estimatedValue || 0), 0);
   useEffect(() => {
     const getLeads = async () => {
       try {
@@ -102,7 +107,7 @@ export default function LeadsPage() {
   const filteredLeads = useMemo<Lead[]>(() => {
     return leads.filter((lead) => {
       const matchesSearch =
-        lead.name?.toLowerCase().includes(search.toLowerCase()) ||
+        lead.name?.toLowerCase().includes(search.toLowerCase()) || 
         lead.email?.toLowerCase().includes(search.toLowerCase()) ||
         lead.assignedTo?.toLowerCase().includes(search.toLowerCase());
 
@@ -119,19 +124,11 @@ export default function LeadsPage() {
     });
   }, [leads, search, statusFilter, priorityFilter, sourceFilter]);
 
-  const totalValue = leads?.reduce(
-    (total, lead) => total + (lead.estimatedValue ?? 0),
-    0,
-  );
 
-  const qualifiedLeads = leads?.filter(
-    (lead) => lead.status === "qualified",
-  ).length;
 
-  const highPriorityLeads = leads?.filter(
-    (lead) => lead.priority === "high",
-  ).length;
+  const qualifiedLeads = Number(qualifiedleads.length)
 
+  const highPriorityLeads =Number(newLeads.length)
   const toggleSelectLead = (id: string) => {
     setSelectedLeads((prev) =>
       prev.includes(id)
@@ -210,7 +207,7 @@ export default function LeadsPage() {
         <StatCard
           icon={CircleDollarSign}
           label="Pipeline Value"
-          value={formatCurrency(totalValue)}
+          value={totalvalue}
           description="Estimated opportunity value"
           iconStyle="bg-emerald-500/10 text-emerald-400"
         />
