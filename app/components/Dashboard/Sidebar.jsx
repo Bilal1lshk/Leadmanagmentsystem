@@ -1,3 +1,4 @@
+"use client"
 import {
   LayoutDashboard,
   Users,
@@ -7,7 +8,12 @@ import {
   Settings,
   TrendingUp,
 } from "lucide-react";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+
+
 import Link from "next/link";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const navItems = [
   {
@@ -43,6 +49,15 @@ const navItems = [
 ];
 
 export default function Sidebar() {
+  const dispatch = useAppDispatch();
+
+  dispatch(setAllLeads(response.data.data ?? []));
+
+  const data = useSelector((store) => store.LeadSlice.Lead)
+  console.log(data)
+  useEffect(() => {
+
+  }, [])
   return (
     <aside className="w-56 min-h-screen bg-[#131826] border-r border-[#1F2635] p-3.5 flex flex-col gap-1">
 

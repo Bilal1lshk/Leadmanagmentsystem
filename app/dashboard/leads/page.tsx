@@ -81,7 +81,6 @@ export default function LeadsPage() {
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [sourceFilter, setSourceFilter] = useState("all");
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const getLeads = async () => {
@@ -93,7 +92,6 @@ export default function LeadsPage() {
         }>("/api/dashboardapi/Leads/AllLead", {
           withCredentials: true,
         });
-        dispatch(setAllLeads(response.data.data ?? []));
         setLeads(response.data.data ?? []);
       } catch (error) {
         console.error(error);
