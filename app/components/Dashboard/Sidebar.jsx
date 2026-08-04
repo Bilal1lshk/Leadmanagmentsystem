@@ -9,11 +9,13 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { setAllLeads } from "@/app/redux/leads";
+
 
 
 import Link from "next/link";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import axios from "axios";
 
 const navItems = [
   {
@@ -50,21 +52,29 @@ const navItems = [
 
 export default function Sidebar() {
   const dispatch = useAppDispatch();
-
-  dispatch(setAllLeads(response.data.data ?? []));
-
-  const data = useSelector((store) => store.LeadSlice.Lead)
-  console.log(data)
   useEffect(() => {
+    const gettingdata = async () => {
+      try {
+        const response = await axios.get("/api/dashboardapi/Leads/AllLead");
+        console.log(response.data, "response");
+        dispatch(setAllLeads(response.data.data ?? []));
+      } catch (err) {
+        console.log(err?.message ?? err, "failed");
+      }
+    };
 
-  }, [])
+    gettingdata();
+  }, [dispatch]);
+
+  const data = useAppSelector((store) => store.LeadSlice.Lead);
+  
   return (
     <aside className="w-56 min-h-screen bg-[#131826] border-r border-[#1F2635] p-3.5 flex flex-col gap-1">
 
       {/* Logo */}
       <div className="flex items-center gap-2 px-2 pb-5">
         <div className="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center">
-          <TrendingUp size={16} className="text-white" />
+          <TrendingUp data={data} size={16} className="text-white" />
         </div>
 
         <span className="font-bold text-[17px] text-white">

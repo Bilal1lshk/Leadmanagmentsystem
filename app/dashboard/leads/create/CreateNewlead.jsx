@@ -107,8 +107,6 @@ export default function CreateLeadPage() {
         if (!form.personId) return;
         setStatus("saving");
         try {
-            const response = await axios.post("/api/dashboardapi/Leads/CreateLead", form);
-            console.log(response.data);
             setStatus("saved");
         } catch (error) {
             console.error(error.response?.data || error.message);

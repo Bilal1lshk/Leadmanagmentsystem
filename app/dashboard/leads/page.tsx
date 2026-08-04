@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 
-import { setAllLeads } from "@/app/redux/leads";
 import type { LucideIcon } from "lucide-react";
 import {
   Search,
@@ -21,7 +20,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 type LeadStatus =
   | "new"
   | "contacted"
