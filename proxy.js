@@ -3,6 +3,9 @@ import { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
 export function proxy(NextRequest) {
     const token = NextRequest.cookies.get("token")?.value;
+    if (!token) {
+        return NextResponse.redirect(new URL("/login", NextRequest?.url));
+    }
     const data = jwt.verify(token, process.env.JWT_SECRET)
     const requestHeaders = new Headers(NextRequest.headers);
     requestHeaders.set("userId", data?.userId)
