@@ -21,7 +21,7 @@ export async function POST(request) {
 
     // Find user
     const user = await User.findOne({ email });
-
+console.log(user)
     if (!user) {
       return NextResponse.json(
         {
@@ -48,12 +48,24 @@ export async function POST(request) {
       );
     }
 
+    const jwtSecret = process.env.JWT_SECRET || process.env.AUTH_SECRET;
+
+    if (!jwtSecret) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Authentication secret is not configured",
+        },
+        { status: 503 }
+      );
+    }
+
     // Create JWT token
     const token = jwt.sign(
       {
         userId: user._id,
       },
-      process.env.JWT_SECRET,
+      jwtSecret,
       {
         expiresIn: "7d",
       }
@@ -83,14 +95,19 @@ export async function POST(request) {
     return response
 
   } catch (error) {
-    console.error(error);
+    console.error("Login error:", error);
+
+    const isDbConfigError =
+      error instanceof Error && error.message.includes("Missing MongoDB connection string");
 
     return NextResponse.json(
       {
         success: false,
-        message: "Internal server error",
+        message: isDbConfigError
+          ? "Database connection is not configured"
+          : "Internal server error",
       },
-      { status: 500 }
+      { status: isDbConfigError ? 503 : 500 }
     );
   }
 }

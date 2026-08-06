@@ -32,6 +32,18 @@ export async function POST(request) {
       );
     }
 
+    const jwtSecret = process.env.JWT_SECRET || process.env.AUTH_SECRET;
+
+    if (!jwtSecret) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Authentication secret is not configured",
+        },
+        { status: 503 }
+      );
+    }
+
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -57,13 +69,19 @@ export async function POST(request) {
       { status: 201 }
     );
   } catch (error) {
-    console.error(error);
+    console.error("Signup error:", error);
+
+    const isDbConfigError =
+      error instanceof Error && error.message.includes("Missing MongoDB connection string");
+
     return NextResponse.json(
       {
         success: false,
-        message: "Internal server error",
+        message: isDbConfigError
+          ? "Database connection is not configured"
+          : "Internal server error",
       },
-      { status: 500 }
+      { status: isDbConfigError ? 503 : 500 }
     );
   }
 }
