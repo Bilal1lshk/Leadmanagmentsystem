@@ -1,7 +1,7 @@
 "use client";
 
 import { FileText, Clock, Loader2, CheckCircle2, ArrowUp, ArrowDown } from "lucide-react";
-import { StatCardData } from "./types";
+import { StatCardData } from "./Types";
 
 const iconByKind = {
   total: { Icon: FileText, bg: "bg-blue-50", fg: "text-blue-600" },

@@ -1,8 +1,8 @@
 "use client";
 
 import { Search, Calendar } from "lucide-react";
-import FilterDropdown from "./FilterDropdown";
-import { FilterState } from "./types";
+import FilterDropdown from "./Filterdropdown";
+import { FilterState } from "./Types";
 
 interface FiltersBarProps {
   filters: FilterState;

@@ -1,4 +1,4 @@
-import { TaskPriority, TaskStatus } from "./types";
+import { TaskPriority, TaskStatus } from "./Types";
 
 const priorityStyles: Record<TaskPriority, string> = {
   High: "bg-red-50 text-red-600",

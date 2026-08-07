@@ -1,4 +1,4 @@
-import { StatCardData, Task, TaskDetail } from "./types";
+import { StatCardData, Task, TaskDetail } from "./Types";
 
 export const statCards: StatCardData[] = [
   { kind: "total", label: "Total", value: "4,022", changePct: "55%", changeDirection: "up" },

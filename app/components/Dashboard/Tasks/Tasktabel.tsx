@@ -1,8 +1,8 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
-import TaskRow from "./TaskRow";
-import { Task } from "./types";
+import TaskRow from "./Taskrow";
+import { Task } from "./Types";
 
 interface TasksTableProps {
   tasks: Task[];

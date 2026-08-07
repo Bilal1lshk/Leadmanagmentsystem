@@ -1,16 +1,16 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Sidebar from "./Sidebar";
-import TopHeader from "./TopHeader";
-import PageActions from "./PageActions";
-import StatsGrid from "./StatsGrid";
+import Sidebar from "../Homepage/Sidebar";
+import TopHeader from "../Homepage/Header";
+import PageActions from "./Pageactions";
+import StatsGrid from "./Statsgrid";
 import FiltersBar from "./FilterBar";
 import TasksTable from "./Tasktabel";
 import Pagination from "./Pagination";
-import TaskDetailPanel from "./TaskDetailPanel";
-import { statCards, tasks as initialTasks, taskDetail } from "./data";
-import { FilterState, Task } from "./types";
+import TaskDetailPanel from "./Taskdetailpanel";
+import { statCards, tasks as initialTasks, taskDetail } from "./Data";
+import { FilterState, Task } from "./Types";
 
 const emptyFilters: FilterState = {
   search: "",

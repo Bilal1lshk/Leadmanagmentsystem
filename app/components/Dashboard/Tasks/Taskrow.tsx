@@ -3,7 +3,7 @@
 import { MoreHorizontal } from "lucide-react";
 import Avatar from "./Avatar";
 import { PriorityBadge, StatusBadge } from "./Badges";
-import { Task } from "./types";
+import { Task } from "./Types";
 
 interface TaskRowProps {
   task: Task;

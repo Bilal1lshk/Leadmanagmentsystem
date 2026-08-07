@@ -4,8 +4,8 @@ import { useState } from "react";
 import { ArrowLeft, X, Smile } from "lucide-react";
 import Avatar from "./Avatar";
 import { PriorityBadge, StatusBadge } from "./Badges";
-import ActivityFeed from "./ActivityFeed";
-import { TaskDetail, TaskPriority } from "./types";
+import ActivityFeed from "./Activityfeed";
+import { TaskDetail, TaskPriority } from "./Types";
 
 interface TaskDetailPanelProps {
   task: TaskDetail;
