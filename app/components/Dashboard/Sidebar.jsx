@@ -7,6 +7,7 @@ import {
   BarChart3,
   Settings,
   TrendingUp,
+  FileDown 
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { setAllLeads } from "@/app/redux/leads";
@@ -44,10 +45,16 @@ const navItems = [
     link: "/dashboard/analytics",
   },
   {
+    icon: FileDown,
+    label: "Tasks",
+    link: "/dashboard/task",
+  },
+  {
     icon: Settings,
     label: "Settings",
     link: "/dashboard/settings",
   },
+  
 ];
 
 export default function Sidebar() {
@@ -67,7 +74,7 @@ export default function Sidebar() {
   }, [dispatch]);
 
   const data = useAppSelector((store) => store.LeadSlice.Lead);
-  
+
   return (
     <aside className="w-56 min-h-screen bg-[#131826] border-r border-[#1F2635] p-3.5 flex flex-col gap-1">
 
