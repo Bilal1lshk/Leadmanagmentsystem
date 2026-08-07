@@ -1,7 +1,7 @@
 "use client"
 
 import { Users, Sparkles, Target, Wallet, CheckCircle2 } from "lucide-react";
-import Card from "./Card.jsx";
+import Card from "./Card";
 import { useAppSelector } from "@/app/redux/hooks";
 import { useState } from "react";
 export default function StatCards() {
