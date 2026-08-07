@@ -1,6 +1,6 @@
 import { Search, Bell, ChevronDown } from "lucide-react";
 import Link from "next/link";
-import Notifications from "../ui/Notification/Notification";
+import Notifications from "../../ui/Notification/Notification";
 
 export default function Header({ name = "Bilal" }) {
   return (

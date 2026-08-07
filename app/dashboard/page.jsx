@@ -1,14 +1,14 @@
-import Sidebar from "../components/Dashboard/Sidebar.jsx";
-import Header from "../components/Dashboard/Header.jsx";
-import StatCards from "../components/Dashboard/Statcard.jsx";
-import PipelineBoard from "../components/Dashboard/PipelineBoard.jsx";
-import QuickActions from "../components/Dashboard/Quickactions.jsx";
-import AIInsights from "../components/Dashboard/Aiinshights.jsx";
-import RecentLeadsTable from "../components/Dashboard/Recentleadtable.jsx";
-import LeadSourcesChart from "../components/Dashboard/Leadsourcechart.jsx";
-import FollowUps from "../components/Dashboard/Followup.jsx";
-import LeadsChart from "../components/Dashboard/Leadchart.jsx";
-import LeadPriority from "../components/Dashboard/Leadpriority.jsx";
+import Sidebar from "../components/Dashboard/Homepage/Sidebar";
+import Header from "../components/Dashboard/Homepage/Header";
+import StatCards from "../components/Dashboard/Homepage/Statcard";
+import PipelineBoard from "../components/Dashboard/Homepage/PipelineBoard";
+import QuickActions from "../components/Dashboard/Homepage/Quickactions";
+import AIInsights from "../components/Dashboard/Homepage/Aiinshights";
+import RecentLeadsTable from "../components/Dashboard/Homepage/Recentleadtable";
+import LeadSourcesChart from "../components/Dashboard/Homepage/Leadsourcechart";
+import FollowUps from "../components/Dashboard/Homepage/Followup";
+import LeadsChart from "../components/Dashboard/Homepage/Leadchart";
+import LeadPriority from "../components/Dashboard/Homepage/Leadpriority";
 
 export default function Dashboard() {
   return (

@@ -1,4 +1,4 @@
-import TasksDashboard from "@/components/tasks/TasksDashboard";
+import TasksDashboard from "@/app/components/Dashboard/Tasks/TasksDashboard";
 
 export default function TasksPage() {
   return <TasksDashboard />;
