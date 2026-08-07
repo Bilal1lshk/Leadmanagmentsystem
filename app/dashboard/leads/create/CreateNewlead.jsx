@@ -73,8 +73,9 @@ export default function CreateLeadPage() {
                     "content-type": "application/json"
                 },
             })
+            console.log(resposne)
             const dataofapi = await resposne.json();
-
+            console.log(dataofapi)
             setdata(dataofapi?.allusers)
         }
         fetchingdata()
@@ -107,8 +108,8 @@ export default function CreateLeadPage() {
         if (!form.personId) return;
         setStatus("saving");
         try {
-           const respone= await axios.post("/api/dashboardapi/Leads/CreateLead", form);
-           console.log(respone)
+            const respone = await axios.post("/api/dashboardapi/Leads/CreateLead", form);
+            console.log(respone)
             setStatus("saved");
         } catch (error) {
             console.error(error.response?.data || error.message);
@@ -304,8 +305,8 @@ export default function CreateLeadPage() {
                             >
                                 <option value="">Unassigned</option>
                                 {data?.map((u) => (
-                                    <option key={u._id} value={u._id}>
-                                        {u.fullname}
+                                    <option key={u?._id} value={u?._id}>
+                                        {u?.name}
                                     </option>
                                 ))}
                             </select>
