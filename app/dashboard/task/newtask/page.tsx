@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calendar, FileText, X } from "lucide-react";
 import { useRouter } from "next/navigation"
+import { useAppSelector } from "@/app/redux/hooks";
 
 interface Lead {
   id: string;
@@ -32,7 +33,17 @@ export default function CreateTaskForm({
     assignedTo: "",
   });
   
-  const leads = propsLeads || [];
+  // Get leads from Redux
+  const reduxLeads = useAppSelector((store) => store?.LeadSlice?.Lead);
+  console.log("🔥 NEWTASK LEADS:", reduxLeads);
+  const fullStore = useAppSelector((store) => store);
+  console.log("Full Redux Store:", fullStore);
+  
+  useEffect(() => {
+    console.log("Component mounted - Redux Leads:", reduxLeads);
+  }, [reduxLeads]);
+  
+  const leads = propsLeads || reduxLeads || [];
   const users = propsUsers || [];
   
   const handleChange = (
@@ -131,7 +142,7 @@ export default function CreateTaskForm({
 
             <select
               name="leadId"
-              value={formData.leadId}
+              value={formData?.leadId}
               onChange={handleChange}
               className="w-full border rounded-lg p-3"
             >

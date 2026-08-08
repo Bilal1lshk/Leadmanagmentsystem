@@ -1,15 +1,21 @@
 "use client";
 
-import type { ReactNode } from "react";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import Userprovider from "./context/Usercontext.jsx";
 
-interface ProvidersProps {
-  children: ReactNode;
-}
+console.log("🔥 STORE OBJECT:", store);
 
-export default function Providers({ children }: ProvidersProps) {
+export default function Providers({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  console.log(
+    "🔥 LEADS INSIDE PROVIDER:",
+    store.getState().LeadSlice
+  );
+
   return (
     <Provider store={store}>
       <Userprovider>{children}</Userprovider>
