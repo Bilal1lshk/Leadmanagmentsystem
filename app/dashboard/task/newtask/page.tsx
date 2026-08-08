@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react";
 import { Calendar, FileText, X } from "lucide-react";
 import { useRouter } from "next/navigation"
-import { useAppSelector } from "@/app/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { setAllLeads } from "@/app/redux/leads";
+import axios from "axios";
 
 interface Lead {
   id: string;
@@ -18,12 +20,10 @@ interface CreateTaskFormProps {
   users?: UserType[];
   onClose?: () => void;
 }
-export default function CreateTaskForm({
-  leads: propsLeads,
-  users: propsUsers,
-  onClose,
-}: CreateTaskFormProps = {}) {
-
+export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
+  const leads = useAppSelector((store) => store.LeadSlice.Lead);
+  console.log(leads, "leads")
+  const users=["dnsdk"]
   const router = useRouter();
   const handleClose = onClose ?? (() => router.push("/dashboard/task"));
   const [formData, setFormData] = useState({
@@ -32,20 +32,19 @@ export default function CreateTaskForm({
     dueDate: "",
     assignedTo: "",
   });
-  
-  // Get leads from Redux
-  const reduxLeads = useAppSelector((store) => store?.LeadSlice?.Lead);
-  console.log("🔥 NEWTASK LEADS:", reduxLeads);
-  const fullStore = useAppSelector((store) => store);
-  console.log("Full Redux Store:", fullStore);
-  
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    console.log("Component mounted - Redux Leads:", reduxLeads);
-  }, [reduxLeads]);
-  
-  const leads = propsLeads || reduxLeads || [];
-  const users = propsUsers || [];
-  
+    const gettingdata = async () => {
+      try {
+        const response = await axios.get("/api/dashboardapi/Leads/AllLead");
+        dispatch(setAllLeads(response.data.data));
+      } catch (err) {
+        console.log(err?.message ?? err, "failed");
+      }
+    };
+
+    gettingdata();
+  }, [dispatch]);
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -76,7 +75,6 @@ export default function CreateTaskForm({
     console.log(formData)
     try {
       console.log("Creating Task:", taskData);
-
       setFormData({
         title: "",
         leadId: "",
@@ -85,40 +83,23 @@ export default function CreateTaskForm({
       });
       handleClose();
     } catch (error) {
-
       console.log(error);
-
     }
-
   };
-
-
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
       <div className="bg-white w-full max-w-lg rounded-xl p-6 shadow-xl">
-
         <div className="flex justify-between items-center mb-6">
-
           <h2 className="text-xl font-semibold">Create New Task</h2>
-
           <button onClick={handleClose}>
             <X />
           </button>
-
         </div>
-
         <form onSubmit={handleSubmit} className="space-y-4">
-
-
-
           <div>
-
             <label>
               Task Title *
             </label>
-
-
             <div className="relative">
               <FileText
                 className="absolute left-3 top-3 text-gray-400"
@@ -134,24 +115,18 @@ export default function CreateTaskForm({
             </div>
           </div>
           <div>
-
             <label>
               Lead *
             </label>
-
-
             <select
               name="leadId"
               value={formData?.leadId}
               onChange={handleChange}
               className="w-full border rounded-lg p-3"
             >
-
               <option value="">
                 Select Lead
               </option>
-
-
               {
                 leads?.map((lead) => (
                   <option

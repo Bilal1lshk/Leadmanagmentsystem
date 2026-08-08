@@ -81,7 +81,6 @@ export default function LeadsPage() {
   const [sourceFilter, setSourceFilter] = useState("all");
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
   const data = useAppSelector((store) => store.LeadSlice.Lead);
-  console.log(data);
   const newLeads = data?.filter((lead) => lead?.status === "new");
   const qualifiedleads = data?.filter((lead) => lead.status === "qualified");
 const totalvalue = leads.reduce((sum, lead) => sum + (lead?.estimatedValue || 0), 0);

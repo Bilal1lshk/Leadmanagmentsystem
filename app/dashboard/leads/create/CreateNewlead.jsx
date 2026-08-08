@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { GetuserId } from "../../../context/Usercontext.jsx"
-
 import {
     ArrowLeft,
     User,
@@ -73,10 +72,11 @@ export default function CreateLeadPage() {
                     "content-type": "application/json"
                 },
             })
-            console.log(resposne)
             const dataofapi = await resposne.json();
+            if(status !== 200) return 
             console.log(dataofapi)
             setdata(dataofapi?.allusers)
+
         }
         fetchingdata()
 
@@ -165,7 +165,7 @@ export default function CreateLeadPage() {
                                     type="text"
                                     value={form.personId}
                                     onChange={(e) => set("personId")(e.target.value)}
-                                    placeholder="Select a person..."
+                                    placeholder="Enter the Name"
                                     className="w-full bg-transparent outline-none text-[#22303A] placeholder-[#9A9A8F]"
                                 />
                             </div>
