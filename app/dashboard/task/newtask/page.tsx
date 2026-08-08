@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { Calendar, FileText, X } from "lucide-react";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"
+
 interface Lead {
-  _id: string;
+  id: string;
   name: string;
 }
 interface UserType {
@@ -13,71 +13,67 @@ interface UserType {
   name: string;
 }
 interface CreateTaskFormProps {
-  leads: Lead[];
-  users: UserType[];
+  leads?: Lead[];
+  users?: UserType[];
   onClose?: () => void;
 }
 export default function CreateTaskForm({
-  leads,
-  users,
+  leads: propsLeads,
+  users: propsUsers,
   onClose,
-}: CreateTaskFormProps) {
-  const dispatch = useDispatch();
+}: CreateTaskFormProps = {}) {
+
   const router = useRouter();
   const handleClose = onClose ?? (() => router.push("/dashboard/task"));
-  const [formData,setFormData] = useState({
-    title:"",
-    leadId:"",
-    dueDate:"",
-    assignedTo:"",
+  const [formData, setFormData] = useState({
+    title: "",
+    leadId: "",
+    dueDate: "",
+    assignedTo: "",
   });
+  
+  const leads = propsLeads || [];
+  const users = propsUsers || [];
+  
   const handleChange = (
-    e:React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     setFormData({
       ...formData,
-      [e.target.name]:e.target.value
+      [e.target.name]: e.target.value
     });
 
   };
-  const handleSubmit = async(
-    e:React.FormEvent
-  )=>{
+  const handleSubmit = async (
+    e: React.FormEvent
+  ) => {
     e.preventDefault()
-    if(
+    if (
       !formData.title ||
       !formData.leadId ||
       !formData.dueDate
-    ){
+    ) {
       alert("Fill required fields");
       return;
     }
     const taskData = {
-      title:formData.title,
-      leadId:formData.leadId,
-      dueDate:formData.dueDate,
-      assignedTo:formData.assignedTo || undefined,
+      title: formData.title,
+      leadId: formData.leadId,
+      dueDate: formData.dueDate,
+      assignedTo: formData.assignedTo || undefined,
     };
-
-
-
-    try{
-      console.log("Creating Task:",taskData);
+    console.log(formData)
+    try {
+      console.log("Creating Task:", taskData);
 
       setFormData({
-        title:"",
-        leadId:"",
-        dueDate:"",
-        assignedTo:"",
+        title: "",
+        leadId: "",
+        dueDate: "",
+        assignedTo: "",
       });
-
-
-
       handleClose();
-
-
-
-    }catch(error){
+    } catch (error) {
 
       console.log(error);
 
@@ -105,112 +101,112 @@ export default function CreateTaskForm({
 
 
 
-        <div>
+          <div>
 
-          <label>
-            Task Title *
-          </label>
+            <label>
+              Task Title *
+            </label>
 
 
-          <div className="relative">
-          <FileText
-          className="absolute left-3 top-3 text-gray-400"
-          size={18}
-          />
-          <input
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          placeholder="Call client"
-          className="w-full border rounded-lg p-3 pl-10"
-          />
+            <div className="relative">
+              <FileText
+                className="absolute left-3 top-3 text-gray-400"
+                size={18}
+              />
+              <input
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="Call client"
+                className="w-full border rounded-lg p-3 pl-10"
+              />
+            </div>
           </div>
-        </div>
-        <div>
+          <div>
 
-          <label>
-            Lead *
-          </label>
-
-
-          <select
-          name="leadId"
-          value={formData.leadId}
-          onChange={handleChange}
-          className="w-full border rounded-lg p-3"
-          >
-
-          <option value="">
-            Select Lead
-          </option>
+            <label>
+              Lead *
+            </label>
 
 
-          {
-            leads?.map((lead)=>(
-              <option
-              key={lead._id}
-              value={lead._id}
-              >
-                {lead.name}
+            <select
+              name="leadId"
+              value={formData.leadId}
+              onChange={handleChange}
+              className="w-full border rounded-lg p-3"
+            >
+
+              <option value="">
+                Select Lead
               </option>
-            ))
-          }
 
 
-          </select>
+              {
+                leads?.map((lead) => (
+                  <option
+                    key={lead.id}
+                    value={lead.id}
+                  >
+                    {lead.name}
+                  </option>
+                ))
+              }
 
-        </div>
-        <div>
 
-          <label>
-            Due Date *
-          </label>
-          <div className="relative">
-          <Calendar
-          className="absolute left-3 top-3 text-gray-400"
-          size={18}
-          />
-          <input
-          type="date"
-          name="dueDate"
-          value={formData.dueDate}
-          onChange={handleChange}
-          className="w-full border rounded-lg p-3 pl-10"
-          />
+            </select>
+
           </div>
-        </div>
-        <div>
-          <label>
-            Assign User
-          </label>
-          <select
-          name="assignedTo"
-          value={formData.assignedTo}
-          onChange={handleChange}
-          className="w-full border rounded-lg p-3"
-          >
-          <option value="">
-            Unassigned
-          </option>
-          {
-            users?.map((user)=>(
-              <option
-              key={user._id}
-              value={user._id}
-              >
-                {user.name}
+          <div>
+
+            <label>
+              Due Date *
+            </label>
+            <div className="relative">
+              <Calendar
+                className="absolute left-3 top-3 text-gray-400"
+                size={18}
+              />
+              <input
+                type="date"
+                name="dueDate"
+                value={formData.dueDate}
+                onChange={handleChange}
+                className="w-full border rounded-lg p-3 pl-10"
+              />
+            </div>
+          </div>
+          <div>
+            <label>
+              Assign User
+            </label>
+            <select
+              name="assignedTo"
+              value={formData.assignedTo}
+              onChange={handleChange}
+              className="w-full border rounded-lg p-3"
+            >
+              <option value="">
+                Unassigned
               </option>
-            ))
-          }
-          </select>
-        </div>
-        <button
-        type="submit"
-        className="w-full bg-blue-600 text-white py-3 rounded-lg"
-        >
-          Create Task
-        </button>
-      </form>
+              {
+                users?.map((user) => (
+                  <option
+                    key={user._id}
+                    value={user._id}
+                  >
+                    {user.name}
+                  </option>
+                ))
+              }
+            </select>
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-3 rounded-lg"
+          >
+            Create Task
+          </button>
+        </form>
       </div>
     </div>
 
