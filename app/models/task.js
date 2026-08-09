@@ -6,7 +6,7 @@ const taskSchema = new mongoose.Schema(
     leadId: { type: mongoose.Schema.Types.ObjectId, ref: "Lead", required: true },
     dueDate: { type: Date, required: true },
     assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    completed: { type: Boolean, default: false },
+    completed: { type: String, enum: ["notstarted", "inprogress", "completed"], default: "notstarted" },
   },
   { timestamps: true }
 );

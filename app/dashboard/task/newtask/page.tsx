@@ -69,23 +69,8 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
       alert("Fill required fields");
       return;
     }
-    const taskData = {
-      title: formData.title,
-      leadId: formData.leadId,
-      dueDate: formData.dueDate,
-      assignedTo: formData.assignedTo || undefined,
-    };
-    try {
-      setFormData({
-        title: "",
-        leadId: "",
-        dueDate: "",
-        assignedTo: "",
-      });
-      handleClose();
-    } catch (error) {
-      console.log(error);
-    }
+
+   
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
@@ -133,6 +118,7 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
                   <option
                     key={lead._id}
                     value={lead._id}
+                    
                   >
                     {lead?.personId}
                   </option>
