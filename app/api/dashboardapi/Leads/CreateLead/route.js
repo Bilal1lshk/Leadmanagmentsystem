@@ -5,16 +5,19 @@ export async function POST(Request) {
   try {
     const {
       sourcedby,
-      source,
       status,
       personId,
       priority,
       estimatedValue,
       assignedTo,
       lastContactedAt,
-      lostReason,
     } = await Request.json();
-    if (!sourcedby || !source || !status || !personId || !priority) {
+    if (!personId || 
+      !sourcedby ||
+      !status ||
+      !priority ||
+      !estimatedValue ||
+      !lastContactedAt) {
       return NextResponse.json(
         { message: "all fields should be filled" },
         { status: 400 }
@@ -29,12 +32,13 @@ export async function POST(Request) {
     }
 
     const created = await leadmodel.create({
+      personId,
       sourcedby,
-      source,
       status,
       priority,
       estimatedValue,
-      lostReason,
+      assignedTo,
+      lastContactedAt,
     })
 
     if(!created) return NextResponse.json({message:"Something went wrong in lead creation try again "})

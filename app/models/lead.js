@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const leadSchema = new mongoose.Schema(
   {
+    personId:{type:String, required:true},
     sourcedby: { type: mongoose.Schema.Types.ObjectId, ref: "Person", required: true },
     source: {
       type: String,
@@ -15,7 +16,9 @@ const leadSchema = new mongoose.Schema(
     },
     priority: { type: String, enum: ["low", "medium", "high"], default: "medium" },
     estimatedValue: { type: Number, default: 0 },
-    assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    assignedTo: {
+      type: mongoose.Schema.Types.ObjectId, ref: "User", default: null
+    },
     lastContactedAt: { type: Date },
     lostReason: { type: String, trim: true },
   },

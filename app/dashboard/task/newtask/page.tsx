@@ -22,6 +22,8 @@ interface CreateTaskFormProps {
 }
 export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
   const leads = useAppSelector((store) => store.LeadSlice.Lead);
+    const users = useAppSelector((store) => store.UserSlice.Users);
+
   console.log(leads, "leads")
   const users=["dnsdk"]
   const router = useRouter();
@@ -130,10 +132,10 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
               {
                 leads?.map((lead) => (
                   <option
-                    key={lead.id}
-                    value={lead.id}
+                    key={lead._id}
+                    value={lead._id}
                   >
-                    {lead.name}
+                    {lead?.personId}
                   </option>
                 ))
               }
