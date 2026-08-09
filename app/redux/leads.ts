@@ -1,16 +1,18 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface Lead {
-  id: string;
-  name: string;
-  email: string;
-  assignedTo: string;
-  status: string;
-  priority: string;
-  source: string;
+  _id?: string;
+  id?: string;
+  personId?: string;
+  name?: string;
+  email?: string;
+  assignedTo?: string;
+  status?: string;
+  priority?: string;
+  source?: string;
   estimatedValue?: number;
   lastContactedAt?: string;
-  createdAt: string;
+  createdAt?: string;
 }
 
 interface LeadState {

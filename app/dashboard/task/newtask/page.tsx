@@ -8,8 +8,10 @@ import { setAllLeads } from "@/app/redux/leads";
 import axios from "axios";
 
 interface Lead {
-  id: string;
-  name: string;
+  _id?: string;
+  id?: string;
+  personId?: string;
+  name?: string;
 }
 interface UserType {
   _id: string;
@@ -24,6 +26,12 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
   const leads = useAppSelector((store) => store.LeadSlice.Lead);
   const [users, setUsers] = useState<UserType[]>([]);
   const router = useRouter();
+  const handleleaditchange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({
+      ...formData,
+      leadId: e.target.value
+    });
+  }
   const handleClose = onClose ?? (() => router.push("/dashboard/task"));
   const [formData, setFormData] = useState({
     title: "",
@@ -31,6 +39,7 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
     dueDate: "",
     assignedTo: "",
   });
+  console.log(formData)
   const dispatch = useAppDispatch();
   useEffect(() => {
     const gettingdata = async () => {
@@ -42,7 +51,7 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
         dispatch(setAllLeads(response[0].data.data));
         setUsers(response[1].data.allusers);
       } catch (err) {
-        console.log(err?.message ?? err, "failed");
+        console.log(err, "failed");
       }
     };
 
@@ -69,6 +78,8 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
       alert("Fill required fields");
       return;
     }
+   const response = await axios.post("/api/Task/Createtask", formData)
+   console.log(response)
 
    
   };
@@ -106,28 +117,19 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
             </label>
             <select
               name="leadId"
-              value={formData?.leadId}
+              value={formData.leadId}
               onChange={handleChange}
               className="w-full border rounded-lg p-3"
             >
               <option value="">
                 Select Lead
               </option>
-              {
-                leads?.map((lead) => (
-                  <option
-                    key={lead._id}
-                    value={lead._id}
-                    
-                  >
-                    {lead?.personId}
-                  </option>
-                ))
-              }
-
-
+              {leads?.map((lead) => (
+                <option key={lead._id} value={lead._id}>
+                  {lead?.personId || lead?.name || "Unnamed lead"}
+                </option>
+              ))}
             </select>
-
           </div>
           <div>
 
