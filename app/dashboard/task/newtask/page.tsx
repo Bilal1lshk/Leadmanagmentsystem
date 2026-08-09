@@ -22,10 +22,7 @@ interface CreateTaskFormProps {
 }
 export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
   const leads = useAppSelector((store) => store.LeadSlice.Lead);
-    const users = useAppSelector((store) => store.UserSlice.Users);
-
-  console.log(leads, "leads")
-  const users=["dnsdk"]
+  const [users, setUsers] = useState<UserType[]>([]);
   const router = useRouter();
   const handleClose = onClose ?? (() => router.push("/dashboard/task"));
   const [formData, setFormData] = useState({
@@ -38,8 +35,12 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
   useEffect(() => {
     const gettingdata = async () => {
       try {
-        const response = await axios.get("/api/dashboardapi/Leads/AllLead");
-        dispatch(setAllLeads(response.data.data));
+        const response = await Promise.all([
+          axios.get("/api/dashboardapi/Leads/AllLead"),
+          axios.get("/api/User/AllUser")
+        ]);
+        dispatch(setAllLeads(response[0].data.data));
+        setUsers(response[1].data.allusers);
       } catch (err) {
         console.log(err?.message ?? err, "failed");
       }
@@ -74,9 +75,7 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
       dueDate: formData.dueDate,
       assignedTo: formData.assignedTo || undefined,
     };
-    console.log(formData)
     try {
-      console.log("Creating Task:", taskData);
       setFormData({
         title: "",
         leadId: "",
@@ -182,7 +181,7 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
                     key={user._id}
                     value={user._id}
                   >
-                    {user.name}
+                    {user?.name}
                   </option>
                 ))
               }
