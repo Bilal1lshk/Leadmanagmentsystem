@@ -13,9 +13,8 @@ export async function POST(Request) {
             leadId,
             title
         })
-        console.log(task)
         if(!task) return NextResponse.json({ message: "Something went wrong in task creation try again" }, { status: 500 })
-        return NextResponse.json(task, { status: 201 })
+        return NextResponse.json(task, { status: 200 })
 
     }
     catch (err) {

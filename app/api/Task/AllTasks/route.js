@@ -1,4 +1,7 @@
-async function GET() {
+import { NextResponse } from "next/server";
+import dbConnect from "../../../config/mongodbconnection"
+import taskmodel from "../../../models/task"
+export async function GET() {
     try{
  await dbConnect()
     const alltasks= await taskmodel.find()
