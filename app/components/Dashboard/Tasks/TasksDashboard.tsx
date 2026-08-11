@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Sidebar from "../Homepage/Sidebar";
 import TopHeader from "../Homepage/Header";
 import PageActions from "./Pageactions";
@@ -11,6 +11,10 @@ import Pagination from "./Pagination";
 import TaskDetailPanel from "./Taskdetailpanel";
 import { statCards, tasks as initialTasks, taskDetail } from "./Data";
 import { FilterState, Task } from "./Types";
+import axios from "axios";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { setTasks } from "@/app/redux/tasks";
+
 
 const emptyFilters: FilterState = {
   search: "",
@@ -30,7 +34,17 @@ export default function TasksDashboard() {
   const [filters, setFilters] = useState<FilterState>(emptyFilters);
   const [currentPage, setCurrentPage] = useState(1);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    const fetchTasks = async () => {
+    const alltasks=await axios.get("/api/Task/AllTasks")
+    dispatch(setTasks(alltasks.data.alltasks))
+    }
+    fetchTasks();
+  }, []);
+  const tasksselected = useAppSelector((store)=>store.tasksSlice);
+  console.log(tasksselected)
   const filteredTasks = useMemo(() => {
     const query = filters.search.trim().toLowerCase();
     if (!query) return tasks;

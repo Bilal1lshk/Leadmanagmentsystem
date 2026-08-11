@@ -78,10 +78,12 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
       alert("Fill required fields");
       return;
     }
-   const response = await axios.post("/api/Task/Createtask", formData)
-   console.log(response)
+    const response = await axios.post("/api/Task/Createtask", formData)
+    if (response.status === 200) {
+      alert("Task created successfully");
+      handleClose();
+    }
 
-   
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">

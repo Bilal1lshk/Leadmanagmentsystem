@@ -13,7 +13,6 @@ const iconByKind = {
 export default function StatCard({ label, value, changePct, changeDirection, kind }: StatCardData) {
   const { Icon, bg, fg } = iconByKind[kind];
   const isUp = changeDirection === "up";
-
   return (
     <div className="flex-1 rounded-xl border border-slate-200 bg-white p-4">
       <div className="mb-3 flex items-center gap-2">
