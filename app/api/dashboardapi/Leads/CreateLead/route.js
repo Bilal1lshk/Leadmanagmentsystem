@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import leadmodel from "../../../../models/lead.js";
 export async function POST(Request) {
-  console.log("request hitted");
   try {
     const {
       sourcedby,
@@ -42,10 +41,8 @@ export async function POST(Request) {
     })
 
     if(!created) return NextResponse.json({message:"Something went wrong in lead creation try again "})
-    console.log(created);
     return NextResponse.json({ message: "lead created succesfully" });
   } catch (err) {
-    console.log(err);
     return NextResponse.json({ message: "Error" }, { status: 500 });
   }
 }

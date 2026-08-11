@@ -7,10 +7,7 @@ async function connectdb(params) {
     }
     try {
         const connectdb = await mongoose.connect(url)
-        console.log("Database:", mongoose.connection.name);
-        console.log("Host:", mongoose.connection.host);
-        if (!connectdb) console.log("database didnt connected")
-        console.log("connected succesfully")
+        if (!connectdb) return
     }
     catch (err) {
         console.log(err.message, "failed")

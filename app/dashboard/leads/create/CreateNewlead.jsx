@@ -32,7 +32,6 @@ function Field({ label, children }) {
 }
 export default function CreateLeadPage() {
     const { userId } = GetuserId()
-    console.log(userId)
 
     const SOURCES = [
         { value: "website", label: "Website", icon: Globe },

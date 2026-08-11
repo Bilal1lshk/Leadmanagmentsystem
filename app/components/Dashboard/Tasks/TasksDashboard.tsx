@@ -9,12 +9,13 @@ import FiltersBar from "./FilterBar";
 import TasksTable from "./Tasktabel";
 import Pagination from "./Pagination";
 import TaskDetailPanel from "./Taskdetailpanel";
-import { statCards, useTasks, taskDetail } from "./Data";
+import { statCards,  tasks as initialTasks, taskDetail } from "./Data";
 import { FilterState, Task } from "./Types";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { setTasks } from "@/app/redux/tasks";
-
+statCards()
+console.log("//////")
 
 const emptyFilters: FilterState = {
   search: "",
@@ -28,7 +29,7 @@ const emptyFilters: FilterState = {
 const PAGE_SIZE = 8;
 
 export default function TasksDashboard() {
-  const [tasks] = useState<Task[]>(useTasks());
+  const [tasks] = useState<Task[]>(initialTasks);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [headerSearch, setHeaderSearch] = useState("");
   const [filters, setFilters] = useState<FilterState>(emptyFilters);

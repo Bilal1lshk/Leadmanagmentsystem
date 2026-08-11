@@ -4,7 +4,6 @@ import taskmodel from "../../../models/task"
 export async function POST(Request) {
     try {
         await dbConnect()
-        console.log("request hitted")
         const {assignedTo, dueDate, leadId, title } = await Request.json()
         if (!assignedTo || !dueDate || !leadId || !title) return NextResponse.json({ message: "All fields should be filled" }, { status: 400 })
         const task = await taskmodel.create({
@@ -18,7 +17,6 @@ export async function POST(Request) {
 
     }
     catch (err) {
-        console.log(err)
         return NextResponse.json({ message: "Error in creating task" }, { status: 500 })
     }
 }

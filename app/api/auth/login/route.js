@@ -21,7 +21,6 @@ export async function POST(request) {
 
     // Find user
     const user = await User.findOne({ email });
-console.log(user)
     if (!user) {
       return NextResponse.json(
         {
