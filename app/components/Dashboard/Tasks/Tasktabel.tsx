@@ -60,7 +60,7 @@ export default function TasksTable({
         <tbody>
           {tasks.map((task) => (
             <TaskRow
-              key={task.id}
+              key={task._id}
               task={task}
               selected={selectedIds.has(task.id)}
               onToggleSelect={onToggleSelect}

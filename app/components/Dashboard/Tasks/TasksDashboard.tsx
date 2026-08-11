@@ -9,7 +9,7 @@ import FiltersBar from "./FilterBar";
 import TasksTable from "./Tasktabel";
 import Pagination from "./Pagination";
 import TaskDetailPanel from "./Taskdetailpanel";
-import { statCards, tasks as initialTasks, taskDetail } from "./Data";
+import { statCards, useTasks, taskDetail } from "./Data";
 import { FilterState, Task } from "./Types";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
@@ -28,14 +28,15 @@ const emptyFilters: FilterState = {
 const PAGE_SIZE = 8;
 
 export default function TasksDashboard() {
-  const [tasks] = useState<Task[]>(initialTasks);
+  const [tasks] = useState<Task[]>(useTasks());
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [headerSearch, setHeaderSearch] = useState("");
   const [filters, setFilters] = useState<FilterState>(emptyFilters);
   const [currentPage, setCurrentPage] = useState(1);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const dispatch = useAppDispatch();
-
+  const tasksselected = useAppSelector((store) => store.tasksSlice);
+  console.log(tasksselected)
   useEffect(() => {
     const fetchTasks = async () => {
     const alltasks=await axios.get("/api/Task/AllTasks")
@@ -43,18 +44,8 @@ export default function TasksDashboard() {
     }
     fetchTasks();
   }, []);
-  const tasksselected = useAppSelector((store)=>store.tasksSlice);
-  console.log(tasksselected)
-  const filteredTasks = useMemo(() => {
-    const query = filters.search.trim().toLowerCase();
-    if (!query) return tasks;
-    return tasks.filter(
-      (t) =>
-        t.name.toLowerCase().includes(query) ||
-        t.relatedLead.toLowerCase().includes(query) ||
-        t.assignedTo.name.toLowerCase().includes(query)
-    );
-  }, [tasks, filters.search]);
+
+  let filteredTasks = tasksselected
 
   const totalPages = Math.max(1, Math.ceil(filteredTasks.length / PAGE_SIZE));
   const pagedTasks = filteredTasks.slice(
@@ -99,7 +90,7 @@ export default function TasksDashboard() {
 
             <div className="px-6 pt-4">
               <TasksTable
-                tasks={pagedTasks}
+                tasks={tasksselected}
                 selectedIds={selectedIds}
                 onToggleSelect={toggleSelect}
                 onToggleSelectAll={toggleSelectAll}

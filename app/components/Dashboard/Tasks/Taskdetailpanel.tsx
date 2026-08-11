@@ -25,6 +25,7 @@ export default function TaskDetailPanel({
   onDelete,
 }: TaskDetailPanelProps) {
   const [comment, setComment] = useState("");
+  console.log(task,"taskpanel")
 
   return (
     <aside className="flex h-full w-96 shrink-0 flex-col border-l border-slate-200 bg-white">
