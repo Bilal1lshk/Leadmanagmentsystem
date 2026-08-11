@@ -23,21 +23,19 @@ export default function TaskRow({ task, selected, onToggleSelect, onView }: Task
           className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
         />
       </td>
-      <td className="px-4 py-3 text-sm font-medium text-slate-800">{task?.title}</td>
+      <td className="px-4 py-3 text-sm font-medium text-slate-800">{task.name}</td>
       <td className="px-4 py-3 text-sm text-slate-600">{task.relatedLead}</td>
       <td className="px-4 py-3">
         <div className="flex items-center gap-2">
-          <Avatar name={task.assignedTo.name} />
-          <span className="text-sm text-slate-600">{task.assignedTo
-}</span>
+          <Avatar name={task.assignedTo?.name || "?"} />
+          <span className="text-sm text-slate-600">{task.assignedTo?.name || "Unassigned"}</span>
         </div>
       </td>
       <td className="px-4 py-3">
         <PriorityBadge priority={task.priority} />
       </td>
       <td className="px-4 py-3">
-        <StatusBadge status={task.completed
-} />
+        <StatusBadge status={task.status} />
       </td>
       <td className="px-4 py-3 text-sm text-slate-600">{task.dueDate}</td>
       <td className="px-4 py-3">
