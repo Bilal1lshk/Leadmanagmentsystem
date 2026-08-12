@@ -37,7 +37,7 @@ const navItems = [
   {
     icon: MessageCircle,
     label: "Follow-ups",
-    link: "/dashboard/follow-ups",
+    link: "/dashboard/followups",
   },
   {
     icon: BarChart3,
