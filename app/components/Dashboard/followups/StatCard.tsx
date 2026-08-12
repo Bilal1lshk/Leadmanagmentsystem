@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-function StatCard({
+export default function StatCard({
   icon,
   title,
   value,

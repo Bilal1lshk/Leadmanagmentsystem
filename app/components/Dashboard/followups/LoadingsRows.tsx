@@ -1,4 +1,4 @@
-function LoadingRows() {
+export default function LoadingRows() {
   return (
     <>
       {Array.from({ length: 6 }).map((_, rowIndex) => (

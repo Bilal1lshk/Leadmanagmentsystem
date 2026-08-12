@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, type ReactNode } from "react";
+import StatCard from "@/app/components/Dashboard/followups/StatCard"
 import {
   Calendar,
   CheckCircle2,
@@ -11,6 +12,10 @@ import {
   TriangleAlert,
   X,
 } from "lucide-react";
+import TableHeader from "@/app/components/Dashboard/followups/TableHeader";
+import LoadingRows from "@/app/components/Dashboard/followups/LoadingsRows";
+import EmptyState from "@/app/components/Dashboard/followups/EmptyState";
+import FollowupRow from "@/app/components/Dashboard/followups/FollowupRow";
 
 export type FollowupStatus =
   | "pending"
@@ -55,7 +60,7 @@ interface FollowupsPageProps {
 }
 
 
-const statusConfig: Record<
+export const statusConfig: Record<
   FollowupStatus,
   {
     label: string;
@@ -115,17 +120,17 @@ export default function FollowupsPage({
 
   const total = followups?.length;
 
-  const pending = followups.filter(
-    (followup) => followup.status === "pending"
+  const pending = followups?.filter(
+    (followup) => followup?.status === "pending"
   ).length;
 
-  const completed = followups.filter(
-    (followup) => followup.status === "completed"
+  const completed = followups?.filter(
+    (followup) => followup?.status === "completed"
   ).length;
 
-  const overdue = followups.filter(
+  const overdue = followups?.filter(
     (followup) =>
-      followup.status === "pending" &&
+      followup?.status === "pending" &&
       new Date(followup.duedate).getTime() < Date.now()
   ).length;
 
@@ -134,9 +139,9 @@ export default function FollowupsPage({
   ========================= */
 
   const filteredFollowups = useMemo(() => {
-    const query = search.toLowerCase().trim();
+    const query = search?.toLowerCase()?.trim();
 
-    return followups.filter((followup) => {
+    return followups?.filter((followup) => {
       const matchesSearch =
         !query ||
         followup.lead?.name
@@ -154,7 +159,7 @@ export default function FollowupsPage({
 
       const matchesStatus =
         status === "all" ||
-        followup.status === status;
+        followup?.status === status;
 
       return matchesSearch && matchesStatus;
     });
@@ -336,10 +341,10 @@ export default function FollowupsPage({
 
                 {loading ? (
                   <LoadingRows />
-                ) : filteredFollowups.length === 0 ? (
+                ) : filteredFollowups?.length === 0 ? (
                   <EmptyState onCreate={onCreate} />
                 ) : (
-                  filteredFollowups.map((followup) => (
+                  filteredFollowups?.map((followup) => (
                     <FollowupRow
                       key={followup._id}
                       followup={followup}

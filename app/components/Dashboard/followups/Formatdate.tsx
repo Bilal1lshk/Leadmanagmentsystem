@@ -1,4 +1,4 @@
-function formatDate(date: string): string {
+export default function formatDate(date: string): string {
   return new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",

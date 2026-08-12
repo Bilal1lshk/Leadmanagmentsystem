@@ -1,6 +1,8 @@
 import { MoreHorizontal } from "lucide-react";
-
-function FollowupRow({
+import {Followup} from "@/app/dashboard/followups/page";
+import {statusConfig} from "@/app/dashboard/followups/page";
+import formatDate from "@/app/components/Dashboard/followups/Formatdate";
+export default function FollowupRow({
   followup,
   menuOpen,
   onMenuToggle,

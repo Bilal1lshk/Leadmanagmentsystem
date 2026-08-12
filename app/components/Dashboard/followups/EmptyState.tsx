@@ -1,6 +1,6 @@
 import { Calendar } from "lucide-react";
 
-function EmptyState({
+export default function EmptyState({
   onCreate,
 }: {
   onCreate?: () => void;
