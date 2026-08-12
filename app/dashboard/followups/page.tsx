@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, type ReactNode } from "react";
+import Link from "next/link";
 import StatCard from "@/app/components/Dashboard/followups/StatCard"
 import {
   Calendar,
@@ -220,8 +221,8 @@ export default function FollowupsPage({
               onChange={(event) =>
                 setStatus(
                   event.target.value as
-                    | "all"
-                    | FollowupStatus
+                  | "all"
+                  | FollowupStatus
                 )
               }
               className="h-10 rounded-lg border border-gray-300 bg-white px-3 text-sm outline-none focus:border-blue-500"
@@ -252,15 +253,16 @@ export default function FollowupsPage({
             </select>
 
             {/* Create */}
-
-            <button
-              type="button"
-              onClick={onCreate}
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition hover:bg-blue-700"
-            >
-              <Plus size={18} />
-              New Follow-up
-            </button>
+            <Link href={"/dashboard/followups/create"}>
+              <button
+                type="button"
+                onClick={onCreate}
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition hover:bg-blue-700"
+              >
+                <Plus size={18} />
+                New Follow-up
+              </button>
+            </Link>
           </div>
         </div>
 
