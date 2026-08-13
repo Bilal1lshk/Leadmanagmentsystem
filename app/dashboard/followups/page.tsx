@@ -89,9 +89,6 @@ export const statusConfig: Record<
   },
 };
 
-/* =========================
-   Main Component
-========================= */
 
 export default function FollowupsPage({
   followups,
@@ -115,9 +112,7 @@ export default function FollowupsPage({
     null
   );
 
-  /* =========================
-     Statistics
-  ========================= */
+
 
   const total = followups?.length;
 
@@ -169,8 +164,6 @@ export default function FollowupsPage({
   return (
     <section className="min-h-screen bg-gray-50 p-4 md:p-6">
       <div className="mx-auto max-w-[1400px]">
-
-        {/* ================= HEADER ================= */}
 
         <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
@@ -266,7 +259,6 @@ export default function FollowupsPage({
           </div>
         </div>
 
-        {/* ================= STATS ================= */}
 
         <div className="mb-5 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
 
