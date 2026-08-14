@@ -2,8 +2,8 @@
 
 import { useAppSelector } from "@/app/redux/hooks";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
 interface Lead {
   _id: string;
   name: string;
@@ -26,23 +26,23 @@ interface CreateFollowupFormProps {
 }
 
 export default function CreateFollowupForm() {
+  const router = useRouter()
   interface User {
-  _id: string;
-  name: string;
-  email: string;
-  password: string;
-  avatar: string;
-  role: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
-  const [users,setusers]=useState<User[]>([])
-  const leads=useAppSelector((store)=>store.LeadSlice.Lead)
-  console.log(leads)
+    _id: string;
+    name: string;
+    email: string;
+    password: string;
+    avatar: string;
+    role: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  }
+  const [users, setusers] = useState<User[]>([])
+  const leads = useAppSelector((store) => store.LeadSlice.Lead)
   useEffect(() => {
     const gettingdata = async () => {
-      const data= await axios.get("/api/User/AllUser")
+      const data = await axios.get("/api/User/AllUser")
       setusers(data?.data?.allusers)
     }
     gettingdata()
@@ -55,7 +55,6 @@ export default function CreateFollowupForm() {
     assignedTo: "",
     status: "pending",
   });
-console.log(formData)
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -71,7 +70,9 @@ console.log(formData)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data=await axios.post(`/api/followups/Create`,formData);
+    const data = await axios.post(`/api/followups/Create`, formData);
+    console.log(data, "success")
+    router.push("/dashboard/followups/")
     console.log(data)
   };
 
