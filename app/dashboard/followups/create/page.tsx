@@ -15,7 +15,6 @@ interface User {
 }
 
 interface CreateFollowupFormProps {
-  leads: Lead[];
   users: User[];
   onSubmit: (data: {
     lead: string;
@@ -26,10 +25,7 @@ interface CreateFollowupFormProps {
   }) => void;
 }
 
-export default function CreateFollowupForm({
-  leads,
-  onSubmit,
-}: CreateFollowupFormProps) {
+export default function CreateFollowupForm() {
   interface User {
   _id: string;
   name: string;
@@ -42,9 +38,8 @@ export default function CreateFollowupForm({
   __v: number;
 }
   const [users,setusers]=useState<User[]>([])
-  console.log(users)
-  const selector=useAppSelector((store)=>store.LeadSlice.Lead)
-  console.log(selector)
+  const leads=useAppSelector((store)=>store.LeadSlice.Lead)
+  console.log(leads)
   useEffect(() => {
     const gettingdata = async () => {
       const data= await axios.get("/api/User/AllUser")
@@ -60,7 +55,7 @@ export default function CreateFollowupForm({
     assignedTo: "",
     status: "pending",
   });
-
+console.log(formData)
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -74,9 +69,10 @@ export default function CreateFollowupForm({
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(formData);
+    const data=await axios.post(`/api/followups/Create`,formData);
+    console.log(data)
   };
 
   return (
@@ -105,7 +101,7 @@ export default function CreateFollowupForm({
 
           {leads?.map((lead) => (
             <option key={lead?._id} value={lead?._id}>
-              {lead?.name}
+              {lead?.personId}
             </option>
           ))}
         </select>

@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-
     const newFollowUp = await FollowUp.create({
       lead: body.lead,
       comments: body.comments,
@@ -19,7 +18,6 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-
     return NextResponse.json(
       { message: "Follow-up created", data: newFollowUp },
       { status: 201 }
