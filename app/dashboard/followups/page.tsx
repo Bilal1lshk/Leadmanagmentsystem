@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import Link from "next/link";
 import StatCard from "@/app/components/Dashboard/followups/StatCard"
 import {
@@ -17,6 +17,7 @@ import TableHeader from "@/app/components/Dashboard/followups/TableHeader";
 import LoadingRows from "@/app/components/Dashboard/followups/LoadingsRows";
 import EmptyState from "@/app/components/Dashboard/followups/EmptyState";
 import FollowupRow from "@/app/components/Dashboard/followups/FollowupRow";
+import axios from "axios";
 
 export type FollowupStatus =
   | "pending"
@@ -101,39 +102,34 @@ export default function FollowupsPage({
   onReschedule,
 }: FollowupsPageProps) {
   const [search, setSearch] = useState("");
-
+const [data,setdata]=useState([])
   const [status, setStatus] = useState<
     "all" | FollowupStatus
   >("all");
-
+  const pendingleads=data?.filter((pending:object)=>pending.status==="pending")
+  console.log(pendingleads,"pending")
+  const completedleads=data?.filter((pending:object)=>pending.status==="completed")
+  console.log(completedleads.length,"completedleads") 
   const [dateFilter, setDateFilter] = useState("this-week");
 
   const [openMenu, setOpenMenu] = useState<string | null>(
     null
   );
-
-
-
-  const total = followups?.length;
-
-  const pending = followups?.filter(
-    (followup) => followup?.status === "pending"
-  ).length;
-
-  const completed = followups?.filter(
-    (followup) => followup?.status === "completed"
-  ).length;
-
   const overdue = followups?.filter(
     (followup) =>
       followup?.status === "pending" &&
       new Date(followup.duedate).getTime() < Date.now()
   ).length;
+  useEffect(() => {
+    const gettingdata = async () => {
+      const response = await axios.get(`/api/followups/All`);
+      console.log(data,"Alldata")
+      setdata(response.data.data)
 
-  /* =========================
-     Search + Status Filtering
-  ========================= */
-
+    }
+    gettingdata()
+  }, [])
+  console.log(data)
   const filteredFollowups = useMemo(() => {
     const query = search?.toLowerCase()?.trim();
 
@@ -265,7 +261,7 @@ export default function FollowupsPage({
           <StatCard
             icon={<Calendar size={22} />}
             title="Total Follow-ups"
-            value={total}
+            value={data.length}
             description="All records"
             iconClass="bg-blue-600"
             highlighted
@@ -274,7 +270,7 @@ export default function FollowupsPage({
           <StatCard
             icon={<Clock3 size={22} />}
             title="Pending"
-            value={pending}
+            value={pendingleads?.length}
             description="Scheduled actions"
             iconClass="bg-yellow-400"
           />
@@ -282,7 +278,7 @@ export default function FollowupsPage({
           <StatCard
             icon={<CheckCircle2 size={22} />}
             title="Completed"
-            value={completed}
+            value={completedleads?.length}
             description="Successfully handled"
             iconClass="bg-green-500"
           />

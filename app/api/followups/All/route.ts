@@ -2,6 +2,7 @@ import FollowUp from "@/app/models/followup";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
+  console.log("request hitted")
   try {
     const Allfollowup = await FollowUp.find()
     if (!Allfollowup) {
