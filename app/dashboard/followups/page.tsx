@@ -102,14 +102,15 @@ export default function FollowupsPage({
   onReschedule,
 }: FollowupsPageProps) {
   const [search, setSearch] = useState("");
-const [data,setdata]=useState([])
+  const [data, setdata] = useState([])
   const [status, setStatus] = useState<
     "all" | FollowupStatus
   >("all");
-  const pendingleads=data?.filter((pending:object)=>pending.status==="pending")
-  console.log(pendingleads,"pending")
-  const completedleads=data?.filter((pending:object)=>pending.status==="completed")
-  console.log(completedleads.length,"completedleads") 
+  const pendingleads = data?.filter((pending: object) => pending?.status === "pending")
+  const completedleads = data?.filter((pending: object) => pending?.status === "completed")
+  const date = Date.now();
+  const duedate = data?.filter((pending: object) =>  new Date(pending.duedate).getTime() < date)
+  console.log("duedate",duedate)
   const [dateFilter, setDateFilter] = useState("this-week");
 
   const [openMenu, setOpenMenu] = useState<string | null>(
@@ -123,7 +124,7 @@ const [data,setdata]=useState([])
   useEffect(() => {
     const gettingdata = async () => {
       const response = await axios.get(`/api/followups/All`);
-      console.log(data,"Alldata")
+      console.log(data, "Alldata")
       setdata(response.data.data)
 
     }
@@ -286,21 +287,18 @@ const [data,setdata]=useState([])
           <StatCard
             icon={<TriangleAlert size={22} />}
             title="Overdue"
-            value={overdue}
+            value={duedate.length}
             description="Missed deadlines"
             iconClass="bg-red-500"
           />
         </div>
 
-        {/* ================= ERROR ================= */}
 
         {error && (
           <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
             {error}
           </div>
         )}
-
-        {/* ================= TABLE ================= */}
 
         <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
           <div className="overflow-x-auto">

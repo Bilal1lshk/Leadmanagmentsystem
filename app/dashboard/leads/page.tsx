@@ -21,6 +21,7 @@ import {
 import Link from "next/link";
 import axios from "axios";
 import { useAppSelector } from "@/app/redux/hooks";
+import lead from "@/app/models/lead";
 type LeadStatus =
   | "new"
   | "contacted"
@@ -35,7 +36,7 @@ type LeadSource = "website" | "referral" | "ad" | "cold_call" | "other";
 
 interface Lead {
   id: string;
-  name: string;
+  personId: string;
   email: string;
   assignedTo: string;
   status: LeadStatus;
@@ -77,13 +78,14 @@ export default function LeadsPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  console.log(statusFilter)
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [sourceFilter, setSourceFilter] = useState("all");
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
   const data = useAppSelector((store) => store.LeadSlice.Lead);
   const newLeads = data?.filter((lead) => lead?.status === "new");
   const qualifiedleads = data?.filter((lead) => lead.status === "qualified");
-const totalvalue = leads.reduce((sum, lead) => sum + (lead?.estimatedValue || 0), 0);
+  const totalvalue = leads.reduce((sum, lead) => sum + (lead?.estimatedValue || 0), 0);
   useEffect(() => {
     const getLeads = async () => {
       try {
@@ -103,31 +105,23 @@ const totalvalue = leads.reduce((sum, lead) => sum + (lead?.estimatedValue || 0)
     getLeads();
   }, []);
 
-  const filteredLeads = useMemo<Lead[]>(() => {
-    return leads.filter((lead) => {
-      const matchesSearch =
-        lead.name?.toLowerCase().includes(search.toLowerCase()) || 
-        lead.email?.toLowerCase().includes(search.toLowerCase()) ||
-        lead.assignedTo?.toLowerCase().includes(search.toLowerCase());
+ const filteredLeads =  useMemo(() => {
+  return leads.filter((lead) => {
+    const matchesSearch =
+      lead?.personId?.toLowerCase()?.includes(search?.toLowerCase()) ||
+      lead?.email?.toLowerCase()?.includes(search?.toLowerCase()) ||
+      lead?.source?.toLowerCase()?.includes(search?.toLowerCase());
 
-      const matchesStatus =
-        statusFilter === "all" || lead.status === statusFilter;
+    const matchesStatus =
+      statusFilter === "all" || lead.status === statusFilter;
 
-      const matchesPriority =
-        priorityFilter === "all" || lead.priority === priorityFilter;
-
-      const matchesSource =
-        sourceFilter === "all" || lead.source === sourceFilter;
-
-      return matchesSearch && matchesStatus && matchesPriority && matchesSource;
-    });
-  }, [leads, search, statusFilter, priorityFilter, sourceFilter]);
-
-
-
+    return matchesSearch && matchesStatus;
+  });
+}, [leads, search, statusFilter]);
+console.log(filteredLeads)
   const qualifiedLeads = Number(qualifiedleads.length)
 
-  const highPriorityLeads =Number(newLeads.length)
+  const highPriorityLeads = Number(newLeads.length)
   const toggleSelectLead = (id: string) => {
     setSelectedLeads((prev) =>
       prev.includes(id)
@@ -346,18 +340,19 @@ const totalvalue = leads.reduce((sum, lead) => sum + (lead?.estimatedValue || 0)
                   <td className="px-5 py-4 min-w-[240px]">
                     <div className="flex items-center gap-3">
                       <div className="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-sm font-semibold text-blue-400">
-                        {lead.name
-                          .split(" ")
-                          .map((name) => name[0])
-                          .join("")}
+                        {lead?.personId
+                          ?.split(" ")
+                          ?.map((name) => name[0])
+                          ?.join("")}
                       </div>
 
                       <div>
                         <p className="text-sm font-medium text-white">
-                          {lead.name}
+                          {lead?.personId
+                          }
                         </p>
                         <p className="text-xs text-slate-500 mt-0.5">
-                          {lead.email}
+                          {lead?.email}
                         </p>
                       </div>
                     </div>
@@ -365,7 +360,7 @@ const totalvalue = leads.reduce((sum, lead) => sum + (lead?.estimatedValue || 0)
 
                   <td className="px-5 py-4">
                     <span className="text-sm text-slate-300 capitalize">
-                      {lead.source.replace("_", " ")}
+                      {lead?.source?.replace("_", " ")}
                     </span>
                   </td>
 
@@ -380,13 +375,12 @@ const totalvalue = leads.reduce((sum, lead) => sum + (lead?.estimatedValue || 0)
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-2">
                       <span
-                        className={`w-2 h-2 rounded-full ${
-                          lead.priority === "high"
-                            ? "bg-red-400"
-                            : lead.priority === "medium"
-                              ? "bg-amber-400"
-                              : "bg-slate-500"
-                        }`}
+                        className={`w-2 h-2 rounded-full ${lead.priority === "high"
+                          ? "bg-red-400"
+                          : lead.priority === "medium"
+                            ? "bg-amber-400"
+                            : "bg-slate-500"
+                          }`}
                       />
 
                       <span
@@ -413,8 +407,8 @@ const totalvalue = leads.reduce((sum, lead) => sum + (lead?.estimatedValue || 0)
                     <span className="text-xs text-slate-500">
                       {lead.lastContactedAt
                         ? new Date(lead.lastContactedAt).toLocaleDateString(
-                            "en-GB",
-                          )
+                          "en-GB",
+                        )
                         : "Never contacted"}
                     </span>
                   </td>
@@ -439,17 +433,17 @@ const totalvalue = leads.reduce((sum, lead) => sum + (lead?.estimatedValue || 0)
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-sm font-semibold text-blue-400">
-                    {lead.name
-                      .split(" ")
-                      .map((name) => name[0])
-                      .join("")}
+                    {lead?.name
+                      ?.split(" ")
+                      ?.map((name) => name[0])
+                      ?.join("")}
                   </div>
 
                   <div>
                     <p className="text-sm font-medium text-white">
-                      {lead.name}
+                      {lead?.name}
                     </p>
-                    <p className="text-xs text-slate-500">{lead.email}</p>
+                    <p className="text-xs text-slate-500">{lead?.email}</p>
                   </div>
                 </div>
 
@@ -494,8 +488,8 @@ const totalvalue = leads.reduce((sum, lead) => sum + (lead?.estimatedValue || 0)
                   <p className="text-xs text-slate-300 mt-1">
                     {lead.lastContactedAt
                       ? new Date(lead.lastContactedAt).toLocaleDateString(
-                          "en-GB",
-                        )
+                        "en-GB",
+                      )
                       : "Never"}
                   </p>
                 </div>
@@ -523,7 +517,7 @@ const totalvalue = leads.reduce((sum, lead) => sum + (lead?.estimatedValue || 0)
           ))}
         </div>
 
-        {filteredLeads?.length === 0 && (
+        {filteredLeads?.length < 0 && (
           <div className="py-16 text-center">
             <Users size={32} className="mx-auto text-slate-600 mb-3" />
             <p className="text-sm text-slate-400">No leads found</p>
