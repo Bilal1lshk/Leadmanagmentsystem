@@ -76,10 +76,11 @@ const formatCurrency = (value: number = 0) => {
 
 export default function LeadsPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
+  console.log(leads)
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  console.log(statusFilter)
   const [priorityFilter, setPriorityFilter] = useState("all");
+  console.log(priorityFilter)
   const [sourceFilter, setSourceFilter] = useState("all");
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
   const data = useAppSelector((store) => store.LeadSlice.Lead);
@@ -105,20 +106,24 @@ export default function LeadsPage() {
     getLeads();
   }, []);
 
- const filteredLeads =  useMemo(() => {
-  return leads.filter((lead) => {
-    const matchesSearch =
-      lead?.personId?.toLowerCase()?.includes(search?.toLowerCase()) ||
-      lead?.email?.toLowerCase()?.includes(search?.toLowerCase()) ||
-      lead?.source?.toLowerCase()?.includes(search?.toLowerCase());
+  const filteredLeads = useMemo(() => {
+    return leads.filter((lead) => {
+      const matchesSearch =
+        lead?.personId?.toLowerCase()?.includes(search?.toLowerCase()) ||
+        lead?.email?.toLowerCase()?.includes(search?.toLowerCase()) ||
+        lead?.source?.toLowerCase()?.includes(search?.toLowerCase());
+      const matchesStatus =
+        statusFilter === "all" || lead.status === statusFilter;
 
-    const matchesStatus =
-      statusFilter === "all" || lead.status === statusFilter;
+      const matchesPriority =
+        priorityFilter === "all" || lead.priority === priorityFilter;
 
-    return matchesSearch && matchesStatus;
-  });
-}, [leads, search, statusFilter]);
-console.log(filteredLeads)
+      const matchesSource =
+        sourceFilter === "all" || lead.source === sourceFilter;
+
+      return matchesSearch && matchesStatus && matchesPriority && matchesSource;
+    });
+  }, [leads, search, statusFilter,priorityFilter,sourceFilter]);
   const qualifiedLeads = Number(qualifiedleads.length)
 
   const highPriorityLeads = Number(newLeads.length)

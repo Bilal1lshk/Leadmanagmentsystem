@@ -14,7 +14,7 @@ interface TaskRowProps {
 
 export default function TaskRow({ task, selected, onToggleSelect, onView }: TaskRowProps) {
   return (
-    <tr className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
+    <tr className="border-b border-[#E5CB90]/40 last:border-0 hover:bg-[#FFF3C8]/20">
       <td className="w-10 px-4 py-3">
         <input
           type="checkbox"
@@ -23,12 +23,12 @@ export default function TaskRow({ task, selected, onToggleSelect, onView }: Task
           className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
         />
       </td>
-      <td className="px-4 py-3 text-sm font-medium text-slate-800">{task.name}</td>
-      <td className="px-4 py-3 text-sm text-slate-600">{task.relatedLead}</td>
+      <td className="px-4 py-3 text-sm font-medium text-[#22303A]">{task.name}</td>
+      <td className="px-4 py-3 text-sm text-[#4A5A5F]">{task.relatedLead}</td>
       <td className="px-4 py-3">
         <div className="flex items-center gap-2">
           <Avatar name={task.assignedTo?.name || "?"} />
-          <span className="text-sm text-slate-600">{task.assignedTo?.name || "Unassigned"}</span>
+          <span className="text-sm text-[#4A5A5F]">{task.assignedTo?.name || "Unassigned"}</span>
         </div>
       </td>
       <td className="px-4 py-3">
@@ -37,26 +37,26 @@ export default function TaskRow({ task, selected, onToggleSelect, onView }: Task
       <td className="px-4 py-3">
         <StatusBadge status={task.status} />
       </td>
-      <td className="px-4 py-3 text-sm text-slate-600">{task.dueDate}</td>
+      <td className="px-4 py-3 text-sm text-[#4A5A5F]">{task.dueDate}</td>
       <td className="px-4 py-3">
         <div className="flex items-center gap-3 text-sm">
           <button
             type="button"
             onClick={() => onView(task)}
-            className="font-medium text-blue-600 hover:underline"
+            className="font-medium text-[#458393] hover:underline"
           >
             View
           </button>
-          <button type="button" className="font-medium text-slate-500 hover:underline">
+          <button type="button" className="font-medium text-[#5C6D71] hover:underline">
             Edit
           </button>
-          <button type="button" className="font-medium text-red-500 hover:underline">
+          <button type="button" className="font-medium text-red-600 hover:underline">
             Delete
           </button>
           <button
             type="button"
             aria-label="More actions"
-            className="text-slate-400 hover:text-slate-600"
+            className="text-[#5C6D71] hover:text-[#22303A]"
           >
             <MoreHorizontal className="h-4 w-4" />
           </button>

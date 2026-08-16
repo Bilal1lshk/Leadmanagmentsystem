@@ -11,12 +11,12 @@ export default function StatCards() {
      const qualifiedleads=data?.filter((lead)=>lead?.status==="qualified")
     
   const stats = [
-  { icon: Users, color: "text-blue-400", label: "Total Leads", value:Number(data?.length) 
+  { icon: Users, color: "text-[#458393]", label: "Total Leads", value:Number(data?.length) 
  },
-  { icon: Sparkles, color: "text-violet-400", label: "New Leads", value: Number(newLeads.length), sub: "this month" },
-  { icon: Target, color: "text-red-400", label: "Qualified Leads", value: Number(qualifiedleads.length) },
-  { icon: Wallet, color: "text-amber-400", label: "Pipeline Value", value:`${pipelinevalue}$` },
-  { icon: CheckCircle2, color: "text-emerald-400", label: "Conversion Rate", value: "24.8%" },
+  { icon: Sparkles, color: "text-[#34A99D]", label: "New Leads", value: Number(newLeads.length), sub: "this month" },
+  { icon: Target, color: "text-[#E5CB90]", label: "Qualified Leads", value: Number(qualifiedleads.length) },
+  { icon: Wallet, color: "text-[#458393]", label: "Pipeline Value", value:`${pipelinevalue}$` },
+  { icon: CheckCircle2, color: "text-[#34A99D]", label: "Conversion Rate", value: "24.8%" },
 ];
   return (
     <div className="grid grid-cols-5 gap-3.5">
@@ -24,10 +24,10 @@ export default function StatCards() {
         <Card key={s.label}>
           <div className="flex items-center gap-2 mb-2.5">
             <s.icon size={16} className={s.color} />
-            <span className="text-[13px] text-slate-400">{s.label}</span>
+            <span className="text-[13px] text-[#5C6D71]">{s.label}</span>
           </div>
-          <div className="text-2xl font-bold text-white">{s.value}</div>
-          {s.sub && <div className="text-xs text-slate-400 mt-0.5">{s.sub}</div>}
+          <div className="text-2xl font-bold text-[#22303A]">{s.value}</div>
+          {s.sub && <div className="text-xs text-[#5C6D71] mt-0.5">{s.sub}</div>}
         </Card>
       ))}
     </div>

@@ -75,15 +75,15 @@ export default function Sidebar() {
   const data = useAppSelector((store) => store.LeadSlice.Lead);
 
   return (
-    <aside className="w-56 min-h-screen bg-[#131826] border-r border-[#1F2635] p-3.5 flex flex-col gap-1">
+    <aside className="w-56 min-h-screen bg-white border-r border-[#E5CB90]/60 p-3.5 flex flex-col gap-1">
 
       {/* Logo */}
       <div className="flex items-center gap-2 px-2 pb-5">
-        <div className="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center">
-          <TrendingUp data={data} size={16} className="text-white" />
+        <div className="w-8 h-8 rounded-lg bg-[#458393] flex items-center justify-center">
+          <TrendingUp data={data} size={16} className="text-[#FFF3C8]" />
         </div>
 
-        <span className="font-bold text-[17px] text-white">
+        <span className="font-bold text-[17px] text-[#2A3F45]">
           Leadwise
         </span>
       </div>
@@ -102,10 +102,10 @@ export default function Sidebar() {
               rounded-lg
               text-sm
               cursor-pointer
-              text-slate-400
+              text-[#5C6D71]
               font-medium
-              hover:bg-[#1A2030]
-              hover:text-white
+              hover:bg-[#FFF3C8]/40
+              hover:text-[#458393]
               transition-colors
             "
           >
