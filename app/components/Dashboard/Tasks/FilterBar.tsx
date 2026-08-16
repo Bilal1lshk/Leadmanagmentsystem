@@ -15,13 +15,13 @@ export default function FiltersBar({ filters, onFilterChange, onReset }: Filters
     <div className="space-y-3 px-6 pt-6">
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative min-w-[200px] flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-gray" />
           <input
             type="text"
             value={filters.search}
             onChange={(e) => onFilterChange({ search: e.target.value })}
             placeholder="Search tasks"
-            className="w-full rounded-lg border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm text-slate-700 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100"
+            className="w-full rounded-lg border border-brand-line bg-white py-2 pl-9 pr-3 text-sm text-brand-navy placeholder:text-brand-gray focus:border-brand-teal focus:outline-none focus:ring-2 focus:ring-brand-teal/30"
           />
         </div>
 
@@ -34,7 +34,7 @@ export default function FiltersBar({ filters, onFilterChange, onReset }: Filters
         <button
           type="button"
           onClick={onReset}
-          className="rounded-lg px-3 py-2 text-sm font-medium text-slate-500 hover:bg-slate-50"
+          className="rounded-lg px-3 py-2 text-sm font-medium text-brand-gray hover:bg-brand-cream/40"
         >
           Reset Filters
         </button>

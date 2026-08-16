@@ -85,7 +85,7 @@ export default function CreateFollowupForm() {
       <div>
         <label
           htmlFor="lead"
-          className="mb-2 block text-sm font-medium text-gray-700"
+          className="mb-2 block text-sm font-medium text-brand-navy"
         >
           Lead
         </label>
@@ -96,7 +96,7 @@ export default function CreateFollowupForm() {
           value={formData.lead}
           onChange={handleChange}
           required
-          className="w-full rounded-lg border border-gray-300 px-4 py-2.5 outline-none focus:border-black"
+          className="w-full rounded-lg border border-brand-line px-4 py-2.5 outline-none focus:border-brand-teal"
         >
           <option value="">Select a lead</option>
 
@@ -112,7 +112,7 @@ export default function CreateFollowupForm() {
       <div>
         <label
           htmlFor="comments"
-          className="mb-2 block text-sm font-medium text-gray-700"
+          className="mb-2 block text-sm font-medium text-brand-navy"
         >
           Comments
         </label>
@@ -125,7 +125,7 @@ export default function CreateFollowupForm() {
           placeholder="Enter follow-up details..."
           rows={4}
           required
-          className="w-full resize-none rounded-lg border border-gray-300 px-4 py-2.5 outline-none focus:border-black"
+          className="w-full resize-none rounded-lg border border-brand-line px-4 py-2.5 outline-none focus:border-brand-teal"
         />
       </div>
 
@@ -133,7 +133,7 @@ export default function CreateFollowupForm() {
       <div>
         <label
           htmlFor="duedate"
-          className="mb-2 block text-sm font-medium text-gray-700"
+          className="mb-2 block text-sm font-medium text-brand-navy"
         >
           Due Date
         </label>
@@ -145,7 +145,7 @@ export default function CreateFollowupForm() {
           value={formData.duedate}
           onChange={handleChange}
           required
-          className="w-full rounded-lg border border-gray-300 px-4 py-2.5 outline-none focus:border-black"
+          className="w-full rounded-lg border border-brand-line px-4 py-2.5 outline-none focus:border-brand-teal"
         />
       </div>
 
@@ -153,7 +153,7 @@ export default function CreateFollowupForm() {
       <div>
         <label
           htmlFor="assignedTo"
-          className="mb-2 block text-sm font-medium text-gray-700"
+          className="mb-2 block text-sm font-medium text-brand-navy"
         >
           Assigned To
         </label>
@@ -164,7 +164,7 @@ export default function CreateFollowupForm() {
           value={formData.assignedTo}
           onChange={handleChange}
           required
-          className="w-full rounded-lg border border-gray-300 px-4 py-2.5 outline-none focus:border-black"
+          className="w-full rounded-lg border border-brand-line px-4 py-2.5 outline-none focus:border-brand-teal"
         >
           <option value="">Select user</option>
 
@@ -180,7 +180,7 @@ export default function CreateFollowupForm() {
       <div>
         <label
           htmlFor="status"
-          className="mb-2 block text-sm font-medium text-gray-700"
+          className="mb-2 block text-sm font-medium text-brand-navy"
         >
           Status
         </label>
@@ -190,7 +190,7 @@ export default function CreateFollowupForm() {
           name="status"
           value={formData.status}
           onChange={handleChange}
-          className="w-full rounded-lg border border-gray-300 px-4 py-2.5 outline-none focus:border-black"
+          className="w-full rounded-lg border border-brand-line px-4 py-2.5 outline-none focus:border-brand-teal"
         >
           <option value="pending">Pending</option>
           <option value="completed">Completed</option>
@@ -201,7 +201,7 @@ export default function CreateFollowupForm() {
       {/* Submit */}
       <button
         type="submit"
-        className="w-full rounded-lg bg-black px-4 py-3 text-sm font-medium text-white transition hover:bg-gray-800"
+        className="w-full rounded-lg bg-brand-teal px-4 py-3 text-sm font-medium text-white transition hover:bg-brand-teal-dark"
       >
         Create Follow-up
       </button>

@@ -18,9 +18,9 @@ export default function QuickActions({ onAction }) {
           <button
             key={label}
             onClick={() => onAction?.(label)}
-            className="flex items-center gap-2 bg-[#0F1420] border border-[#1F2635] rounded-lg px-3 py-2.5 text-sm text-white hover:bg-[#171D2C] transition-colors"
+            className="flex items-center gap-2 bg-brand-navy-deep border border-brand-navy-border rounded-lg px-3 py-2.5 text-sm text-white hover:bg-brand-navy-surface transition-colors"
           >
-            <Icon size={14} className="text-blue-500" />
+            <Icon size={14} className="text-brand-teal-light" />
             {label}
           </button>
         ))}

@@ -28,7 +28,7 @@ export default function FollowupRow({
 
   return (
     <tr
-      className={`border-b border-gray-100 hover:bg-gray-50 ${
+      className={`border-b border-brand-line hover:bg-brand-cream/40 ${
         isOverdue ? "bg-red-50/60" : ""
       }`}
     >
@@ -38,14 +38,14 @@ export default function FollowupRow({
       <td className="px-4 py-4">
         <input
           type="checkbox"
-          className="h-4 w-4 rounded border-gray-300"
+          className="h-4 w-4 rounded border-brand-line"
         />
       </td>
 
       {/* Lead */}
 
       <td className="px-4 py-4">
-        <p className="font-medium text-gray-900">
+        <p className="font-medium text-brand-navy">
           {followup.lead?.company ||
             followup.lead?.name}
         </p>
@@ -64,12 +64,12 @@ export default function FollowupRow({
               className="h-8 w-8 rounded-full object-cover"
             />
           ) : (
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-xs font-semibold">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-line text-xs font-semibold">
               {followup.assignedTo?.name?.charAt(0)}
             </div>
           )}
 
-          <span className="text-sm text-gray-800">
+          <span className="text-sm text-brand-navy">
             {followup.assignedTo?.name}
           </span>
 
@@ -83,7 +83,7 @@ export default function FollowupRow({
 
         <div className="flex items-center gap-2">
 
-          <span className="whitespace-nowrap text-sm text-gray-800">
+          <span className="whitespace-nowrap text-sm text-brand-navy">
             {formatDate(followup.duedate)}
           </span>
 
@@ -114,7 +114,7 @@ export default function FollowupRow({
       <td className="max-w-[280px] px-4 py-4">
 
         <p
-          className="truncate text-sm text-gray-700"
+          className="truncate text-sm text-brand-navy"
           title={followup.comments}
         >
           {followup.comments || "No comments"}
@@ -128,34 +128,34 @@ export default function FollowupRow({
 
         <div className="flex items-center gap-2 whitespace-nowrap">
 
-          <button className="text-sm text-blue-700 hover:underline">
+          <button className="text-sm text-brand-teal hover:underline">
             View
           </button>
 
-          <span className="text-gray-300">|</span>
+          <span className="text-brand-gray">|</span>
 
           <button
             onClick={onEdit}
-            className="text-sm text-blue-700 hover:underline"
+            className="text-sm text-brand-teal hover:underline"
           >
             Edit
           </button>
 
-          <span className="text-gray-300">|</span>
+          <span className="text-brand-gray">|</span>
 
           <button
             onClick={onComplete}
             disabled={
               followup.status === "completed"
             }
-            className="text-sm text-blue-700 hover:underline disabled:opacity-40"
+            className="text-sm text-brand-teal hover:underline disabled:opacity-40"
           >
             Complete
           </button>
 
           <button
             onClick={onMenuToggle}
-            className="rounded-md p-1 text-gray-500 hover:bg-gray-100"
+            className="rounded-md p-1 text-brand-gray hover:bg-brand-cream/60"
           >
             <MoreHorizontal size={18} />
           </button>
@@ -163,11 +163,11 @@ export default function FollowupRow({
         </div>
 
         {menuOpen && (
-          <div className="absolute right-4 top-12 z-20 w-40 rounded-lg border border-gray-200 bg-white p-1 shadow-lg">
+          <div className="absolute right-4 top-12 z-20 w-40 rounded-lg border border-brand-line bg-white p-1 shadow-lg">
 
             <button
               onClick={onReschedule}
-              className="w-full rounded-md px-3 py-2 text-left text-sm hover:bg-gray-50"
+              className="w-full rounded-md px-3 py-2 text-left text-sm hover:bg-brand-cream/40"
             >
               Reschedule
             </button>

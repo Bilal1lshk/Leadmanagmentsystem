@@ -48,17 +48,17 @@ interface Lead {
 }
 
 const statusStyles: Record<LeadStatus, string> = {
-  new: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-  contacted: "bg-slate-500/10 text-slate-300 border-slate-500/20",
-  qualified: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
-  proposal: "bg-purple-500/10 text-purple-400 border-purple-500/20",
-  won: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+  new: "bg-brand-teal/10 text-brand-teal-light border-brand-teal/20",
+  contacted: "bg-brand-gray/10 text-brand-gray-light border-brand-navy-border/20",
+  qualified: "bg-brand-emerald/10 text-brand-emerald-light border-brand-emerald/20",
+  proposal: "bg-brand-teal-light/10 text-brand-teal-light border-brand-teal-light/20",
+  won: "bg-brand-emerald/10 text-brand-emerald-light border-brand-emerald/20",
   lost: "bg-red-500/10 text-red-400 border-red-500/20",
 };
 
 const priorityStyles: Record<LeadPriority, string> = {
-  low: "text-slate-400",
-  medium: "text-amber-400",
+  low: "text-brand-gray-light",
+  medium: "text-brand-tan-light",
   high: "text-red-400",
 };
 
@@ -146,7 +146,7 @@ console.log(filteredLeads)
   };
 
   return (
-    <main className="min-h-screen bg-[#0D1421] text-white p-4 sm:p-6 lg:p-8">
+    <main className="min-h-screen bg-brand-navy-deep text-white p-4 sm:p-6 lg:p-8">
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 mb-8">
         <div>
           <div className="flex items-center gap-3">
@@ -154,18 +154,18 @@ console.log(filteredLeads)
               Leads
             </h1>
 
-            <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-brand-teal/10 text-brand-teal-light border border-brand-teal/20">
               {leads?.length} total
             </span>
           </div>
 
-          <p className="text-sm text-slate-400 mt-2">
+          <p className="text-sm text-brand-gray-light mt-2">
             Manage, track, and convert your sales opportunities.
           </p>
         </div>
 
         <Link href="/dashboard/leads/create">
-          <button className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-sm font-medium transition-colors shadow-lg shadow-blue-600/10">
+          <button className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-brand-teal hover:bg-brand-teal-dark text-sm font-medium transition-colors shadow-lg shadow-brand-teal/10">
             <Plus size={17} />
             Add New Lead
           </button>
@@ -178,7 +178,7 @@ console.log(filteredLeads)
           label="Total Leads"
           value={leads?.length}
           description="All active leads"
-          iconStyle="bg-blue-500/10 text-blue-400"
+          iconStyle="bg-brand-teal/10 text-brand-teal-light"
         />
 
         <StatCard
@@ -194,7 +194,7 @@ console.log(filteredLeads)
           label="Qualified Leads"
           value={qualifiedLeads}
           description="Ready for conversion"
-          iconStyle="bg-cyan-500/10 text-cyan-400"
+          iconStyle="bg-brand-emerald/10 text-brand-emerald-light"
         />
 
         <StatCard
@@ -202,16 +202,16 @@ console.log(filteredLeads)
           label="Pipeline Value"
           value={totalvalue}
           description="Estimated opportunity value"
-          iconStyle="bg-emerald-500/10 text-emerald-400"
+          iconStyle="bg-brand-emerald/10 text-brand-emerald-light"
         />
       </div>
 
-      <div className="bg-[#111827] border border-[#263248] rounded-2xl p-4 mb-5">
+      <div className="bg-brand-navy border border-brand-navy-surface rounded-2xl p-4 mb-5">
         <div className="flex flex-col xl:flex-row gap-3">
           <div className="relative flex-1">
             <Search
               size={17}
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500"
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-gray-light"
             />
 
             <input
@@ -219,7 +219,7 @@ console.log(filteredLeads)
               placeholder="Search leads, emails, or assignees..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full h-10 pl-10 pr-4 rounded-xl bg-[#0D1421] border border-[#263248] text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-500/60 transition-colors"
+              className="w-full h-10 pl-10 pr-4 rounded-xl bg-brand-navy-deep border border-brand-navy-surface text-sm text-white placeholder:text-brand-gray-light outline-none focus:border-brand-teal/60 transition-colors"
             />
           </div>
 
@@ -263,19 +263,19 @@ console.log(filteredLeads)
 
           <button
             onClick={clearFilters}
-            className="h-10 px-3 rounded-xl border border-[#263248] text-slate-400 hover:text-white hover:bg-[#182235] transition-colors"
+            className="h-10 px-3 rounded-xl border border-brand-navy-surface text-brand-gray-light hover:text-white hover:bg-brand-navy transition-colors"
           >
             <X size={16} />
           </button>
         </div>
       </div>
 
-      <div className="bg-[#111827] border border-[#263248] rounded-2xl overflow-hidden">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-5 py-4 border-b border-[#263248]">
+      <div className="bg-brand-navy border border-brand-navy-surface rounded-2xl overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-5 py-4 border-b border-brand-navy-surface">
           <div className="flex items-center gap-3">
-            <SlidersHorizontal size={17} className="text-slate-500" />
+            <SlidersHorizontal size={17} className="text-brand-gray-light" />
 
-            <span className="text-sm text-slate-400">
+            <span className="text-sm text-brand-gray-light">
               Showing{" "}
               <span className="text-white font-medium">
                 {filteredLeads?.length}
@@ -284,13 +284,13 @@ console.log(filteredLeads)
             </span>
 
             {selectedLeads?.length > 0 && (
-              <span className="text-xs text-blue-400">
+              <span className="text-xs text-brand-teal-light">
                 {selectedLeads?.length} selected
               </span>
             )}
           </div>
 
-          <button className="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors">
+          <button className="flex items-center gap-2 text-xs text-brand-gray-light hover:text-white transition-colors">
             <ArrowUpDown size={14} />
             Sort by
             <ChevronDown size={14} />
@@ -300,7 +300,7 @@ console.log(filteredLeads)
         <div className="hidden lg:block overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-[#263248] text-left">
+              <tr className="border-b border-brand-navy-surface text-left">
                 <th className="px-5 py-3">
                   <input
                     type="checkbox"
@@ -309,7 +309,7 @@ console.log(filteredLeads)
                       selectedLeads?.length === filteredLeads?.length
                     }
                     onChange={toggleSelectAll}
-                    className="accent-blue-500"
+                    className="accent-brand-teal"
                   />
                 </th>
                 <TableHeader>Lead</TableHeader>
@@ -326,20 +326,20 @@ console.log(filteredLeads)
               {filteredLeads?.map((lead) => (
                 <tr
                   key={lead.id}
-                  className="border-b border-[#263248] last:border-0 hover:bg-[#151F31] transition-colors"
+                  className="border-b border-brand-navy-surface last:border-0 hover:bg-brand-navy transition-colors"
                 >
                   <td className="px-5 py-4">
                     <input
                       type="checkbox"
                       checked={selectedLeads?.includes(lead.id)}
                       onChange={() => toggleSelectLead(lead.id)}
-                      className="accent-blue-500"
+                      className="accent-brand-teal"
                     />
                   </td>
 
                   <td className="px-5 py-4 min-w-[240px]">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-sm font-semibold text-blue-400">
+                      <div className="w-9 h-9 rounded-xl bg-brand-teal/10 border border-brand-teal/20 flex items-center justify-center text-sm font-semibold text-brand-teal-light">
                         {lead?.personId
                           ?.split(" ")
                           ?.map((name) => name[0])
@@ -351,7 +351,7 @@ console.log(filteredLeads)
                           {lead?.personId
                           }
                         </p>
-                        <p className="text-xs text-slate-500 mt-0.5">
+                        <p className="text-xs text-brand-gray-light mt-0.5">
                           {lead?.email}
                         </p>
                       </div>
@@ -359,7 +359,7 @@ console.log(filteredLeads)
                   </td>
 
                   <td className="px-5 py-4">
-                    <span className="text-sm text-slate-300 capitalize">
+                    <span className="text-sm text-brand-gray-light capitalize">
                       {lead?.source?.replace("_", " ")}
                     </span>
                   </td>
@@ -378,8 +378,8 @@ console.log(filteredLeads)
                         className={`w-2 h-2 rounded-full ${lead.priority === "high"
                           ? "bg-red-400"
                           : lead.priority === "medium"
-                            ? "bg-amber-400"
-                            : "bg-slate-500"
+                            ? "bg-brand-tan"
+                            : "bg-brand-gray"
                           }`}
                       />
 
@@ -392,19 +392,19 @@ console.log(filteredLeads)
                   </td>
 
                   <td className="px-5 py-4">
-                    <span className="text-sm font-medium text-slate-200">
+                    <span className="text-sm font-medium text-white">
                       {formatCurrency(lead.estimatedValue)}
                     </span>
                   </td>
 
                   <td className="px-5 py-4">
-                    <span className="text-sm text-slate-300">
+                    <span className="text-sm text-brand-gray-light">
                       {lead.assignedTo}
                     </span>
                   </td>
 
                   <td className="px-5 py-4">
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-brand-gray-light">
                       {lead.lastContactedAt
                         ? new Date(lead.lastContactedAt).toLocaleDateString(
                           "en-GB",
@@ -414,7 +414,7 @@ console.log(filteredLeads)
                   </td>
 
                   <td className="px-5 py-4">
-                    <button className="p-2 rounded-lg text-slate-500 hover:text-white hover:bg-[#263248] transition-colors">
+                    <button className="p-2 rounded-lg text-brand-gray-light hover:text-white hover:bg-brand-navy-surface transition-colors">
                       <MoreHorizontal size={17} />
                     </button>
                   </td>
@@ -424,15 +424,15 @@ console.log(filteredLeads)
           </table>
         </div>
 
-        <div className="lg:hidden divide-y divide-[#263248]">
+        <div className="lg:hidden divide-y divide-brand-navy-surface">
           {filteredLeads?.map((lead) => (
             <div
               key={lead.id}
-              className="p-4 hover:bg-[#151F31] transition-colors"
+              className="p-4 hover:bg-brand-navy transition-colors"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-sm font-semibold text-blue-400">
+                  <div className="w-10 h-10 rounded-xl bg-brand-teal/10 border border-brand-teal/20 flex items-center justify-center text-sm font-semibold text-brand-teal-light">
                     {lead?.name
                       ?.split(" ")
                       ?.map((name) => name[0])
@@ -443,11 +443,11 @@ console.log(filteredLeads)
                     <p className="text-sm font-medium text-white">
                       {lead?.name}
                     </p>
-                    <p className="text-xs text-slate-500">{lead?.email}</p>
+                    <p className="text-xs text-brand-gray-light">{lead?.email}</p>
                   </div>
                 </div>
 
-                <button className="text-slate-500 hover:text-white">
+                <button className="text-brand-gray-light hover:text-white">
                   <MoreHorizontal size={17} />
                 </button>
               </div>
@@ -459,33 +459,33 @@ console.log(filteredLeads)
                   {formatLabel(lead.status)}
                 </span>
 
-                <span className="px-2.5 py-1 rounded-full bg-[#182235] text-xs text-slate-400 capitalize">
+                <span className="px-2.5 py-1 rounded-full bg-brand-navy text-xs text-brand-gray-light capitalize">
                   {lead.priority} priority
                 </span>
 
-                <span className="px-2.5 py-1 rounded-full bg-[#182235] text-xs text-slate-400">
+                <span className="px-2.5 py-1 rounded-full bg-brand-navy text-xs text-brand-gray-light">
                   {formatCurrency(lead.estimatedValue)}
                 </span>
               </div>
 
               <div className="grid grid-cols-2 gap-3 mt-4">
                 <div>
-                  <p className="text-[11px] text-slate-500">Source</p>
-                  <p className="text-xs text-slate-300 capitalize mt-1">
+                  <p className="text-[11px] text-brand-gray-light">Source</p>
+                  <p className="text-xs text-brand-gray-light capitalize mt-1">
                     {lead.source.replace("_", " ")}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-[11px] text-slate-500">Assigned To</p>
-                  <p className="text-xs text-slate-300 mt-1">
+                  <p className="text-[11px] text-brand-gray-light">Assigned To</p>
+                  <p className="text-xs text-brand-gray-light mt-1">
                     {lead.assignedTo}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-[11px] text-slate-500">Last Contact</p>
-                  <p className="text-xs text-slate-300 mt-1">
+                  <p className="text-[11px] text-brand-gray-light">Last Contact</p>
+                  <p className="text-xs text-brand-gray-light mt-1">
                     {lead.lastContactedAt
                       ? new Date(lead.lastContactedAt).toLocaleDateString(
                         "en-GB",
@@ -495,20 +495,20 @@ console.log(filteredLeads)
                 </div>
 
                 <div>
-                  <p className="text-[11px] text-slate-500">Created</p>
-                  <p className="text-xs text-slate-300 mt-1">
+                  <p className="text-[11px] text-brand-gray-light">Created</p>
+                  <p className="text-xs text-brand-gray-light mt-1">
                     {new Date(lead.createdAt).toLocaleDateString("en-GB")}
                   </p>
                 </div>
               </div>
 
               <div className="flex gap-2 mt-4">
-                <button className="flex-1 flex items-center justify-center gap-2 h-9 rounded-lg bg-blue-500/10 text-blue-400 text-xs hover:bg-blue-500/20">
+                <button className="flex-1 flex items-center justify-center gap-2 h-9 rounded-lg bg-brand-teal/10 text-brand-teal-light text-xs hover:bg-brand-teal/20">
                   <Phone size={14} />
                   Call
                 </button>
 
-                <button className="flex-1 flex items-center justify-center gap-2 h-9 rounded-lg bg-[#182235] text-slate-300 text-xs hover:bg-[#263248]">
+                <button className="flex-1 flex items-center justify-center gap-2 h-9 rounded-lg bg-brand-navy text-brand-gray-light text-xs hover:bg-brand-navy-surface">
                   <Mail size={14} />
                   Email
                 </button>
@@ -519,9 +519,9 @@ console.log(filteredLeads)
 
         {filteredLeads?.length < 0 && (
           <div className="py-16 text-center">
-            <Users size={32} className="mx-auto text-slate-600 mb-3" />
-            <p className="text-sm text-slate-400">No leads found</p>
-            <p className="text-xs text-slate-600 mt-1">
+            <Users size={32} className="mx-auto text-brand-gray mb-3" />
+            <p className="text-sm text-brand-gray-light">No leads found</p>
+            <p className="text-xs text-brand-gray mt-1">
               Try adjusting your filters or search query.
             </p>
           </div>
@@ -547,12 +547,12 @@ function StatCard({
   iconStyle,
 }: StatCardProps) {
   return (
-    <div className="bg-[#111827] border border-[#263248] rounded-2xl p-4">
+    <div className="bg-brand-navy border border-brand-navy-surface rounded-2xl p-4">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-xs text-slate-500">{label}</p>
+          <p className="text-xs text-brand-gray-light">{label}</p>
           <p className="text-2xl font-semibold text-white mt-2">{value}</p>
-          <p className="text-[11px] text-slate-500 mt-1">{description}</p>
+          <p className="text-[11px] text-brand-gray-light mt-1">{description}</p>
         </div>
 
         <div
@@ -577,7 +577,7 @@ function FilterSelect({ value, onChange, options }: FilterSelectProps) {
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="appearance-none h-10 min-w-[140px] w-full px-3 pr-9 rounded-xl bg-[#0D1421] border border-[#263248] text-sm text-slate-300 outline-none focus:border-blue-500/60 cursor-pointer"
+        className="appearance-none h-10 min-w-[140px] w-full px-3 pr-9 rounded-xl bg-brand-navy-deep border border-brand-navy-surface text-sm text-brand-gray-light outline-none focus:border-brand-teal/60 cursor-pointer"
       >
         {options.map(([optionValue, label]) => (
           <option key={optionValue} value={optionValue}>
@@ -588,7 +588,7 @@ function FilterSelect({ value, onChange, options }: FilterSelectProps) {
 
       <ChevronDown
         size={15}
-        className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500"
+        className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-brand-gray-light"
       />
     </div>
   );
@@ -596,7 +596,7 @@ function FilterSelect({ value, onChange, options }: FilterSelectProps) {
 
 function TableHeader({ children }: { children: ReactNode }) {
   return (
-    <th className="px-5 py-3 text-[11px] uppercase tracking-wider font-medium text-slate-500 whitespace-nowrap">
+    <th className="px-5 py-3 text-[11px] uppercase tracking-wider font-medium text-brand-gray-light whitespace-nowrap">
       {children}
     </th>
   );

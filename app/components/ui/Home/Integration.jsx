@@ -12,24 +12,24 @@ import {
 } from "lucide-react";
 
 const integrations = [
-  { name: "Gmail", icon: Mail, color: "text-red-400" },
-  { name: "WhatsApp", icon: MessageCircle, color: "text-emerald-400" },
-  { name: "Slack", icon: Hash, color: "text-violet-400" },
-  { name: "Calendar", icon: Calendar, color: "text-blue-400" },
-  { name: "HubSpot", icon: Database, color: "text-orange-400" },
-  { name: "Zapier", icon: Zap, color: "text-amber-400" },
-  { name: "Stripe", icon: CreditCard, color: "text-indigo-400" },
-  { name: "Sheets", icon: Sheet, color: "text-green-400" },
-  { name: "Twilio", icon: Phone, color: "text-red-300" },
+  { name: "Gmail", icon: Mail, color: "text-brand-tan" },
+  { name: "WhatsApp", icon: MessageCircle, color: "text-brand-emerald-light" },
+  { name: "Slack", icon: Hash, color: "text-brand-teal-light" },
+  { name: "Calendar", icon: Calendar, color: "text-brand-teal-light" },
+  { name: "HubSpot", icon: Database, color: "text-brand-tan-light" },
+  { name: "Zapier", icon: Zap, color: "text-brand-tan-light" },
+  { name: "Stripe", icon: CreditCard, color: "text-brand-teal-light" },
+  { name: "Sheets", icon: Sheet, color: "text-brand-emerald-light" },
+  { name: "Twilio", icon: Phone, color: "text-brand-teal-light" },
 ];
 
 export default function IntegrationsSection() {
   return (
-    <section className="bg-[#0B0F17] py-20 px-6">
+    <section className="bg-brand-navy-deep py-20 px-6">
       <div className="max-w-5xl mx-auto">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <span className="text-xs font-semibold tracking-wider text-blue-400 uppercase">
+            <span className="text-xs font-semibold tracking-wider text-brand-teal-light uppercase">
               Integrations
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-white mt-3 leading-tight">
@@ -37,14 +37,14 @@ export default function IntegrationsSection() {
               <br />
               between tools
             </h2>
-            <p className="text-slate-400 text-base mt-4 max-w-md leading-relaxed">
+            <p className="text-brand-gray-light text-base mt-4 max-w-md leading-relaxed">
               Your leads move automatically between Leadwise and the apps you
               already use — set it up yourself in minutes.
             </p>
 
             <a
               href="#"
-              className="inline-flex items-center gap-2 mt-7 bg-blue-500 hover:bg-blue-600 transition-colors text-white text-sm font-semibold px-5 py-3 rounded-lg"
+              className="inline-flex items-center gap-2 mt-7 bg-brand-teal hover:bg-brand-teal-dark transition-colors text-white text-sm font-semibold px-5 py-3 rounded-lg"
             >
               See all integrations
               <ArrowRight size={15} />
@@ -55,12 +55,12 @@ export default function IntegrationsSection() {
             {integrations.map(({ name, icon: Icon, color }) => (
               <div
                 key={name}
-                className="bg-[#131826] border border-[#1F2635] rounded-2xl p-5 flex flex-col items-center justify-center gap-2.5 hover:border-blue-500/40 hover:bg-[#171D2C] transition-colors"
+                className="bg-brand-navy border border-brand-navy-border rounded-2xl p-5 flex flex-col items-center justify-center gap-2.5 hover:border-brand-teal/40 hover:bg-brand-navy-surface transition-colors"
               >
-                <div className="w-11 h-11 rounded-xl bg-[#0F1420] border border-[#1F2635] flex items-center justify-center">
+                <div className="w-11 h-11 rounded-xl bg-brand-navy-deep border border-brand-navy-border flex items-center justify-center">
                   <Icon size={20} className={color} />
                 </div>
-                <span className="text-xs text-slate-300 font-medium">{name}</span>
+                <span className="text-xs text-brand-gray-light font-medium">{name}</span>
               </div>
             ))}
           </div>

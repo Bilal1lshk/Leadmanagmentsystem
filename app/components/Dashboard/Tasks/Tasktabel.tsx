@@ -32,22 +32,22 @@ export default function TasksTable({
   const allSelected = tasks.length > 0 && tasks.every((t) => selectedIds.has(t.id));
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+    <div className="overflow-x-auto rounded-xl border border-brand-line bg-white">
       <table className="w-full min-w-[900px] border-collapse">
         <thead>
-          <tr className="border-b border-slate-100 bg-slate-50/60 text-left">
+          <tr className="border-b border-brand-line bg-brand-cream/60 text-left">
             <th className="w-10 px-4 py-3">
               <input
                 type="checkbox"
                 checked={allSelected}
                 onChange={onToggleSelectAll}
-                className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                className="h-4 w-4 rounded border-brand-line text-brand-teal focus:ring-brand-teal"
               />
             </th>
             {columns.map((col) => (
               <th
                 key={col}
-                className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500"
+                className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-brand-gray"
               >
                 <span className="flex items-center gap-1">
                   {col}

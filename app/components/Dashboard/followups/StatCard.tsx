@@ -18,8 +18,8 @@ export default function StatCard({
     <div
       className={`rounded-xl border bg-white p-5 shadow-sm ${
         highlighted
-          ? "border-blue-400 ring-1 ring-blue-100"
-          : "border-gray-200"
+          ? "border-brand-teal ring-1 ring-brand-teal/30"
+          : "border-brand-line"
       }`}
     >
       <div className="flex items-center gap-4">
@@ -31,15 +31,15 @@ export default function StatCard({
         </div>
 
         <div>
-          <p className="text-sm font-medium text-gray-700">
+          <p className="text-sm font-medium text-brand-navy">
             {title}
           </p>
 
-          <p className="mt-1 text-2xl font-semibold text-gray-900">
+          <p className="mt-1 text-2xl font-semibold text-brand-navy">
             {value}
           </p>
 
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-brand-gray">
             {description}
           </p>
         </div>

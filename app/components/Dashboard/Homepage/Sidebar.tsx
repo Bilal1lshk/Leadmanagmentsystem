@@ -75,11 +75,11 @@ export default function Sidebar() {
   const data = useAppSelector((store) => store.LeadSlice.Lead);
 
   return (
-    <aside className="w-56 min-h-screen bg-[#131826] border-r border-[#1F2635] p-3.5 flex flex-col gap-1">
+    <aside className="w-56 min-h-screen bg-brand-navy border-r border-brand-navy-border p-3.5 flex flex-col gap-1">
 
       {/* Logo */}
       <div className="flex items-center gap-2 px-2 pb-5">
-        <div className="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-lg bg-brand-teal flex items-center justify-center">
           <TrendingUp data={data} size={16} className="text-white" />
         </div>
 
@@ -102,9 +102,9 @@ export default function Sidebar() {
               rounded-lg
               text-sm
               cursor-pointer
-              text-slate-400
+              text-brand-gray-light
               font-medium
-              hover:bg-[#1A2030]
+              hover:bg-brand-navy-surface
               hover:text-white
               transition-colors
             "

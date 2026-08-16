@@ -1,10 +1,10 @@
 const palette = [
-  "bg-blue-500",
-  "bg-purple-500",
-  "bg-emerald-500",
-  "bg-amber-500",
-  "bg-pink-500",
-  "bg-sky-500",
+  "bg-brand-teal",
+  "bg-brand-teal-light",
+  "bg-brand-emerald",
+  "bg-brand-emerald-light",
+  "bg-brand-tan",
+  "bg-brand-navy",
 ];
 
 function colorFor(name: string) {

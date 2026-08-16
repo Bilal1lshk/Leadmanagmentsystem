@@ -1,9 +1,9 @@
 import Card from "./Card";
 
 const followUps = [
-  { title: "Call John Smith", meta: "Today · 10:30 AM", color: "bg-emerald-400" },
-  { title: "Send proposal to Sarah Khan", meta: "Today · 2:00 PM", color: "bg-amber-400" },
-  { title: "Follow up with TechCorp", meta: "Tomorrow · 11:00 AM", color: "bg-blue-400" },
+  { title: "Call John Smith", meta: "Today · 10:30 AM", color: "bg-brand-emerald" },
+  { title: "Send proposal to Sarah Khan", meta: "Today · 2:00 PM", color: "bg-brand-tan" },
+  { title: "Follow up with TechCorp", meta: "Tomorrow · 11:00 AM", color: "bg-brand-teal" },
 ];
 
 export default function FollowUps() {
@@ -16,7 +16,7 @@ export default function FollowUps() {
             <span className={`w-1.5 h-1.5 rounded-full ${f.color} mt-1.5 shrink-0`} />
             <div>
               <div className="text-[12.5px] text-white">{f.title}</div>
-              <div className="text-[11px] text-slate-400">{f.meta}</div>
+              <div className="text-[11px] text-brand-gray-light">{f.meta}</div>
             </div>
           </div>
         ))}

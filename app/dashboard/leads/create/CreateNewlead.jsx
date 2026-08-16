@@ -22,7 +22,7 @@ import axios from "axios";
 function Field({ label, children }) {
     return (
         <div className="flex flex-col gap-2">
-            <label className="text-xs text-[#5C6D71] font-medium">
+            <label className="text-xs text-brand-gray font-medium">
                 {label}
             </label>
 
@@ -43,8 +43,8 @@ export default function CreateLeadPage() {
 
     // bg/text pairs chosen for AA contrast on a light card
     const PRIORITIES = [
-        { value: "low", label: "Low", activeBg: "#E9ECEE", activeText: "#3D4D51" },
-        { value: "medium", label: "Medium", activeBg: "#C9A24A", activeText: "#FFFFFF" },
+        { value: "low", label: "Low", activeBg: "#E8E3CD", activeText: "#6B7280" },
+        { value: "medium", label: "Medium", activeBg: "#D8B677", activeText: "#FFFFFF" },
         { value: "high", label: "High", activeBg: "#C1523F", activeText: "#FFFFFF" },
     ];
 
@@ -122,13 +122,13 @@ const router = useRouter();
     };
 
     const inputClass =
-        "w-full bg-white border border-[#D8D8D0] rounded-xl px-3.5 py-3 text-sm text-[#22303A] placeholder:text-[#9A9A8F] outline-none focus:border-[#458393] transition-colors";
+        "w-full bg-white border border-brand-line rounded-xl px-3.5 py-3 text-sm text-brand-navy placeholder:text-brand-gray-light outline-none focus:border-brand-teal transition-colors";
 
     return (
-        <div className="relative min-h-screen bg-[#FFF3C8] text-[#22303A] px-6 py-10 flex justify-center overflow-hidden">
+        <div className="relative min-h-screen bg-brand-cream text-brand-navy px-6 py-10 flex justify-center overflow-hidden">
             {/* decorative blobs — same as HeroSection */}
-            <div className="pointer-events-none absolute -left-16 bottom-0 h-64 w-64 rounded-full bg-[#458393]/15" />
-            <div className="pointer-events-none absolute right-10 top-10 h-40 w-40 rounded-full bg-[#458393]/10" />
+            <div className="pointer-events-none absolute -left-16 bottom-0 h-64 w-64 rounded-full bg-brand-teal/15" />
+            <div className="pointer-events-none absolute right-10 top-10 h-40 w-40 rounded-full bg-brand-teal/10" />
 
             <div className="relative w-full max-w-xl">
                 <motion.div
@@ -137,14 +137,14 @@ const router = useRouter();
                     transition={{ duration: 0.4 }}
                     className="flex items-center gap-3 mb-8"
                 >
-                    <button className="w-8 h-8 rounded-lg bg-white border border-[#E5CB90]/60 flex items-center justify-center text-[#5C6D71] hover:text-[#22303A] hover:border-[#458393] transition-colors shadow-sm">
+                    <button className="w-8 h-8 rounded-lg bg-white border border-brand-tan/60 flex items-center justify-center text-brand-gray hover:text-brand-navy hover:border-brand-teal transition-colors shadow-sm">
                         <ArrowLeft size={15} />
                     </button>
                     <div>
-                        <h1 className="font-serif text-xl font-medium text-[#22303A] m-0">
+                        <h1 className="font-serif text-xl font-medium text-brand-navy m-0">
                             Create New Lead
                         </h1>
-                        <p className="text-xs text-[#5C6D71] mt-0.5">
+                        <p className="text-xs text-brand-gray mt-0.5">
                             Add a new lead to your pipeline
                         </p>
                     </div>
@@ -155,19 +155,19 @@ const router = useRouter();
                     variants={container}
                     initial="hidden"
                     animate="show"
-                    className="bg-white border border-[#E5CB90]/60 rounded-2xl p-6 flex flex-col gap-5 shadow-md"
+                    className="bg-white border border-brand-tan/60 rounded-2xl p-6 flex flex-col gap-5 shadow-md"
                 >
                     {/* Person selector */}
                     <Field label="Person or organization name">
                         <div className="relative">
                             <div className={`${inputClass} flex items-center gap-2`}>
-                                <User size={14} className="text-[#9A9A8F]" />
+                                <User size={14} className="text-brand-gray-light" />
                                 <input
                                     type="text"
                                     value={form.personId}
                                     onChange={(e) => set("personId")(e.target.value)}
                                     placeholder="Enter the Name"
-                                    className="w-full bg-transparent outline-none text-[#22303A] placeholder-[#9A9A8F]"
+                                    className="w-full bg-transparent outline-none text-brand-navy placeholder-brand-gray-light"
                                 />
                             </div>
                         </div>
@@ -184,14 +184,14 @@ const router = useRouter();
                                         key={value}
                                         onClick={() => set("source")(value)}
                                         className={`relative flex flex-col items-center gap-1.5 py-2.5 rounded-xl border text-[11px] font-medium transition-colors ${active
-                                            ? "border-[#458393] text-white"
-                                            : "border-[#E5E5E0] text-[#5C6D71] hover:border-[#C9A24A]"
+                                            ? "border-brand-teal text-white"
+                                            : "border-brand-line text-brand-gray hover:border-brand-tan"
                                             }`}
                                     >
                                         {active && (
                                             <motion.div
                                                 layoutId="sourceHighlight"
-                                                className="absolute inset-0 bg-[#458393] rounded-xl"
+                                                className="absolute inset-0 bg-brand-teal rounded-xl"
                                                 transition={{ type: "spring", bounce: 0.25, duration: 0.4 }}
                                             />
                                         )}
@@ -216,7 +216,7 @@ const router = useRouter();
                                         style={active ? { backgroundColor: activeBg, color: activeText } : {}}
                                         className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl border text-xs font-medium transition-colors ${active
                                             ? "border-transparent"
-                                            : "border-[#E5E5E0] text-[#5C6D71] hover:border-[#C9A24A]"
+                                            : "border-brand-line text-brand-gray hover:border-brand-tan"
                                             }`}
                                     >
                                         <Flame size={12} />
@@ -252,7 +252,7 @@ const router = useRouter();
                                 transition={{ duration: 0.25 }}
                                 className="overflow-hidden"
                             >
-                                <label className="text-xs text-[#5C6D71] mb-2 block font-medium">
+                                <label className="text-xs text-brand-gray mb-2 block font-medium">
                                     Lost Reason
                                 </label>
                                 <textarea
@@ -270,7 +270,7 @@ const router = useRouter();
                     <div className="grid grid-cols-2 gap-4">
                         <Field label="Estimated Value">
                             <div className="relative">
-                                <DollarSign size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A9A8F]" />
+                                <DollarSign size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-gray-light" />
                                 <input
                                     type="number"
                                     min="0"
@@ -284,7 +284,7 @@ const router = useRouter();
 
                         <Field label="Last Contacted">
                             <div className="relative">
-                                <Calendar size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A9A8F]" />
+                                <Calendar size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-gray-light" />
                                 <input
                                     type="date"
                                     value={form.lastContactedAt}
@@ -298,7 +298,7 @@ const router = useRouter();
                     {/* Assigned to */}
                     <Field label="Assigned To">
                         <div className="relative">
-                            <UserCheck size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A9A8F]" />
+                            <UserCheck size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-gray-light" />
                             <select
                                 value={form.assignedTo}
                                 onChange={(e) => set("assignedTo")(e.target.value)}
@@ -320,7 +320,7 @@ const router = useRouter();
                         type="submit"
                         disabled={!form.personId || status === "saving"}
                         whileTap={{ scale: 0.98 }}
-                        className="mt-2 relative flex items-center justify-center gap-2 bg-[#458393] hover:bg-[#3A7180] disabled:opacity-50 disabled:cursor-not-allowed rounded-xl py-3.5 text-sm font-semibold text-white transition-colors overflow-hidden shadow-sm"
+                        className="mt-2 relative flex items-center justify-center gap-2 bg-brand-teal hover:bg-brand-teal-dark disabled:opacity-50 disabled:cursor-not-allowed rounded-xl py-3.5 text-sm font-semibold text-white transition-colors overflow-hidden shadow-sm"
                     >
                         <AnimatePresence mode="wait">
                             {status === "idle" && (

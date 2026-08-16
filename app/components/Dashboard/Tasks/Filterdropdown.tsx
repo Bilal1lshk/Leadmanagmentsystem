@@ -13,11 +13,11 @@ export default function FilterDropdown({ label, icon: Icon, onClick }: FilterDro
     <button
       type="button"
       onClick={onClick}
-      className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
+      className="flex items-center gap-2 rounded-lg border border-brand-line bg-white px-3 py-2 text-sm font-medium text-brand-gray hover:bg-brand-cream/40"
     >
-      {Icon && <Icon className="h-4 w-4 text-slate-400" />}
+      {Icon && <Icon className="h-4 w-4 text-brand-gray" />}
       {label}
-      <ChevronDown className="h-4 w-4 text-slate-400" />
+      <ChevronDown className="h-4 w-4 text-brand-gray" />
     </button>
   );
 }

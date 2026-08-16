@@ -71,12 +71,12 @@ export const statusConfig: Record<
 > = {
   pending: {
     label: "Pending",
-    className: "bg-yellow-100 text-yellow-800",
+    className: "bg-brand-tan/10 text-brand-tan",
   },
 
   completed: {
     label: "Completed",
-    className: "bg-green-100 text-green-800",
+    className: "bg-brand-emerald/10 text-brand-emerald",
   },
 
   missed: {
@@ -86,7 +86,7 @@ export const statusConfig: Record<
 
   rescheduled: {
     label: "Rescheduled",
-    className: "bg-blue-100 text-blue-800",
+    className: "bg-brand-teal/10 text-brand-teal",
   },
 };
 
@@ -159,16 +159,16 @@ export default function FollowupsPage({
   }, [followups, search, status]);
 
   return (
-    <section className="min-h-screen bg-gray-50 p-4 md:p-6">
+    <section className="min-h-screen bg-brand-cream/40 p-4 md:p-6">
       <div className="mx-auto max-w-[1400px]">
 
         <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">
+            <h1 className="text-2xl font-semibold text-brand-navy">
               Follow-ups
             </h1>
 
-            <p className="mt-1 text-sm text-gray-600">
+            <p className="mt-1 text-sm text-brand-gray">
               Manage scheduled customer follow-ups
             </p>
           </div>
@@ -180,7 +180,7 @@ export default function FollowupsPage({
             <div className="relative">
               <Search
                 size={18}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-gray"
               />
 
               <input
@@ -190,14 +190,14 @@ export default function FollowupsPage({
                   setSearch(event.target.value)
                 }
                 placeholder="Search by lead, user, comments..."
-                className="h-10 w-full rounded-lg border border-gray-300 bg-white pl-10 pr-9 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:w-[300px]"
+                className="h-10 w-full rounded-lg border border-brand-line bg-white pl-10 pr-9 text-sm outline-none focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/30 sm:w-[300px]"
               />
 
               {search && (
                 <button
                   type="button"
                   onClick={() => setSearch("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-gray"
                 >
                   <X size={16} />
                 </button>
@@ -215,7 +215,7 @@ export default function FollowupsPage({
                   | FollowupStatus
                 )
               }
-              className="h-10 rounded-lg border border-gray-300 bg-white px-3 text-sm outline-none focus:border-blue-500"
+              className="h-10 rounded-lg border border-brand-line bg-white px-3 text-sm outline-none focus:border-brand-teal"
             >
               <option value="all">All</option>
               <option value="pending">Pending</option>
@@ -233,7 +233,7 @@ export default function FollowupsPage({
               onChange={(event) =>
                 setDateFilter(event.target.value)
               }
-              className="h-10 rounded-lg border border-gray-300 bg-white px-3 text-sm outline-none focus:border-blue-500"
+              className="h-10 rounded-lg border border-brand-line bg-white px-3 text-sm outline-none focus:border-brand-teal"
             >
               <option value="all">All Dates</option>
               <option value="today">Today</option>
@@ -247,7 +247,7 @@ export default function FollowupsPage({
               <button
                 type="button"
                 onClick={onCreate}
-                className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition hover:bg-blue-700"
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-brand-teal px-4 text-sm font-medium text-white transition hover:bg-brand-teal-dark"
               >
                 <Plus size={18} />
                 New Follow-up
@@ -264,7 +264,7 @@ export default function FollowupsPage({
             title="Total Follow-ups"
             value={data.length}
             description="All records"
-            iconClass="bg-blue-600"
+            iconClass="bg-brand-teal"
             highlighted
           />
 
@@ -273,7 +273,7 @@ export default function FollowupsPage({
             title="Pending"
             value={pendingleads?.length}
             description="Scheduled actions"
-            iconClass="bg-yellow-400"
+            iconClass="bg-brand-tan-light"
           />
 
           <StatCard
@@ -281,7 +281,7 @@ export default function FollowupsPage({
             title="Completed"
             value={completedleads?.length}
             description="Successfully handled"
-            iconClass="bg-green-500"
+            iconClass="bg-brand-emerald"
           />
 
           <StatCard
@@ -300,18 +300,18 @@ export default function FollowupsPage({
           </div>
         )}
 
-        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-xl border border-brand-line bg-white shadow-sm">
           <div className="overflow-x-auto">
 
             <table className="w-full min-w-[1000px]">
 
               <thead>
-                <tr className="border-b border-gray-200 bg-gray-50">
+                <tr className="border-b border-brand-line bg-brand-cream/40">
 
                   <th className="w-12 px-4 py-3 text-left">
                     <input
                       type="checkbox"
-                      className="h-4 w-4 rounded border-gray-300"
+                      className="h-4 w-4 rounded border-brand-line"
                     />
                   </th>
 

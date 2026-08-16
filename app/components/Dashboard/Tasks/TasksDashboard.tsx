@@ -143,7 +143,7 @@ export default function TasksDashboard() {
   }
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-slate-50 text-slate-900">
+    <div className="flex h-screen w-full overflow-hidden bg-brand-cream/40 text-brand-navy">
       <Sidebar activeItem="Tasks" />
 
       <div className="flex min-w-0 flex-1 flex-col">

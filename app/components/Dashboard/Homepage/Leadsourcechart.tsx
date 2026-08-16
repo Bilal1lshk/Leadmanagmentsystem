@@ -1,10 +1,10 @@
 import Card from "./Card";
 
 const sources = [
-  { label: "Website", pct: 45, color: "#F97316" },
-  { label: "LinkedIn", pct: 25, color: "#3B82F6" },
-  { label: "Facebook", pct: 15, color: "#22D3EE" },
-  { label: "Referrals", pct: 10, color: "#F59E0B" },
+  { label: "Website", pct: 45, color: "#CBCFA0" },
+  { label: "LinkedIn", pct: 25, color: "#5C8B96" },
+  { label: "Facebook", pct: 15, color: "#4FBFA6" },
+  { label: "Referrals", pct: 10, color: "#D8B677" },
   { label: "Other", pct: 5, color: "#6B7280" },
 ];
 
@@ -48,8 +48,8 @@ export default function LeadSourcesChart() {
           {sources.map((s) => (
             <div key={s.label} className="flex items-center gap-2 text-[12.5px]">
               <span className="w-2 h-2 rounded-full" style={{ background: s.color }} />
-              <span className="text-slate-300 flex-1">{s.label}</span>
-              <span className="text-slate-400">{s.pct}%</span>
+              <span className="text-brand-gray-light flex-1">{s.label}</span>
+              <span className="text-brand-gray-light">{s.pct}%</span>
             </div>
           ))}
         </div>

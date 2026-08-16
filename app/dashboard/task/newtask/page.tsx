@@ -86,7 +86,7 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
 
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
+    <div className="min-h-screen flex items-center justify-center bg-brand-cream/40 p-6">
       <div className="bg-white w-full max-w-lg rounded-xl p-6 shadow-xl">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold">Create New Task</h2>
@@ -101,7 +101,7 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
             </label>
             <div className="relative">
               <FileText
-                className="absolute left-3 top-3 text-gray-400"
+                className="absolute left-3 top-3 text-brand-gray"
                 size={18}
               />
               <input
@@ -140,7 +140,7 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
             </label>
             <div className="relative">
               <Calendar
-                className="absolute left-3 top-3 text-gray-400"
+                className="absolute left-3 top-3 text-brand-gray"
                 size={18}
               />
               <input
@@ -179,7 +179,7 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg"
+            className="w-full bg-brand-teal text-white py-3 rounded-lg"
           >
             Create Task
           </button>

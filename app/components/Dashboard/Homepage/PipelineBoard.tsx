@@ -13,7 +13,7 @@ export default function PipelineBoard() {
     <Card>
       <div className="flex items-baseline gap-2.5 mb-3.5">
         <h3 className="m-0 text-[15px] text-white">Lead Pipeline</h3>
-        <span className="text-xs text-slate-400">
+        <span className="text-xs text-brand-gray-light">
           NEW → CONTACTED → QUALIFIED → PROPOSAL → WON / LOST
         </span>
       </div>
@@ -22,16 +22,16 @@ export default function PipelineBoard() {
         {stages.map((stage) => (
           <div
             key={stage.name}
-            className={`bg-[#0F1420] border border-[#1F2635] border-t-[3px] ${stage.border} rounded-lg p-2.5 min-h-[150px]`}
+            className={`bg-brand-navy-deep border border-brand-navy-border border-t-[3px] ${stage.border} rounded-lg p-2.5 min-h-[150px]`}
           >
             <div className="text-xs font-bold tracking-wide text-white">{stage.name}</div>
-            <div className="text-[11px] text-slate-400 mt-0.5">{stage.count} Leads</div>
-            <div className="text-xs text-slate-300 mb-2">{stage.value}</div>
+            <div className="text-[11px] text-brand-gray-light mt-0.5">{stage.count} Leads</div>
+            <div className="text-xs text-brand-gray-light mb-2">{stage.value}</div>
 
             {stage.leads.map((lead) => (
               <div
                 key={lead}
-                className="bg-[#131826] border border-[#1F2635] rounded-md px-2 py-1.5 text-xs mb-1.5 text-slate-200"
+                className="bg-brand-navy border border-brand-navy-border rounded-md px-2 py-1.5 text-xs mb-1.5 text-white"
               >
                 {lead}
               </div>

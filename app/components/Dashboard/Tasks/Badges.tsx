@@ -2,14 +2,14 @@ import { TaskPriority, TaskStatus } from "./Types";
 
 const priorityStyles: Record<TaskPriority, string> = {
   High: "bg-red-50 text-red-600",
-  Medium: "bg-amber-50 text-amber-600",
-  Low: "bg-emerald-50 text-emerald-600",
+  Medium: "bg-brand-tan/10 text-brand-tan",
+  Low: "bg-brand-emerald/10 text-brand-emerald",
 };
 
 const statusStyles: Record<TaskStatus, string> = {
-  Pending: "bg-slate-100 text-slate-600",
-  "In Progress": "bg-blue-50 text-blue-600",
-  Completed: "bg-emerald-50 text-emerald-600",
+  Pending: "bg-brand-cream/60 text-brand-gray",
+  "In Progress": "bg-brand-teal/10 text-brand-teal",
+  Completed: "bg-brand-emerald/10 text-brand-emerald",
   Overdue: "bg-red-50 text-red-600",
 };
 
