@@ -2,7 +2,6 @@ import { ChartLine, Bell } from "lucide-react";
 export default function Navbar() {
   return (
     <nav className="flex items-center justify-between gap-4 rounded-xl bg-[#FFF3C8] px-5 py-3.5 flex-wrap">
-      {/* Logo */}
       <div className="flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#458393]">
           <ChartLine className="h-4.5 w-4.5 text-[#FFF3C8]" />
@@ -10,18 +9,17 @@ export default function Navbar() {
         <span className="text-[17px] font-medium text-[#2A3F45]">Leadwise</span>
       </div>
 
-      {/* Nav links */}
       <div className="flex items-center gap-7">
         <a href="/dashboard" className="text-sm font-medium text-[#2A3F45]">
           Dashboard
         </a>
-        <a href="/leads" className="text-sm text-[#5C6D71] hover:text-[#2A3F45]">
+        <a href="/Leads" className="text-sm text-[#5C6D71] hover:text-[#2A3F45]">
           Leads
         </a>
         <a href="/pipeline" className="text-sm text-[#5C6D71] hover:text-[#2A3F45]">
           Pipeline
         </a>
-        <a href="/reports" className="text-sm text-[#5C6D71] hover:text-[#2A3F45]">
+        <a href="/Dashdetails" className="text-sm text-[#5C6D71] hover:text-[#2A3F45]">
           Reports
         </a>
       </div>
