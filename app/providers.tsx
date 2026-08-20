@@ -2,7 +2,6 @@
 
 import { Provider } from "react-redux";
 import store from "./redux/store";
-import Userprovider from "./context/Usercontext.jsx";
 
 
 export default function Providers({
@@ -13,8 +12,6 @@ export default function Providers({
 
 
   return (
-    <Provider store={store}>
-      <Userprovider>{children}</Userprovider>
-    </Provider>
+    <Provider store={store}>{children}</Provider>
   );
 }

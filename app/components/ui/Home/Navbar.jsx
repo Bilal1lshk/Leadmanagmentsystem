@@ -1,5 +1,10 @@
-import { ChartLine, Bell } from "lucide-react";
+"use client";
+
+import { ChartLine } from "lucide-react";
+import { useAppSelector } from "@/app/redux/hooks";
 export default function Navbar() {
+  const user = useAppSelector((state) => state.auth.user);
+  const activeOrganization = useAppSelector((state) => state.organizationSlice.activeOrganization);
   return (
     <nav className="flex items-center justify-between gap-4 rounded-xl bg-[#FFF3C8] px-5 py-3.5 flex-wrap">
       <div className="flex items-center gap-2">
@@ -9,12 +14,9 @@ export default function Navbar() {
         <span className="text-[17px] font-medium text-[#2A3F45]">Leadwise</span>
       </div>
 
-      <div className="flex items-center gap-7">
-        <a href="/dashboard" className="text-sm font-medium text-[#2A3F45]">
-          Dashboard
-        </a>
-        <a href="/Leads" className="text-sm text-[#5C6D71] hover:text-[#2A3F45]">
-          Leads
+      <div className="hidden items-center gap-7 md:flex">
+        <a href="#features" className="text-sm text-[#5C6D71] hover:text-[#2A3F45]">
+          Features
         </a>
         <a href="/pipeline" className="text-sm text-[#5C6D71] hover:text-[#2A3F45]">
           Pipeline
@@ -26,17 +28,20 @@ export default function Navbar() {
 
       {/* Right side */}
       <div className="flex items-center gap-3">
-        <button className="flex h-[34px] w-[34px] items-center justify-center rounded-lg border border-[#E5CB90] bg-white">
-          <Bell className="h-4 w-4 text-[#458393]" />
-        </button>
-
-        <button className="rounded-lg bg-[#34A99D] px-4 py-2 text-sm font-medium text-[#04342C]">
-          New lead
-        </button>
-
-        <div className="flex h-[34px] w-[34px] items-center justify-center rounded-full bg-[#458393] text-sm font-medium text-[#FFF3C8]">
-          BS
-        </div>
+        {user ? (
+          <a href={activeOrganization ? "/dashboard" : "/"} className="rounded-lg bg-[#34A99D] px-4 py-2 text-sm font-medium text-[#04342C] hover:bg-[#2F958A]">
+            {activeOrganization ? "Open dashboard" : "Set up workspace"}
+          </a>
+        ) : (
+          <>
+            <a href="/login" className="rounded-lg px-4 py-2 text-sm font-medium text-[#2A3F45] hover:bg-white/70">
+              Log in
+            </a>
+            <a href="/signup" className="rounded-lg bg-[#34A99D] px-4 py-2 text-sm font-medium text-[#04342C] hover:bg-[#2F958A]">
+              Get started
+            </a>
+          </>
+        )}
       </div>
     </nav>
   );

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { setActiveOrganization, setOrganizations } from "@/app/redux/organization";
+import { setUser } from "@/app/redux/auth";
 
 export default function DashboardGuard({ children }) {
   const router = useRouter();
@@ -14,14 +15,16 @@ export default function DashboardGuard({ children }) {
   useEffect(() => {
     async function establishWorkspace() {
       try {
-        const response = await fetch("/api/organization/my");
-        const data = await response.json();
-        if (!response.ok) return router.replace("/login");
+        const [sessionResponse, organizationsResponse] = await Promise.all([
+          fetch("/api/auth/me"),
+          fetch("/api/organization/my"),
+        ]);
+        if (!sessionResponse.ok || !organizationsResponse.ok) return router.replace("/login");
+        const [session, data] = await Promise.all([sessionResponse.json(), organizationsResponse.json()]);
         if (!data.organizations?.length) return router.replace("/");
-        const savedId = localStorage.getItem("activeOrganizationId");
-        const organization = data.organizations.find((org) => org._id === savedId) || data.organizations[0];
-        localStorage.setItem("activeOrganizationId", organization._id);
+        const organization = data.organizations[0];
         axios.defaults.headers.common["x-organization-id"] = organization._id;
+        dispatch(setUser(session.user));
         dispatch(setOrganizations(data.organizations));
         dispatch(setActiveOrganization(organization));
         setReady(true);

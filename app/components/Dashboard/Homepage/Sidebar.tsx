@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { setAllLeads } from "@/app/redux/leads";
+import { clearAuth } from "@/app/redux/auth";
 
 
 
@@ -78,8 +79,7 @@ export default function Sidebar() {
 
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
-    localStorage.removeItem("user");
-    localStorage.removeItem("activeOrganizationId");
+    dispatch(clearAuth());
     delete axios.defaults.headers.common["x-organization-id"];
     window.location.href = "/login";
   };

@@ -25,6 +25,7 @@ export default function CreateOrganizationForm() {
   const [fieldErrors, setFieldErrors] = useState({});
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [createdOrganization, setCreatedOrganization] = useState(null);
 
   const handleChange = (e) => {
     setForm({
@@ -74,16 +75,30 @@ export default function CreateOrganizationForm() {
       }
 
       const org = data.organization;
-      localStorage.setItem("activeOrganizationId", org._id);
       dispatch(setOrganizations([org]));
       dispatch(setActiveOrganization(org));
-      window.location.href = "/dashboard";
+      setCreatedOrganization(org);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
+
+  if (createdOrganization) {
+    return (
+      <div className="rounded-lg border border-[#E5CB90] bg-[#FFF3C8]/40 p-4">
+        <p className="text-sm font-medium text-[#2A3F45]">Your workspace is ready.</p>
+        <p className="mt-2 text-xs text-[#5C6D71]">Share this workspace code with teammates so they can join:</p>
+        <code className="mt-3 block rounded-md bg-white px-3 py-2 text-center text-sm font-semibold tracking-widest text-[#458393]">
+          {createdOrganization.inviteCode}
+        </code>
+        <button onClick={() => { window.location.href = "/dashboard"; }} className="mt-4 w-full rounded-lg bg-[#34A99D] py-2.5 text-sm font-medium text-[#04342C] hover:bg-[#2F958A]">
+          Continue to dashboard
+        </button>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">

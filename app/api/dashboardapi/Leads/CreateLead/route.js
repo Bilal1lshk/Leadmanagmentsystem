@@ -10,9 +10,9 @@ export async function POST(Request) {
     if (!membership) return NextResponse.json({ message: "Select a workspace first." }, { status: 403 });
     await connectDB();
     const {
-      sourcedby,
       status,
       personId,
+      source,
       priority,
       estimatedValue,
       assignedTo,
@@ -20,7 +20,6 @@ export async function POST(Request) {
       lostReason,
     } = await Request.json();
     if (!personId || 
-      !sourcedby ||
       !status ||
       !priority ||
       estimatedValue === undefined ||
@@ -41,7 +40,8 @@ export async function POST(Request) {
     const created = await leadmodel.create({
       organization: membership.organization,
       personId,
-      sourcedby,
+      source,
+      sourcedby: user._id,
       status,
       priority,
       estimatedValue,
@@ -52,7 +52,8 @@ export async function POST(Request) {
 
     if(!created) return NextResponse.json({message:"Something went wrong in lead creation try again "})
     return NextResponse.json({ message: "lead created succesfully", data: created, success: true }, { status: 201 });
-  } catch (err) {
+  } catch (error) {
+    console.error("Create lead error:", error);
     return NextResponse.json({ message: "Error" }, { status: 500 });
   }
 }

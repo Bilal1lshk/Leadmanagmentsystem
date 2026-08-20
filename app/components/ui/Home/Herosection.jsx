@@ -51,12 +51,12 @@ export default function HeroSection() {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-4">
-            <button className="rounded-lg bg-[#458393] px-6 py-3 text-sm font-medium text-white">
+            <a href="/signup" className="rounded-lg bg-[#458393] px-6 py-3 text-sm font-medium text-white">
               Get started free
-            </button>
-            <button className="rounded-lg border border-[#E5CB90] bg-transparent px-6 py-3 text-sm font-medium text-[#22303A]">
-              See how it works
-            </button>
+            </a>
+            <a href="/login" className="rounded-lg border border-[#E5CB90] bg-transparent px-6 py-3 text-sm font-medium text-[#22303A] hover:bg-white/60">
+              Log in
+            </a>
           </div>
         </div>
 

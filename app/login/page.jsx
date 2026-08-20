@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import { ChartLine } from "lucide-react";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { setUser } from "@/app/redux/auth";
 
 export default function Login() {
+  const dispatch = useAppDispatch();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -24,7 +27,6 @@ export default function Login() {
     setError("");
     setSuccess("");
     setLoading(true);
-    const data=JSON.stringify(form)
      try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
@@ -41,7 +43,7 @@ export default function Login() {
       }
 
       setSuccess("Login successful!");
-      localStorage.setItem("user", JSON.stringify(data.user));
+      dispatch(setUser(data.user));
 
       // Redirect after brief delay to let user see success message
       setTimeout(() => {

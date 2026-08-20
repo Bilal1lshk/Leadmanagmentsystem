@@ -4,7 +4,7 @@ const leadSchema = new mongoose.Schema(
   {
     organization: { type: mongoose.Schema.Types.ObjectId, ref: "Organization", required: true, index: true },
     personId:{type:String, required:true},
-    sourcedby: { type: mongoose.Schema.Types.ObjectId, ref: "Person", required: true },
+    sourcedby: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     source: {
       type: String,
       enum: ["website", "referral", "ad", "cold_call", "other"],

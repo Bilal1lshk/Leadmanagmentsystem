@@ -9,42 +9,40 @@ import {
   setOrganizations,
   setOrgLoading,
 } from "@/app/redux/organization";
+import { setUser } from "@/app/redux/auth";
 
 export default function HomePageClient() {
   const dispatch = useAppDispatch();
   const [view, setView] = useState("loading");
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-
-    if (!storedUser) {
-      setView("marketing");
-      return;
-    }
-
     let cancelled = false;
 
     async function checkOrganizations() {
       dispatch(setOrgLoading(true));
 
       try {
-        const response = await fetch("/api/organization/my");
-        const data = await response.json();
+        const [sessionResponse, response] = await Promise.all([
+          fetch("/api/auth/me"),
+          fetch("/api/organization/my"),
+        ]);
+        const [session, data] = await Promise.all([sessionResponse.json(), response.json()]);
 
         if (cancelled) return;
 
-        if (!response.ok || !data.success) {
+        if (!sessionResponse.ok || !response.ok || !data.success) {
           setView("marketing");
           return;
         }
 
+        dispatch(setUser(session.user));
+
         const orgs = data.organizations || [];
 
         if (orgs.length > 0) {
-          localStorage.setItem("activeOrganizationId", orgs[0]._id);
           dispatch(setOrganizations(orgs));
           dispatch(setActiveOrganization(orgs[0]));
-          window.location.href = "/dashboard";
+          setView("marketing");
           return;
         }
 

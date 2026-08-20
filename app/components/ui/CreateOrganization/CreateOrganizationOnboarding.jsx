@@ -1,9 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { ChartLine, Building2 } from "lucide-react";
 import CreateOrganizationForm from "./CreateOrganizationForm";
+import JoinOrganizationForm from "./JoinOrganizationForm";
 
 export default function CreateOrganizationOnboarding() {
+  const [mode, setMode] = useState("create");
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#FFF3C8] px-4 py-12">
       <div className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-[#458393]/10" />
@@ -22,12 +25,9 @@ export default function CreateOrganizationOnboarding() {
             <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#FFF3C8]/20">
               <Building2 className="h-8 w-8 text-[#FFF3C8]" />
             </div>
-            <h2 className="text-2xl font-medium leading-snug text-white">
-              Create your workspace
-            </h2>
+            <h2 className="text-2xl font-medium leading-snug text-white">{mode === "create" ? "Create your workspace" : "Join your workspace"}</h2>
             <p className="mt-3 text-sm leading-relaxed text-white/75">
-              Set up your organization to start managing leads, tracking
-              pipelines, and growing your business with your team.
+              {mode === "create" ? "Set up your organization to start managing leads, tracking pipelines, and growing your business with your team." : "Use the workspace code shared by your administrator to collaborate with your team."}
             </p>
           </div>
 
@@ -46,15 +46,18 @@ export default function CreateOrganizationOnboarding() {
             <span className="text-lg font-medium text-[#2A3F45]">Leadwise</span>
           </div>
 
-          <h1 className="text-2xl font-medium text-[#2A3F45]">
-            Set up your workspace
-          </h1>
+          <h1 className="text-2xl font-medium text-[#2A3F45]">{mode === "create" ? "Set up your workspace" : "Join a workspace"}</h1>
           <p className="mt-1 text-sm text-[#5C6D71]">
-            Tell us a bit about your organization to get started.
+            {mode === "create" ? "Tell us a bit about your organization to get started." : "Enter the code you received from your administrator."}
           </p>
 
-          <div className="mt-7">
-            <CreateOrganizationForm />
+          <div className="mt-6 flex rounded-lg bg-[#FFF3C8]/60 p-1 text-sm">
+            <button onClick={() => setMode("create")} className={`flex-1 rounded-md px-3 py-2 font-medium ${mode === "create" ? "bg-white text-[#458393] shadow-sm" : "text-[#5C6D71]"}`}>Create</button>
+            <button onClick={() => setMode("join")} className={`flex-1 rounded-md px-3 py-2 font-medium ${mode === "join" ? "bg-white text-[#458393] shadow-sm" : "text-[#5C6D71]"}`}>Join</button>
+          </div>
+
+          <div className="mt-5">
+            {mode === "create" ? <CreateOrganizationForm /> : <JoinOrganizationForm />}
           </div>
         </div>
       </div>

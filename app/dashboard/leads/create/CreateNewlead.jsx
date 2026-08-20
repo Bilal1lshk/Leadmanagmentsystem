@@ -1,8 +1,7 @@
 "use client"
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { GetuserId } from "../../../context/Usercontext.jsx"
 import {
     ArrowLeft,
     User,
@@ -31,7 +30,6 @@ function Field({ label, children }) {
     );
 }
 export default function CreateLeadPage() {
-    const { userId } = GetuserId()
 
     const SOURCES = [
         { value: "website", label: "Website", icon: Globe },
@@ -73,8 +71,7 @@ const router = useRouter();
                 },
             })
             const dataofapi = await resposne.json();
-            if(status !== 200) return 
-            console.log(dataofapi)
+            if (!resposne.ok) return;
             setdata(dataofapi?.allusers)
 
         }
@@ -82,7 +79,6 @@ const router = useRouter();
 
     }, [])
     const [form, setForm] = useState({
-        sourcedby: userId,
         personId: "",
         source: "website",
         status: "new",
@@ -92,14 +88,7 @@ const router = useRouter();
         lastContactedAt: "",
         lostReason: "",
     });
-    useEffect(() => {
-        if (userId) {
-            setForm((f) => ({ ...f, sourcedby: userId }));
-        }
-    }, [userId]);
-
     const [status, setStatus] = useState("idle"); 
-    const selectedPerson = data?.find((p) => p?._id === form?.personId);
     const set = (field) => (val) => setForm((f) => ({ ...f, [field]: val }));
 
     const handleSubmit = async (e) => {
@@ -108,7 +97,7 @@ const router = useRouter();
         setStatus("saving");
         try {
             const respone = await axios.post("/api/dashboardapi/Leads/CreateLead", form);
-            if(respone?.status===200){
+            if(respone?.status===201){
                 router.push("/dashboard/leads")
             }
             setStatus("saved");

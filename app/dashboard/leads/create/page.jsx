@@ -1,12 +1,5 @@
-import React from 'react'
-import CreateLeadPage from "./CreateNewlead.jsx"
-import Sourced from './Sourced.jsx';
-export default function page() {
-  return (
-<>
-<CreateLeadPage/>
-<Sourced />
-</>
+import CreateLeadPage from "./CreateNewlead.jsx";
 
-)
+export default function Page() {
+  return <CreateLeadPage />;
 }

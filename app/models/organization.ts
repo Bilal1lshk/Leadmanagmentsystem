@@ -6,6 +6,7 @@ interface IOrganization extends Document {
   createdBy: mongoose.Types.ObjectId;
   owner: mongoose.Types.ObjectId;
   plan: "free" | "pro" | "enterprise";
+  inviteCode: string;
 }
 
 const organizationSchema = new Schema<IOrganization>(
@@ -32,9 +33,17 @@ const organizationSchema = new Schema<IOrganization>(
       enum: ["free", "pro", "enterprise"],
       default: "free",
     },
+    inviteCode: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+      uppercase: true,
+      trim: true,
+    },
   },
   { timestamps: true }
 );
 
 export default mongoose.models.Organization ||
-  mongoose.model<IOrganization>("Organization", organizationSchema);
+  mongoose.model<IOrganization>("Organization", organizationSchema);

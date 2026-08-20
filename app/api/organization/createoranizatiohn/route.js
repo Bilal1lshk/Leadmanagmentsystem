@@ -3,6 +3,9 @@ import connectDB from "@/app/config/mongodbconnection";
 import Organization from "@/app/models/organization";
 import OrganizationMember from "@/app/models/organizationMember";
 import { getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
+import crypto from "crypto";
+
+const createInviteCode = () => crypto.randomBytes(5).toString("hex").toUpperCase();
 
 /**
  * POST /api/organization/createoranizatiohn
@@ -82,6 +85,7 @@ export async function POST(request) {
       owner: currentUser._id,
       createdBy: currentUser._id,
       plan: "free",
+      inviteCode: createInviteCode(),
     });
 
     // ── 7. Create OrganizationMember (creator = Admin) ────────────────────────
@@ -108,6 +112,7 @@ export async function POST(request) {
           name: organization.name,
           companysize: organization.companysize,
           plan: organization.plan,
+          inviteCode: organization.inviteCode,
         },
       },
       { status: 201 }
