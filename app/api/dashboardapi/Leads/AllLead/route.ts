@@ -1,17 +1,22 @@
 import { NextResponse } from "next/server";
 import leadmodel from "@/app/models/lead.js";
 import dbConnect from "@/app/config/mongodbconnection.js"
-export async function GET() {
+import { getCurrentOrganization, getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
+export async function GET(request: Request) {
   try {
+    const user = await getCurrentUser(request);
+    if (!user) return unauthorizedResponse();
+    const membership = await getCurrentOrganization(request, user);
+    if (!membership) return NextResponse.json({ message: "Select a workspace first.", success: false }, { status: 403 });
     await dbConnect();
 
-    const data = await leadmodel.find();
+    const data = await leadmodel.find({ organization: membership.organization });
 
     if (data.length === 0) {
       return NextResponse.json(
         {
           message: "No leads found",
-          success: false,
+          success: true,
         },
         { status: 404 }
       );

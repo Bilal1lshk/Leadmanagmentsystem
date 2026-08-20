@@ -8,14 +8,20 @@ const sources = [
   { label: "Other", pct: 5, color: "#9CA3AF" },
 ];
 
-function Donut({ data, size = 150, thickness = 22 }) {
+interface DonutEntry {
+  label: string;
+  pct: number;
+  color: string;
+}
+
+function Donut({ data, size = 150, thickness = 22 }: { data: DonutEntry[]; size?: number; thickness?: number }) {
   const radius = (size - thickness) / 2;
   const circumference = 2 * Math.PI * radius;
   let offset = 0;
 
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      {data.map((d) => {
+      {data.map((d: DonutEntry) => {
         const dash = (d.pct / 100) * circumference;
         const el = (
           <circle

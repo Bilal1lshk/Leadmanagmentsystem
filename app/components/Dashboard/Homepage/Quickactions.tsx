@@ -9,7 +9,7 @@ const actions = [
   { icon: PenSquare, label: "Create Task" },
 ];
 
-export default function QuickActions({ onAction }) {
+export default function QuickActions({ onAction }: { onAction?: (label: string) => void }) {
   return (
     <Card>
       <h3 className="m-0 mb-3 text-sm text-[#22303A]">Quick Actions</h3>

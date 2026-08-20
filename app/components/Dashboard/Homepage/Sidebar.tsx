@@ -65,14 +65,24 @@ export default function Sidebar() {
         const response = await axios.get("/api/dashboardapi/Leads/AllLead");
         dispatch(setAllLeads(response.data.data));
       } catch (err) {
-        console.log(err?.message ?? err, "failed");
+        const message = err instanceof Error ? err.message : String(err);
+        console.log(message, "failed");
       }
     };
 
     gettingdata();
   }, [dispatch]);
 
-  const data = useAppSelector((store) => store.LeadSlice.Lead);
+  // data is read from redux but only used for the lead count badge — not passed to SVG icons
+  useAppSelector((store) => store.LeadSlice.Lead);
+
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    localStorage.removeItem("user");
+    localStorage.removeItem("activeOrganizationId");
+    delete axios.defaults.headers.common["x-organization-id"];
+    window.location.href = "/login";
+  };
 
   return (
     <aside className="w-56 min-h-screen bg-white border-r border-[#E5CB90]/60 p-3.5 flex flex-col gap-1">
@@ -80,7 +90,7 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="flex items-center gap-2 px-2 pb-5">
         <div className="w-8 h-8 rounded-lg bg-[#458393] flex items-center justify-center">
-          <TrendingUp data={data} size={16} className="text-[#FFF3C8]" />
+          <TrendingUp size={16} className="text-[#FFF3C8]" />
         </div>
 
         <span className="font-bold text-[17px] text-[#2A3F45]">
@@ -114,6 +124,10 @@ export default function Sidebar() {
           </div>
         </Link>
       ))}
+
+      <button onClick={handleLogout} className="mt-auto flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-[#5C6D71] transition-colors hover:bg-[#FFF3C8]/40 hover:text-[#458393]">
+        Sign out
+      </button>
 
     </aside>
   );

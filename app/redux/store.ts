@@ -1,10 +1,12 @@
 import leadReducer from "./leads";
 import { configureStore } from "@reduxjs/toolkit";
 import tasksSlice from "./tasks";
+import organizationSlice from "./organization";
 export const store = configureStore({
   reducer: {
     LeadSlice: leadReducer,
     tasksSlice,
+    organizationSlice,
   },
 });
 

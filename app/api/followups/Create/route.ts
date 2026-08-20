@@ -1,26 +1,25 @@
 import FollowUp from "@/app/models/followup";
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import jwt from 'jsonwebtoken'
+import connectDB from "@/app/config/mongodbconnection";
+import Lead from "@/app/models/lead";
+import { getCurrentOrganization, getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
 export async function POST(request: Request) {
-  console.log("request hitted")
   try {
     const body = await request.json();
-    const Allcookie = await cookies();
-    const token = Allcookie.get("token")?.value
-    if (!token) {
-      return Response.json(
-        { message: "Unauthorized" },
-        { status: 401 }
-      );
-    }
-    const decoded = jwt.decode(token)
+    const user = await getCurrentUser(request);
+    if (!user) return unauthorizedResponse();
+    const membership = await getCurrentOrganization(request, user);
+    if (!membership) return NextResponse.json({ message: "Select a workspace first" }, { status: 403 });
+    await connectDB();
+    const lead = await Lead.findOne({ _id: body.lead, organization: membership.organization });
+    if (!lead) return NextResponse.json({ message: "Lead not found" }, { status: 404 });
     const newFollowUp = await FollowUp.create({
+      organization: membership.organization,
       lead: body.lead,
       status: body.status,
       comments: body.comments,
       duedate: body.duedate,
-      CreatedBy: decoded?.userId,
+      CreatedBy: user._id,
       assignedTo: body.assignedTo,
     });
     if (!newFollowUp) {

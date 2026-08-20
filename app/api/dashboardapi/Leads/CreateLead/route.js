@@ -1,7 +1,14 @@
 import { NextResponse } from "next/server";
 import leadmodel from "../../../../models/lead.js";
+import connectDB from "@/app/config/mongodbconnection";
+import { getCurrentOrganization, getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
 export async function POST(Request) {
   try {
+    const user = await getCurrentUser(Request);
+    if (!user) return unauthorizedResponse();
+    const membership = await getCurrentOrganization(Request, user);
+    if (!membership) return NextResponse.json({ message: "Select a workspace first." }, { status: 403 });
+    await connectDB();
     const {
       sourcedby,
       status,
@@ -10,12 +17,13 @@ export async function POST(Request) {
       estimatedValue,
       assignedTo,
       lastContactedAt,
+      lostReason,
     } = await Request.json();
     if (!personId || 
       !sourcedby ||
       !status ||
       !priority ||
-      !estimatedValue ||
+      estimatedValue === undefined ||
       !lastContactedAt) {
       return NextResponse.json(
         { message: "all fields should be filled" },
@@ -31,6 +39,7 @@ export async function POST(Request) {
     }
 
     const created = await leadmodel.create({
+      organization: membership.organization,
       personId,
       sourcedby,
       status,
@@ -38,10 +47,11 @@ export async function POST(Request) {
       estimatedValue,
       assignedTo,
       lastContactedAt,
+      lostReason,
     })
 
     if(!created) return NextResponse.json({message:"Something went wrong in lead creation try again "})
-    return NextResponse.json({ message: "lead created succesfully" });
+    return NextResponse.json({ message: "lead created succesfully", data: created, success: true }, { status: 201 });
   } catch (err) {
     return NextResponse.json({ message: "Error" }, { status: 500 });
   }

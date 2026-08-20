@@ -1,9 +1,14 @@
 ﻿import { NextResponse } from "next/server";
 import dbConnect from "../../../../config/mongodbconnection";
 import Lead from "../../../../models/lead";
+import { getCurrentOrganization, getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
 
 export async function PATCH(req) {
   try {
+    const user = await getCurrentUser(req);
+    if (!user) return unauthorizedResponse();
+    const membership = await getCurrentOrganization(req, user);
+    if (!membership) return NextResponse.json({ message: "Select a workspace first." }, { status: 403 });
     await dbConnect();
     const { leadId, status, lostReason } = await req.json();
 
@@ -22,7 +27,7 @@ export async function PATCH(req) {
       ...(status === "lost" && lostReason ? { lostReason } : {}),
     };
 
-    const updated = await Lead.findByIdAndUpdate(leadId, updatePayload, { new: true }).lean();
+    const updated = await Lead.findOneAndUpdate({ _id: leadId, organization: membership.organization }, updatePayload, { new: true }).lean();
     if (!updated) return NextResponse.json({ message: "Lead not found" }, { status: 404 });
 
     return NextResponse.json({ lead: updated, message: "Lead status updated", success: true });

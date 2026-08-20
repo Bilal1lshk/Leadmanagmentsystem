@@ -1,5 +1,6 @@
 import mongoose,{Document, Schema} from "mongoose";
 interface followup extends Document{
+    organization: object | string,
     lead:object,
     comments:string,
     duedate:Date,
@@ -9,6 +10,7 @@ interface followup extends Document{
 
 }
 const followupSchema=new Schema<followup>({ 
+    organization: { type: Schema.Types.ObjectId, ref: "Organization", required: true, index: true },
     lead: {
       type: Schema.Types.ObjectId,
       ref: "Lead",
@@ -44,4 +46,4 @@ const followupSchema=new Schema<followup>({
 
  
 }, { timestamps: true })
-export default mongoose.model<followup>("Followup", followupSchema)
+export default mongoose.models.Followup || mongoose.model<followup>("Followup", followupSchema)

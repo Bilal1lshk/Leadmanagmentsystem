@@ -1,19 +1,13 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import jwt from "jsonwebtoken";
-export function proxy(NextRequest) {
-    const token = NextRequest.cookies.get("token")?.value;
+export function proxy(request) {
+    const token = request.cookies.get("token")?.value;
     if (!token) {
-        return NextResponse.redirect(new URL("/login", NextRequest?.url));
+        return NextResponse.redirect(new URL("/login", request.url));
     }
-    const data = jwt.verify(token, process.env.JWT_SECRET)
-    const requestHeaders = new Headers(NextRequest.headers);
-    requestHeaders.set("userId", data?.userId)
-    return NextResponse.next({
-      request:{
-        headers:requestHeaders
-      }
-    });
+    // Route handlers verify the JWT and membership before accessing data.
+    // Proxy only performs the inexpensive navigation gate.
+    return NextResponse.next();
 }
 
 export const config = {

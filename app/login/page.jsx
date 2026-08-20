@@ -41,7 +41,6 @@ export default function Login() {
       }
 
       setSuccess("Login successful!");
-      localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
       // Redirect after brief delay to let user see success message

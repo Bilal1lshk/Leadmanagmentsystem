@@ -6,12 +6,12 @@ const leads = [
   { name: "Sarah Khan", company: "Digital Co", source: "LinkedIn", status: "Qualified", value: "$5,000", date: "Today" },
 ];
 
-const statusStyles = {
+const statusStyles: Record<string, string> = {
   New: "bg-[#458393]/15 text-[#458393] font-semibold border border-[#458393]/30",
   Qualified: "bg-[#34A99D]/15 text-[#34A99D] font-semibold border border-[#34A99D]/30",
 };
 
-export default function RecentLeadsTable({ onAddLead }) {
+export default function RecentLeadsTable({ onAddLead }: { onAddLead?: () => void }) {
   return (
     <Card>
       <div className="flex items-center justify-between mb-3">

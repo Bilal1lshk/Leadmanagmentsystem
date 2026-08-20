@@ -1,17 +1,16 @@
 import mongoose from "mongoose"
-async function connectdb(params) {
+async function connectdb() {
     const url = process.env.MONGODB_URI
     if (!url) {
-        console.log("mongodb connection string is not defined")
-        return
+        throw new Error("Missing MongoDB connection string")
     }
     try {
-        const connectdb = await mongoose.connect(url)
-        if (!connectdb) return
+        if (mongoose.connection.readyState === 1) return mongoose.connection
+        return await mongoose.connect(url)
     }
     catch (err) {
         console.log(err.message, "failed")
-
+        throw err
     }
 }
 export default connectdb

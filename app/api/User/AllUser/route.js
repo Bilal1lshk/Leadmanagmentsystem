@@ -1,10 +1,17 @@
-import { NextResponse } from "next/dist/api/server.js";
+import { NextResponse } from "next/server";
 import usermodel from "../../../models/user.js"
+import connectDB from "@/app/config/mongodbconnection";
+import OrganizationMember from "@/app/models/organizationMember";
+import { getCurrentOrganization, getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
 
-export async function GET() {
-    console.log("Fetching all users");
-    const allusers = await usermodel.find()
-    if (!allusers) return
+export async function GET(request) {
+    const user = await getCurrentUser(request);
+    if (!user) return unauthorizedResponse();
+    const membership = await getCurrentOrganization(request, user);
+    if (!membership) return NextResponse.json({ message: "Select a workspace first" }, { status: 403 });
+    await connectDB();
+    const members = await OrganizationMember.find({ organization: membership.organization }).populate("user", "name email avatar").lean();
+    const allusers = members.filter((member) => member.user).map((member) => ({ ...member.user, organizationRole: member.role }));
     return NextResponse.json({
         allusers,
         message: "All users avaliable",
