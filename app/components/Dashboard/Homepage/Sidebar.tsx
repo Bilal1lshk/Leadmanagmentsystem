@@ -54,12 +54,14 @@ const navItems = [
     icon: Settings,
     label: "Settings",
     link: "/dashboard/settings",
+    adminOnly: true,
   },
   
 ];
 
 export default function Sidebar() {
   const dispatch = useAppDispatch();
+  const activeOrganization = useAppSelector((store) => store.organizationSlice.activeOrganization);
   useEffect(() => {
     const gettingdata = async () => {
       try {
@@ -99,7 +101,7 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation */}
-      {navItems.map(({ icon: Icon, label, link }) => (
+      {navItems.filter((item) => !item.adminOnly || activeOrganization?.role === "Admin").map(({ icon: Icon, label, link }) => (
         <Link
           key={label}
           href={link}
