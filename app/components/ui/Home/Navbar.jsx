@@ -2,9 +2,28 @@
 
 import { ChartLine } from "lucide-react";
 import { useAppSelector } from "@/app/redux/hooks";
+import axios from "axios";
+import { useEffect, useState } from "react";
 export default function Navbar() {
-  const user = useAppSelector((state) => state.auth.user);
-  const activeOrganization = useAppSelector((state) => state.organizationSlice.activeOrganization);
+  const [user, setuser] = useState(false)
+  const [activeOrganization, setactiveorganization] = useState(false)
+  useEffect(() => {
+    const getuser = async () => {
+      const data = await axios.get("/api/auth/me")
+      console.log(data)
+      setuser(data.data.success)
+    }
+    const activeOrganization = async () => {
+      const data = await axios.get(`/api/organization/my`)
+      console.log(data)
+      // setactiveorganization(data.data.success)
+    }
+
+    activeOrganization()
+    getuser()
+
+  }, [])
+  console.log("organization",activeOrganization,"user",user)
   return (
     <nav className="flex items-center justify-between gap-4 rounded-xl bg-[#FFF3C8] px-5 py-3.5 flex-wrap">
       <div className="flex items-center gap-2">
@@ -28,8 +47,8 @@ export default function Navbar() {
 
       {/* Right side */}
       <div className="flex items-center gap-3">
-        {user ? (
-          <a href={activeOrganization ? "/dashboard" : "/"} className="rounded-lg bg-[#34A99D] px-4 py-2 text-sm font-medium text-[#04342C] hover:bg-[#2F958A]">
+        {user  ? (
+          <a href={activeOrganization ? "/dashboard" : "/setupworkspace"} className="rounded-lg bg-[#34A99D] px-4 py-2 text-sm font-medium text-[#04342C] hover:bg-[#2F958A]">
             {activeOrganization ? "Open dashboard" : "Set up workspace"}
           </a>
         ) : (

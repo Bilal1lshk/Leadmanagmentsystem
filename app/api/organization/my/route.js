@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/app/config/mongodbconnection";
 import OrganizationMember from "@/app/models/organizationMember";
+import Organization from "@/app/models/organization";
 import { getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
 
 /**

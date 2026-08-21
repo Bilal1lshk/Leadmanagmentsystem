@@ -65,7 +65,8 @@ export default function Sidebar() {
   useEffect(() => {
     const gettingdata = async () => {
       try {
-        const response = await axios.get("/api/dashboardapi/Leads/AllLead");
+        const response = await axios.get("/api/dashboardapi/AllLead");
+        console.log(response)
         dispatch(setAllLeads(response.data.data));
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
