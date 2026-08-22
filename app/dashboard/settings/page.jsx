@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/app/redux/hooks";
+import Sidebar from "../../components/Dashboard/Homepage/Sidebar";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -79,8 +80,10 @@ export default function SettingsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#FFF3C8] p-6 text-[#22303A]">
-      <div className="mx-auto max-w-3xl rounded-2xl border border-[#E5CB90] bg-white p-6 shadow-sm">
+    <main className="min-h-screen w-full bg-[#FFF3C8] flex flex-row  p-6 text-[#22303A]">
+                  <Sidebar />
+
+      <div className="mx-auto min-w-4xl rounded-2xl border border-[#E5CB90] bg-white p-6 shadow-sm">
         <h1 className="text-2xl font-semibold">Workspace settings</h1>
         <p className="mt-1 text-sm text-[#5C6D71]">Review people who requested to join {organization?.name || "your workspace"}.</p>
         {error && <div className="mt-5 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600">{error}</div>}

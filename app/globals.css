@@ -151,6 +151,19 @@
   color: #5c6d71 !important;
 }
 
+/* Fix: white/near-white text becomes invisible once dark backgrounds are forced to white above */
+.leadwise-dashboard [class*="text-white"],
+.leadwise-dashboard [class*="text-slate-50"],
+.leadwise-dashboard [class*="text-slate-100"],
+.leadwise-dashboard [class*="text-slate-200"],
+.leadwise-dashboard [class*="text-gray-50"],
+.leadwise-dashboard [class*="text-gray-100"],
+.leadwise-dashboard [class*="text-gray-200"],
+.leadwise-dashboard [class*="text-neutral-50"],
+.leadwise-dashboard [class*="text-neutral-100"] {
+  color: #22303a !important;
+}
+
 .leadwise-dashboard [class*="border-slate-"],
 .leadwise-dashboard [class*="border-gray-"] {
   border-color: #e5cb90 !important;

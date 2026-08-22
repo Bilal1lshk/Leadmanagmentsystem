@@ -1,7 +1,6 @@
 ﻿"use client";
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-
 import type { LucideIcon } from "lucide-react";
 import {
   Search,
@@ -20,8 +19,14 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
+
+import Sidebar from "@/app/components/Dashboard/Homepage/Sidebar";
 import { useAppSelector } from "@/app/redux/hooks";
-import lead from "@/app/models/lead";
+
+/* =========================================================
+   TYPES
+========================================================= */
+
 type LeadStatus =
   | "new"
   | "contacted"
@@ -32,7 +37,12 @@ type LeadStatus =
 
 type LeadPriority = "low" | "medium" | "high";
 
-type LeadSource = "website" | "referral" | "ad" | "cold_call" | "other";
+type LeadSource =
+  | "website"
+  | "referral"
+  | "ad"
+  | "cold_call"
+  | "other";
 
 interface Lead {
   id: string;
@@ -46,6 +56,10 @@ interface Lead {
   lastContactedAt?: string;
   createdAt: string;
 }
+
+/* =========================================================
+   STYLES
+========================================================= */
 
 const statusStyles: Record<LeadStatus, string> = {
   new: "bg-blue-500/10 text-blue-400 border-blue-500/20",
@@ -62,8 +76,18 @@ const priorityStyles: Record<LeadPriority, string> = {
   high: "text-red-400",
 };
 
+/* =========================================================
+   HELPERS
+========================================================= */
+
 const formatLabel = (value: string) => {
+  if (!value) return "";
+
   return value.charAt(0).toUpperCase() + value.slice(1);
+};
+
+const formatSource = (value: string) => {
+  return value.replace("_", " ");
 };
 
 const formatCurrency = (value: number = 0) => {
@@ -74,19 +98,53 @@ const formatCurrency = (value: number = 0) => {
   }).format(value);
 };
 
+const formatDate = (value?: string) => {
+  if (!value) return "Never contacted";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "Never contacted";
+  }
+
+  return date.toLocaleDateString("en-GB");
+};
+
+const getInitials = (name?: string) => {
+  if (!name) return "?";
+
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+};
+
+/* =========================================================
+   PAGE
+========================================================= */
+
 export default function LeadsPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
-  console.log(leads)
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
-  console.log(priorityFilter)
   const [sourceFilter, setSourceFilter] = useState("all");
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
-  const data = useAppSelector((store) => store.LeadSlice.Lead);
-  const newLeads = data?.filter((lead) => lead?.status === "new");
-  const qualifiedleads = data?.filter((lead) => lead.status === "qualified");
-  const totalvalue = leads.reduce((sum, lead) => sum + (lead?.estimatedValue || 0), 0);
+
+  /*
+   * Keeping this selector because it already exists in
+   * your project. The actual table/statistics use the API
+   * response below so all displayed numbers stay consistent.
+   */
+  useAppSelector((store) => store.LeadSlice.Lead);
+
+  /* =======================================================
+     FETCH LEADS
+  ======================================================= */
+
   useEffect(() => {
     const getLeads = async () => {
       try {
@@ -97,21 +155,32 @@ export default function LeadsPage() {
         }>("/api/dashboardapi/Leads/AllLead", {
           withCredentials: true,
         });
+
         setLeads(response.data.data ?? []);
       } catch (error) {
-        console.error(error);
+        console.error("Failed to fetch leads:", error);
+        setLeads([]);
       }
     };
 
     getLeads();
   }, []);
 
+  /* =======================================================
+     FILTERED LEADS
+  ======================================================= */
+
   const filteredLeads = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
     return leads.filter((lead) => {
       const matchesSearch =
-        lead?.personId?.toLowerCase()?.includes(search?.toLowerCase()) ||
-        lead?.email?.toLowerCase()?.includes(search?.toLowerCase()) ||
-        lead?.source?.toLowerCase()?.includes(search?.toLowerCase());
+        !query ||
+        lead.personId?.toLowerCase().includes(query) ||
+        lead.email?.toLowerCase().includes(query) ||
+        lead.source?.toLowerCase().includes(query) ||
+        lead.assignedTo?.toLowerCase().includes(query);
+
       const matchesStatus =
         statusFilter === "all" || lead.status === statusFilter;
 
@@ -121,27 +190,78 @@ export default function LeadsPage() {
       const matchesSource =
         sourceFilter === "all" || lead.source === sourceFilter;
 
-      return matchesSearch && matchesStatus && matchesPriority && matchesSource;
+      return (
+        matchesSearch &&
+        matchesStatus &&
+        matchesPriority &&
+        matchesSource
+      );
     });
-  }, [leads, search, statusFilter,priorityFilter,sourceFilter]);
-  const qualifiedLeads = Number(qualifiedleads.length)
+  }, [
+    leads,
+    search,
+    statusFilter,
+    priorityFilter,
+    sourceFilter,
+  ]);
 
-  const highPriorityLeads = Number(newLeads.length)
+  /* =======================================================
+     STATISTICS
+  ======================================================= */
+
+  const highPriorityLeads = useMemo(() => {
+    return leads.filter((lead) => lead.priority === "high").length;
+  }, [leads]);
+
+  const qualifiedLeads = useMemo(() => {
+    return leads.filter((lead) => lead.status === "qualified").length;
+  }, [leads]);
+
+  const totalValue = useMemo(() => {
+    return leads.reduce(
+      (sum, lead) => sum + (lead.estimatedValue || 0),
+      0
+    );
+  }, [leads]);
+
+  /* =======================================================
+     SELECTION
+  ======================================================= */
+
   const toggleSelectLead = (id: string) => {
-    setSelectedLeads((prev) =>
-      prev.includes(id)
-        ? prev.filter((leadId) => leadId !== id)
-        : [...prev, id],
+    setSelectedLeads((previous) =>
+      previous.includes(id)
+        ? previous.filter((leadId) => leadId !== id)
+        : [...previous, id]
     );
   };
 
   const toggleSelectAll = () => {
-    if (selectedLeads?.length === filteredLeads?.length) {
-      setSelectedLeads([]);
+    if (filteredLeads.length === 0) return;
+
+    const allSelected = filteredLeads.every((lead) =>
+      selectedLeads.includes(lead.id)
+    );
+
+    if (allSelected) {
+      setSelectedLeads((previous) =>
+        previous.filter(
+          (id) => !filteredLeads.some((lead) => lead.id === id)
+        )
+      );
     } else {
-      setSelectedLeads(filteredLeads.map((lead) => lead.id));
+      setSelectedLeads((previous) => [
+        ...new Set([
+          ...previous,
+          ...filteredLeads.map((lead) => lead.id),
+        ]),
+      ]);
     }
   };
+
+  /* =======================================================
+     CLEAR FILTERS
+  ======================================================= */
 
   const clearFilters = () => {
     setSearch("");
@@ -150,391 +270,580 @@ export default function LeadsPage() {
     setSourceFilter("all");
   };
 
+  const hasActiveFilters =
+    search.length > 0 ||
+    statusFilter !== "all" ||
+    priorityFilter !== "all" ||
+    sourceFilter !== "all";
+
+  /* =======================================================
+     RENDER
+  ======================================================= */
+
   return (
-    <main className="min-h-screen bg-[#0D1421] text-white p-4 sm:p-6 lg:p-8">
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 mb-8">
-        <div>
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">
-              Leads
-            </h1>
+    <main className="min-h-screen bg-[#0D1421] text-white">
+      <div className="flex min-h-screen">
 
-            <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
-              {leads?.length} total
-            </span>
+        {/* =================================================
+            DESKTOP SIDEBAR
+        ================================================= */}
+
+        <aside className="hidden w-[250px] shrink-0 border-r border-[#263248] lg:block">
+          <div className="sticky top-0 h-screen overflow-y-auto">
+            <Sidebar />
           </div>
+        </aside>
 
-          <p className="text-sm text-slate-400 mt-2">
-            Manage, track, and convert your sales opportunities.
-          </p>
-        </div>
+        {/* =================================================
+            MAIN CONTENT
+        ================================================= */}
 
-        <Link href="/dashboard/leads/create">
-          <button className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-sm font-medium transition-colors shadow-lg shadow-blue-600/10">
-            <Plus size={17} />
-            Add New Lead
-          </button>
-        </Link>
-      </div>
+        <section className="min-w-0 flex-1">
+          <div className="mx-auto w-full max-w-[1600px] px-4 py-5 sm:px-6 sm:py-6 lg:px-8 xl:px-10">
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-        <StatCard
-          icon={Users}
-          label="Total Leads"
-          value={leads?.length}
-          description="All active leads"
-          iconStyle="bg-blue-500/10 text-blue-400"
-        />
+            {/* =================================================
+                PAGE HEADER
+            ================================================= */}
 
-        <StatCard
-          icon={Flame}
-          label="High Priority"
-          value={highPriorityLeads}
-          description="Need immediate attention"
-          iconStyle="bg-red-500/10 text-red-400"
-        />
+            <header className="mb-7">
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
 
-        <StatCard
-          icon={TrendingUp}
-          label="Qualified Leads"
-          value={qualifiedLeads}
-          description="Ready for conversion"
-          iconStyle="bg-cyan-500/10 text-cyan-400"
-        />
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+                      Leads
+                    </h1>
 
-        <StatCard
-          icon={CircleDollarSign}
-          label="Pipeline Value"
-          value={totalvalue}
-          description="Estimated opportunity value"
-          iconStyle="bg-emerald-500/10 text-emerald-400"
-        />
-      </div>
+                    <span className="rounded-full border border-blue-500/20 bg-blue-500/10 px-2.5 py-1 text-xs font-medium text-blue-400">
+                      {leads.length} total
+                    </span>
+                  </div>
 
-      <div className="bg-[#111827] border border-[#263248] rounded-2xl p-4 mb-5">
-        <div className="flex flex-col xl:flex-row gap-3">
-          <div className="relative flex-1">
-            <Search
-              size={17}
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500"
-            />
+                  <p className="mt-2 max-w-xl text-sm text-slate-400">
+                    Manage, track, and convert your sales opportunities.
+                  </p>
+                </div>
 
-            <input
-              type="text"
-              placeholder="Search leads, emails, or assignees..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full h-10 pl-10 pr-4 rounded-xl bg-[#0D1421] border border-[#263248] text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-500/60 transition-colors"
-            />
-          </div>
+                <Link
+                  href="/dashboard/leads/create"
+                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium shadow-lg shadow-blue-600/10 transition-all hover:bg-blue-500 hover:shadow-blue-500/20 active:scale-[0.98]"
+                >
+                  <Plus size={17} />
+                  Add New Lead
+                </Link>
+              </div>
+            </header>
 
-          <FilterSelect
-            value={statusFilter}
-            onChange={setStatusFilter}
-            options={[
-              ["all", "All Status"],
-              ["new", "New"],
-              ["contacted", "Contacted"],
-              ["qualified", "Qualified"],
-              ["proposal", "Proposal"],
-              ["won", "Won"],
-              ["lost", "Lost"],
-            ]}
-          />
+            {/* =================================================
+                STAT CARDS
+            ================================================= */}
 
-          <FilterSelect
-            value={priorityFilter}
-            onChange={setPriorityFilter}
-            options={[
-              ["all", "All Priority"],
-              ["high", "High"],
-              ["medium", "Medium"],
-              ["low", "Low"],
-            ]}
-          />
+            <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-4">
 
-          <FilterSelect
-            value={sourceFilter}
-            onChange={setSourceFilter}
-            options={[
-              ["all", "All Sources"],
-              ["website", "Website"],
-              ["referral", "Referral"],
-              ["ad", "Advertisement"],
-              ["cold_call", "Cold Call"],
-              ["other", "Other"],
-            ]}
-          />
+              <StatCard
+                icon={Users}
+                label="Total Leads"
+                value={leads.length}
+                description="All active leads"
+                iconStyle="bg-blue-500/10 text-blue-400"
+              />
 
-          <button
-            onClick={clearFilters}
-            className="h-10 px-3 rounded-xl border border-[#263248] text-slate-400 hover:text-white hover:bg-[#182235] transition-colors"
-          >
-            <X size={16} />
-          </button>
-        </div>
-      </div>
+              <StatCard
+                icon={Flame}
+                label="High Priority"
+                value={highPriorityLeads}
+                description="Need immediate attention"
+                iconStyle="bg-red-500/10 text-red-400"
+              />
 
-      <div className="bg-[#111827] border border-[#263248] rounded-2xl overflow-hidden">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-5 py-4 border-b border-[#263248]">
-          <div className="flex items-center gap-3">
-            <SlidersHorizontal size={17} className="text-slate-500" />
+              <StatCard
+                icon={TrendingUp}
+                label="Qualified Leads"
+                value={qualifiedLeads}
+                description="Ready for conversion"
+                iconStyle="bg-cyan-500/10 text-cyan-400"
+              />
 
-            <span className="text-sm text-slate-400">
-              Showing{" "}
-              <span className="text-white font-medium">
-                {filteredLeads?.length}
-              </span>{" "}
-              leads
-            </span>
+              <StatCard
+                icon={CircleDollarSign}
+                label="Pipeline Value"
+                value={formatCurrency(totalValue)}
+                description="Estimated opportunity value"
+                iconStyle="bg-emerald-500/10 text-emerald-400"
+              />
 
-            {selectedLeads?.length > 0 && (
-              <span className="text-xs text-blue-400">
-                {selectedLeads?.length} selected
-              </span>
-            )}
-          </div>
+            </div>
 
-          <button className="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors">
-            <ArrowUpDown size={14} />
-            Sort by
-            <ChevronDown size={14} />
-          </button>
-        </div>
+            {/* =================================================
+                FILTER BAR
+            ================================================= */}
 
-        <div className="hidden lg:block overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-[#263248] text-left">
-                <th className="px-5 py-3">
-                  <input
-                    type="checkbox"
-                    checked={
-                      filteredLeads?.length > 0 &&
-                      selectedLeads?.length === filteredLeads?.length
-                    }
-                    onChange={toggleSelectAll}
-                    className="accent-blue-500"
+            <div className="mb-5 rounded-2xl border border-[#263248] bg-[#111827] p-4">
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-[minmax(240px,1fr)_repeat(3,minmax(140px,180px))_40px]">
+
+                {/* Search */}
+
+                <div className="relative sm:col-span-2 xl:col-span-1">
+                  <Search
+                    size={17}
+                    className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500"
                   />
-                </th>
-                <TableHeader>Lead</TableHeader>
-                <TableHeader>Source</TableHeader>
-                <TableHeader>Status</TableHeader>
-                <TableHeader>Priority</TableHeader>
-                <TableHeader>Est. Value</TableHeader>
-                <TableHeader>Assigned To</TableHeader>
-                <TableHeader>Last Contact</TableHeader>
-                <th className="px-5 py-3"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredLeads?.map((lead) => (
-                <tr
-                  key={lead.id}
-                  className="border-b border-[#263248] last:border-0 hover:bg-[#151F31] transition-colors"
+
+                  <input
+                    type="text"
+                    placeholder="Search leads, emails, sources..."
+                    value={search}
+                    onChange={(event) =>
+                      setSearch(event.target.value)
+                    }
+                    className="h-10 w-full rounded-xl border border-[#263248] bg-[#0D1421] pl-10 pr-4 text-sm text-white outline-none transition-colors placeholder:text-slate-500 focus:border-blue-500/60"
+                  />
+                </div>
+
+                {/* Status */}
+
+                <FilterSelect
+                  value={statusFilter}
+                  onChange={setStatusFilter}
+                  options={[
+                    ["all", "All Status"],
+                    ["new", "New"],
+                    ["contacted", "Contacted"],
+                    ["qualified", "Qualified"],
+                    ["proposal", "Proposal"],
+                    ["won", "Won"],
+                    ["lost", "Lost"],
+                  ]}
+                />
+
+                {/* Priority */}
+
+                <FilterSelect
+                  value={priorityFilter}
+                  onChange={setPriorityFilter}
+                  options={[
+                    ["all", "All Priority"],
+                    ["high", "High"],
+                    ["medium", "Medium"],
+                    ["low", "Low"],
+                  ]}
+                />
+
+                {/* Source */}
+
+                <FilterSelect
+                  value={sourceFilter}
+                  onChange={setSourceFilter}
+                  options={[
+                    ["all", "All Sources"],
+                    ["website", "Website"],
+                    ["referral", "Referral"],
+                    ["ad", "Advertisement"],
+                    ["cold_call", "Cold Call"],
+                    ["other", "Other"],
+                  ]}
+                />
+
+                {/* Clear */}
+
+                <button
+                  onClick={clearFilters}
+                  disabled={!hasActiveFilters}
+                  title="Clear filters"
+                  className="flex h-10 items-center justify-center rounded-xl border border-[#263248] text-slate-400 transition-colors hover:bg-[#182235] hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
                 >
-                  <td className="px-5 py-4">
-                    <input
-                      type="checkbox"
-                      checked={selectedLeads?.includes(lead.id)}
-                      onChange={() => toggleSelectLead(lead.id)}
-                      className="accent-blue-500"
-                    />
-                  </td>
-
-                  <td className="px-5 py-4 min-w-[240px]">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-sm font-semibold text-blue-400">
-                        {lead?.personId
-                          ?.split(" ")
-                          ?.map((name) => name[0])
-                          ?.join("")}
-                      </div>
-
-                      <div>
-                        <p className="text-sm font-medium text-white">
-                          {lead?.personId
-                          }
-                        </p>
-                        <p className="text-xs text-slate-500 mt-0.5">
-                          {lead?.email}
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td className="px-5 py-4">
-                    <span className="text-sm text-slate-300 capitalize">
-                      {lead?.source?.replace("_", " ")}
-                    </span>
-                  </td>
-
-                  <td className="px-5 py-4">
-                    <span
-                      className={`inline-flex px-2.5 py-1 rounded-full border text-xs font-medium ${statusStyles[lead.status]}`}
-                    >
-                      {formatLabel(lead.status)}
-                    </span>
-                  </td>
-
-                  <td className="px-5 py-4">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={`w-2 h-2 rounded-full ${lead.priority === "high"
-                          ? "bg-red-400"
-                          : lead.priority === "medium"
-                            ? "bg-amber-400"
-                            : "bg-slate-500"
-                          }`}
-                      />
-
-                      <span
-                        className={`text-sm capitalize ${priorityStyles[lead.priority]}`}
-                      >
-                        {lead.priority}
-                      </span>
-                    </div>
-                  </td>
-
-                  <td className="px-5 py-4">
-                    <span className="text-sm font-medium text-slate-200">
-                      {formatCurrency(lead.estimatedValue)}
-                    </span>
-                  </td>
-
-                  <td className="px-5 py-4">
-                    <span className="text-sm text-slate-300">
-                      {lead.assignedTo}
-                    </span>
-                  </td>
-
-                  <td className="px-5 py-4">
-                    <span className="text-xs text-slate-500">
-                      {lead.lastContactedAt
-                        ? new Date(lead.lastContactedAt).toLocaleDateString(
-                          "en-GB",
-                        )
-                        : "Never contacted"}
-                    </span>
-                  </td>
-
-                  <td className="px-5 py-4">
-                    <button className="p-2 rounded-lg text-slate-500 hover:text-white hover:bg-[#263248] transition-colors">
-                      <MoreHorizontal size={17} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="lg:hidden divide-y divide-[#263248]">
-          {filteredLeads?.map((lead) => (
-            <div
-              key={lead.id}
-              className="p-4 hover:bg-[#151F31] transition-colors"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-sm font-semibold text-blue-400">
-                    {lead?.name
-                      ?.split(" ")
-                      ?.map((name) => name[0])
-                      ?.join("")}
-                  </div>
-
-                  <div>
-                    <p className="text-sm font-medium text-white">
-                      {lead?.name}
-                    </p>
-                    <p className="text-xs text-slate-500">{lead?.email}</p>
-                  </div>
-                </div>
-
-                <button className="text-slate-500 hover:text-white">
-                  <MoreHorizontal size={17} />
-                </button>
-              </div>
-
-              <div className="flex flex-wrap gap-2 mt-4">
-                <span
-                  className={`px-2.5 py-1 rounded-full border text-xs ${statusStyles[lead.status]}`}
-                >
-                  {formatLabel(lead.status)}
-                </span>
-
-                <span className="px-2.5 py-1 rounded-full bg-[#182235] text-xs text-slate-400 capitalize">
-                  {lead.priority} priority
-                </span>
-
-                <span className="px-2.5 py-1 rounded-full bg-[#182235] text-xs text-slate-400">
-                  {formatCurrency(lead.estimatedValue)}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 mt-4">
-                <div>
-                  <p className="text-[11px] text-slate-500">Source</p>
-                  <p className="text-xs text-slate-300 capitalize mt-1">
-                    {lead.source.replace("_", " ")}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-[11px] text-slate-500">Assigned To</p>
-                  <p className="text-xs text-slate-300 mt-1">
-                    {lead.assignedTo}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-[11px] text-slate-500">Last Contact</p>
-                  <p className="text-xs text-slate-300 mt-1">
-                    {lead.lastContactedAt
-                      ? new Date(lead.lastContactedAt).toLocaleDateString(
-                        "en-GB",
-                      )
-                      : "Never"}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-[11px] text-slate-500">Created</p>
-                  <p className="text-xs text-slate-300 mt-1">
-                    {new Date(lead.createdAt).toLocaleDateString("en-GB")}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-2 mt-4">
-                <button className="flex-1 flex items-center justify-center gap-2 h-9 rounded-lg bg-blue-500/10 text-blue-400 text-xs hover:bg-blue-500/20">
-                  <Phone size={14} />
-                  Call
+                  <X size={16} />
                 </button>
 
-                <button className="flex-1 flex items-center justify-center gap-2 h-9 rounded-lg bg-[#182235] text-slate-300 text-xs hover:bg-[#263248]">
-                  <Mail size={14} />
-                  Email
-                </button>
               </div>
             </div>
-          ))}
-        </div>
 
-        {filteredLeads?.length < 0 && (
-          <div className="py-16 text-center">
-            <Users size={32} className="mx-auto text-slate-600 mb-3" />
-            <p className="text-sm text-slate-400">No leads found</p>
-            <p className="text-xs text-slate-600 mt-1">
-              Try adjusting your filters or search query.
-            </p>
+            {/* =================================================
+                LEADS CONTAINER
+            ================================================= */}
+
+            <div className="overflow-hidden rounded-2xl border border-[#263248] bg-[#111827]">
+
+              {/* =================================================
+                  TABLE TOOLBAR
+              ================================================= */}
+
+              <div className="flex flex-col gap-3 border-b border-[#263248] px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+
+                <div className="flex flex-wrap items-center gap-3">
+
+                  <SlidersHorizontal
+                    size={17}
+                    className="text-slate-500"
+                  />
+
+                  <span className="text-sm text-slate-400">
+                    Showing{" "}
+                    <span className="font-medium text-white">
+                      {filteredLeads.length}
+                    </span>{" "}
+                    leads
+                  </span>
+
+                  {selectedLeads.length > 0 && (
+                    <span className="rounded-full bg-blue-500/10 px-2 py-1 text-xs text-blue-400">
+                      {selectedLeads.length} selected
+                    </span>
+                  )}
+
+                </div>
+
+                <button className="flex items-center gap-2 self-start text-xs text-slate-400 transition-colors hover:text-white sm:self-auto">
+                  <ArrowUpDown size={14} />
+                  Sort by
+                  <ChevronDown size={14} />
+                </button>
+
+              </div>
+
+              {/* =================================================
+                  DESKTOP TABLE
+              ================================================= */}
+
+              <div className="hidden overflow-x-auto lg:block">
+
+                <table className="w-full min-w-[1100px]">
+
+                  <thead>
+                    <tr className="border-b border-[#263248] text-left">
+
+                      <th className="w-12 px-5 py-3">
+                        <input
+                          type="checkbox"
+                          checked={
+                            filteredLeads.length > 0 &&
+                            filteredLeads.every((lead) =>
+                              selectedLeads.includes(lead.id)
+                            )
+                          }
+                          onChange={toggleSelectAll}
+                          className="h-4 w-4 cursor-pointer accent-blue-500"
+                        />
+                      </th>
+
+                      <TableHeader>Lead</TableHeader>
+                      <TableHeader>Source</TableHeader>
+                      <TableHeader>Status</TableHeader>
+                      <TableHeader>Priority</TableHeader>
+                      <TableHeader>Est. Value</TableHeader>
+                      <TableHeader>Assigned To</TableHeader>
+                      <TableHeader>Last Contact</TableHeader>
+
+                      <th className="w-12 px-5 py-3" />
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    {filteredLeads.map((lead) => (
+                      <tr
+                        key={lead.id}
+                        className="border-b border-[#263248] transition-colors last:border-0 hover:bg-[#151F31]"
+                      >
+
+                        {/* Checkbox */}
+
+                        <td className="px-5 py-4">
+                          <input
+                            type="checkbox"
+                            checked={selectedLeads.includes(lead.id)}
+                            onChange={() =>
+                              toggleSelectLead(lead.id)
+                            }
+                            className="h-4 w-4 cursor-pointer accent-blue-500"
+                          />
+                        </td>
+
+                        {/* Lead */}
+
+                        <td className="min-w-[240px] px-5 py-4">
+
+                          <div className="flex items-center gap-3">
+
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-500/20 bg-blue-500/10 text-sm font-semibold text-blue-400">
+                              {getInitials(lead.personId)}
+                            </div>
+
+                            <div className="min-w-0">
+                              <p className="truncate text-sm font-medium text-white">
+                                {lead.personId}
+                              </p>
+
+                              <p className="mt-0.5 truncate text-xs text-slate-500">
+                                {lead.email}
+                              </p>
+                            </div>
+
+                          </div>
+
+                        </td>
+
+                        {/* Source */}
+
+                        <td className="px-5 py-4">
+                          <span className="text-sm capitalize text-slate-300">
+                            {formatSource(lead.source)}
+                          </span>
+                        </td>
+
+                        {/* Status */}
+
+                        <td className="px-5 py-4">
+                          <span
+                            className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-medium ${
+                              statusStyles[lead.status]
+                            }`}
+                          >
+                            {formatLabel(lead.status)}
+                          </span>
+                        </td>
+
+                        {/* Priority */}
+
+                        <td className="px-5 py-4">
+                          <div className="flex items-center gap-2">
+
+                            <span
+                              className={`h-2 w-2 rounded-full ${
+                                lead.priority === "high"
+                                  ? "bg-red-400"
+                                  : lead.priority === "medium"
+                                  ? "bg-amber-400"
+                                  : "bg-slate-500"
+                              }`}
+                            />
+
+                            <span
+                              className={`text-sm capitalize ${
+                                priorityStyles[lead.priority]
+                              }`}
+                            >
+                              {lead.priority}
+                            </span>
+
+                          </div>
+                        </td>
+
+                        {/* Value */}
+
+                        <td className="px-5 py-4">
+                          <span className="text-sm font-medium text-slate-200">
+                            {formatCurrency(
+                              lead.estimatedValue
+                            )}
+                          </span>
+                        </td>
+
+                        {/* Assigned */}
+
+                        <td className="px-5 py-4">
+                          <span className="text-sm text-slate-300">
+                            {lead.assignedTo}
+                          </span>
+                        </td>
+
+                        {/* Last Contact */}
+
+                        <td className="px-5 py-4">
+                          <span className="whitespace-nowrap text-xs text-slate-500">
+                            {formatDate(
+                              lead.lastContactedAt
+                            )}
+                          </span>
+                        </td>
+
+                        {/* Actions */}
+
+                        <td className="px-5 py-4">
+                          <button
+                            className="rounded-lg p-2 text-slate-500 transition-colors hover:bg-[#263248] hover:text-white"
+                            aria-label={`Actions for ${lead.personId}`}
+                          >
+                            <MoreHorizontal size={17} />
+                          </button>
+                        </td>
+
+                      </tr>
+                    ))}
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+              {/* =================================================
+                  MOBILE CARDS
+              ================================================= */}
+
+              <div className="divide-y divide-[#263248] lg:hidden">
+
+                {filteredLeads.map((lead) => (
+                  <div
+                    key={lead.id}
+                    className="p-4 transition-colors hover:bg-[#151F31] sm:p-5"
+                  >
+
+                    {/* Lead Header */}
+
+                    <div className="flex items-start justify-between gap-3">
+
+                      <div className="flex min-w-0 items-center gap-3">
+
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-blue-500/20 bg-blue-500/10 text-sm font-semibold text-blue-400">
+                          {getInitials(lead.personId)}
+                        </div>
+
+                        <div className="min-w-0">
+
+                          <p className="truncate text-sm font-medium text-white">
+                            {lead.personId}
+                          </p>
+
+                          <p className="truncate text-xs text-slate-500">
+                            {lead.email}
+                          </p>
+
+                        </div>
+
+                      </div>
+
+                      <button
+                        className="shrink-0 rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-[#263248] hover:text-white"
+                        aria-label={`Actions for ${lead.personId}`}
+                      >
+                        <MoreHorizontal size={17} />
+                      </button>
+
+                    </div>
+
+                    {/* Badges */}
+
+                    <div className="mt-4 flex flex-wrap gap-2">
+
+                      <span
+                        className={`rounded-full border px-2.5 py-1 text-xs ${
+                          statusStyles[lead.status]
+                        }`}
+                      >
+                        {formatLabel(lead.status)}
+                      </span>
+
+                      <span className="rounded-full bg-[#182235] px-2.5 py-1 text-xs capitalize text-slate-400">
+                        {lead.priority} priority
+                      </span>
+
+                      <span className="rounded-full bg-[#182235] px-2.5 py-1 text-xs text-slate-400">
+                        {formatCurrency(
+                          lead.estimatedValue
+                        )}
+                      </span>
+
+                    </div>
+
+                    {/* Details */}
+
+                    <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-4 sm:grid-cols-4">
+
+                      <MobileDetail
+                        label="Source"
+                        value={formatSource(lead.source)}
+                        capitalize
+                      />
+
+                      <MobileDetail
+                        label="Assigned To"
+                        value={lead.assignedTo}
+                      />
+
+                      <MobileDetail
+                        label="Last Contact"
+                        value={formatDate(
+                          lead.lastContactedAt
+                        )}
+                      />
+
+                      <MobileDetail
+                        label="Created"
+                        value={formatDate(lead.createdAt)}
+                      />
+
+                    </div>
+
+                    {/* Actions */}
+
+                    <div className="mt-4 grid grid-cols-2 gap-2">
+
+                      <button className="flex h-9 items-center justify-center gap-2 rounded-lg bg-blue-500/10 text-xs text-blue-400 transition-colors hover:bg-blue-500/20">
+                        <Phone size={14} />
+                        Call
+                      </button>
+
+                      <button className="flex h-9 items-center justify-center gap-2 rounded-lg bg-[#182235] text-xs text-slate-300 transition-colors hover:bg-[#263248]">
+                        <Mail size={14} />
+                        Email
+                      </button>
+
+                    </div>
+
+                  </div>
+                ))}
+
+              </div>
+
+              {/* =================================================
+                  EMPTY STATE
+              ================================================= */}
+
+              {filteredLeads.length === 0 && (
+                <div className="px-4 py-16 text-center sm:px-6">
+
+                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#182235]">
+                    <Users
+                      size={24}
+                      className="text-slate-500"
+                    />
+                  </div>
+
+                  <p className="text-sm font-medium text-white">
+                    No leads found
+                  </p>
+
+                  <p className="mx-auto mt-1 max-w-sm text-xs text-slate-500">
+                    Try adjusting your filters or search query.
+                  </p>
+
+                  {hasActiveFilters && (
+                    <button
+                      onClick={clearFilters}
+                      className="mt-4 text-xs font-medium text-blue-400 transition-colors hover:text-blue-300"
+                    >
+                      Clear filters
+                    </button>
+                  )}
+
+                </div>
+              )}
+
+            </div>
+
           </div>
-        )}
+        </section>
+
       </div>
     </main>
   );
 }
+
+/* =========================================================
+   STAT CARD
+========================================================= */
 
 interface StatCardProps {
   icon: LucideIcon;
@@ -552,23 +861,41 @@ function StatCard({
   iconStyle,
 }: StatCardProps) {
   return (
-    <div className="bg-[#111827] border border-[#263248] rounded-2xl p-4">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs text-slate-500">{label}</p>
-          <p className="text-2xl font-semibold text-white mt-2">{value}</p>
-          <p className="text-[11px] text-slate-500 mt-1">{description}</p>
+    <div className="rounded-2xl border border-[#263248] bg-[#111827] p-4 transition-colors hover:border-[#34445f]">
+
+      <div className="flex items-start justify-between gap-4">
+
+        <div className="min-w-0">
+
+          <p className="text-xs text-slate-500">
+            {label}
+          </p>
+
+          <p className="mt-2 truncate text-2xl font-semibold text-white">
+            {value}
+          </p>
+
+          <p className="mt-1 text-[11px] text-slate-500">
+            {description}
+          </p>
+
         </div>
 
         <div
-          className={`w-10 h-10 rounded-xl flex items-center justify-center ${iconStyle}`}
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${iconStyle}`}
         >
           <Icon size={19} />
         </div>
+
       </div>
+
     </div>
   );
 }
+
+/* =========================================================
+   FILTER SELECT
+========================================================= */
 
 interface FilterSelectProps {
   value: string;
@@ -576,16 +903,26 @@ interface FilterSelectProps {
   options: [string, string][];
 }
 
-function FilterSelect({ value, onChange, options }: FilterSelectProps) {
+function FilterSelect({
+  value,
+  onChange,
+  options,
+}: FilterSelectProps) {
   return (
     <div className="relative">
+
       <select
         value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="appearance-none h-10 min-w-[140px] w-full px-3 pr-9 rounded-xl bg-[#0D1421] border border-[#263248] text-sm text-slate-300 outline-none focus:border-blue-500/60 cursor-pointer"
+        onChange={(event) =>
+          onChange(event.target.value)
+        }
+        className="h-10 w-full cursor-pointer appearance-none rounded-xl border border-[#263248] bg-[#0D1421] px-3 pr-9 text-sm text-slate-300 outline-none transition-colors focus:border-blue-500/60"
       >
         {options.map(([optionValue, label]) => (
-          <option key={optionValue} value={optionValue}>
+          <option
+            key={optionValue}
+            value={optionValue}
+          >
             {label}
           </option>
         ))}
@@ -593,16 +930,59 @@ function FilterSelect({ value, onChange, options }: FilterSelectProps) {
 
       <ChevronDown
         size={15}
-        className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500"
+        className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-500"
       />
+
     </div>
   );
 }
 
-function TableHeader({ children }: { children: ReactNode }) {
+/* =========================================================
+   TABLE HEADER
+========================================================= */
+
+function TableHeader({
+  children,
+}: {
+  children: ReactNode;
+}) {
   return (
-    <th className="px-5 py-3 text-[11px] uppercase tracking-wider font-medium text-slate-500 whitespace-nowrap">
+    <th className="whitespace-nowrap px-5 py-3 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">
       {children}
     </th>
+  );
+}
+
+/* =========================================================
+   MOBILE DETAIL
+========================================================= */
+
+interface MobileDetailProps {
+  label: string;
+  value: string;
+  capitalize?: boolean;
+}
+
+function MobileDetail({
+  label,
+  value,
+  capitalize = false,
+}: MobileDetailProps) {
+  return (
+    <div className="min-w-0">
+
+      <p className="text-[11px] text-slate-500">
+        {label}
+      </p>
+
+      <p
+        className={`mt-1 truncate text-xs text-slate-300 ${
+          capitalize ? "capitalize" : ""
+        }`}
+      >
+        {value}
+      </p>
+
+    </div>
   );
 }

@@ -5,19 +5,19 @@ import Card from "./Card";
 import { useAppSelector } from "@/app/redux/hooks";
 import { useState } from "react";
 export default function StatCards() {
-  const [pipelinevalue ,setpipelinevalue]=useState(0)
-    const data = useAppSelector((store) => store.LeadSlice.Lead);
-     const newLeads = data?.filter((lead) => lead?.status === "new");
-     const qualifiedleads=data?.filter((lead)=>lead?.status==="qualified")
-    
+  const data = useAppSelector((store) => store.LeadSlice.Lead);
+  const newLeads = data?.filter((lead) => lead?.status === "new");
+  const qualifiedleads = data?.filter((lead) => lead?.status === "qualified")
+  const pipelinevalue = data.reduce((acc, lead) => acc + lead?.estimatedValue, 0);
   const stats = [
-  { icon: Users, color: "text-[#458393]", label: "Total Leads", value:Number(data?.length) 
- },
-  { icon: Sparkles, color: "text-[#34A99D]", label: "New Leads", value: Number(newLeads.length), sub: "this month" },
-  { icon: Target, color: "text-[#E5CB90]", label: "Qualified Leads", value: Number(qualifiedleads.length) },
-  { icon: Wallet, color: "text-[#458393]", label: "Pipeline Value", value:`${pipelinevalue}$` },
-  { icon: CheckCircle2, color: "text-[#34A99D]", label: "Conversion Rate", value: "24.8%" },
-];
+    {
+      icon: Users, color: "text-[#458393]", label: "Total Leads", value: Number(data?.length)
+    },
+    { icon: Sparkles, color: "text-[#34A99D]", label: "New Leads", value: Number(newLeads.length), sub: "this month" },
+    { icon: Target, color: "text-[#E5CB90]", label: "Qualified Leads", value: Number(qualifiedleads.length) },
+    { icon: Wallet, color: "text-[#458393]", label: "Pipeline Value", value: `${pipelinevalue}$` },
+    { icon: CheckCircle2, color: "text-[#34A99D]", label: "Conversion Rate", value: "24.8%" },
+  ];
   return (
     <div className="grid grid-cols-5 gap-3.5">
       {stats.map((s) => (

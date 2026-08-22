@@ -18,6 +18,7 @@ import LoadingRows from "@/app/components/Dashboard/followups/LoadingsRows";
 import EmptyState from "@/app/components/Dashboard/followups/EmptyState";
 import FollowupRow from "@/app/components/Dashboard/followups/FollowupRow";
 import axios from "axios";
+import Sidebar from "@/app/components/Dashboard/Homepage/Sidebar";
 
 export type FollowupStatus =
   | "pending"
@@ -159,7 +160,9 @@ export default function FollowupsPage({
   }, [followups, search, status]);
 
   return (
-    <section className="min-h-screen bg-gray-50 p-4 md:p-6">
+    <section className="min-h-screen bg-gray-50 flex flex-row  p-4 md:p-6">
+            <Sidebar />
+
       <div className="mx-auto max-w-[1400px]">
 
         <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
