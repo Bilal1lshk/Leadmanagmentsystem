@@ -7,11 +7,11 @@ export async function GET(request: Request) {
     const user = await getCurrentUser(request);
     if (!user) return unauthorizedResponse();
     const membership = await getCurrentOrganization(request, user);
+    console.log(membership)
     if (!membership) return NextResponse.json({ message: "Select a workspace first.", success: false }, { status: 403 });
     await dbConnect();
 
     const data = await leadmodel.find({ organization: membership.organization });
-
     if (data.length === 0) {
       return NextResponse.json(
         {

@@ -15,6 +15,8 @@ export default function Navbar() {
     }
     const activeOrganization = async () => {
       const data = await axios.get(`/api/organization/my`)
+      setactiveorganization(data.data.success)
+
       console.log(data)
       // setactiveorganization(data.data.success)
     }
@@ -23,7 +25,7 @@ export default function Navbar() {
     getuser()
 
   }, [])
-  console.log("organization",activeOrganization,"user",user)
+  console.log("organization", activeOrganization, "user", user)
   return (
     <nav className="flex items-center justify-between gap-4 rounded-xl bg-[#FFF3C8] px-5 py-3.5 flex-wrap">
       <div className="flex items-center gap-2">
@@ -47,7 +49,7 @@ export default function Navbar() {
 
       {/* Right side */}
       <div className="flex items-center gap-3">
-        {user  ? (
+        {user ? (
           <a href={activeOrganization ? "/dashboard" : "/setupworkspace"} className="rounded-lg bg-[#34A99D] px-4 py-2 text-sm font-medium text-[#04342C] hover:bg-[#2F958A]">
             {activeOrganization ? "Open dashboard" : "Set up workspace"}
           </a>
