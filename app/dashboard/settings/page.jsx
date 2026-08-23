@@ -81,8 +81,6 @@ export default function SettingsPage() {
 
   return (
     <main className="min-h-screen w-full bg-[#FFF3C8] flex flex-row  p-6 text-[#22303A]">
-                  <Sidebar />
-
       <div className="mx-auto min-w-4xl rounded-2xl border border-[#E5CB90] bg-white p-6 shadow-sm">
         <h1 className="text-2xl font-semibold">Workspace settings</h1>
         <p className="mt-1 text-sm text-[#5C6D71]">Review people who requested to join {organization?.name || "your workspace"}.</p>

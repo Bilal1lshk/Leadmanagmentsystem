@@ -13,8 +13,6 @@ import LeadPriority from "../components/Dashboard/Homepage/Leadpriority";
 export default function Dashboard() {
   return (
     <div className="flex min-h-screen bg-[#FFF3C8] text-[#22303A] font-sans">
-      <Sidebar />
-
       <main className="flex-1 p-6 flex flex-col gap-4">
         <Header />
 

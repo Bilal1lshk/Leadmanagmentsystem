@@ -160,9 +160,7 @@ export default function FollowupsPage({
   }, [followups, search, status]);
 
   return (
-    <section className="min-h-screen bg-gray-50 flex flex-row  p-4 md:p-6">
-            <Sidebar />
-
+    <section className="min-h-screen bg-gray-50 flex flex-row  -start p-4 md:p-6">
       <div className="mx-auto max-w-[1400px]">
 
         <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">

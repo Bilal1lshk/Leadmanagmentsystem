@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Sidebar from "../Homepage/Sidebar";
 import TopHeader from "../Homepage/Header";
 import PageActions from "./Pageactions";
 import StatsGrid from "./Statsgrid";
@@ -144,7 +143,6 @@ export default function TasksDashboard() {
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-slate-50 text-slate-900">
-      <Sidebar activeItem="Tasks" />
 
       <div className="flex min-w-0 flex-1 flex-col">
         <TopHeader title="Tasks" searchValue={headerSearch} onSearchChange={setHeaderSearch} />

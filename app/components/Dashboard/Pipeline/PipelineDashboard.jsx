@@ -107,7 +107,6 @@ export default function PipelineDashboard() {
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-[#FFF3C8] text-[#22303A]">
-      <Sidebar activeItem="Pipeline" />
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Top bar */}
         <div className="px-6 pt-6 pb-4 flex items-center justify-between gap-4 shrink-0">

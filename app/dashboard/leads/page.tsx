@@ -285,16 +285,6 @@ export default function LeadsPage() {
       <div className="flex min-h-screen">
 
         {/* =================================================
-            DESKTOP SIDEBAR
-        ================================================= */}
-
-        <aside className="hidden w-[250px] shrink-0 border-r border-[#263248] lg:block">
-          <div className="sticky top-0 h-screen overflow-y-auto">
-            <Sidebar />
-          </div>
-        </aside>
-
-        {/* =================================================
             MAIN CONTENT
         ================================================= */}
 
