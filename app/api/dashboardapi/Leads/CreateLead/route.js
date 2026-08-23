@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import leadmodel from "../../../../models/lead.js";
+import leadmodel from "../../../../models/lead";
 import connectDB from "@/app/config/mongodbconnection";
 import { getCurrentOrganization, getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
+import { data } from "framer-motion/client";
 export async function POST(Request) {
   try {
     const user = await getCurrentUser(Request);
@@ -18,6 +19,9 @@ export async function POST(Request) {
       assignedTo,
       lastContactedAt,
       lostReason,
+      email,
+      phone,
+      message
     } = await Request.json();
     if (!personId || 
       !status ||
@@ -48,9 +52,14 @@ export async function POST(Request) {
       assignedTo,
       lastContactedAt,
       lostReason,
+      email,
+      phone,
+      message
+
     })
 
     if(!created) return NextResponse.json({message:"Something went wrong in lead creation try again "})
+      console.log("created",created)
     return NextResponse.json({ message: "lead created succesfully", data: created, success: true }, { status: 201 });
   } catch (error) {
     console.error("Create lead error:", error);

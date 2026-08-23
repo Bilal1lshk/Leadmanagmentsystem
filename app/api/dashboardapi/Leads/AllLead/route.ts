@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import leadmodel from "@/app/models/lead.js";
+import leadmodel from "@/app/models/lead";
 import dbConnect from "@/app/config/mongodbconnection.js"
 import { getCurrentOrganization, getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
 export async function GET(request: Request) {

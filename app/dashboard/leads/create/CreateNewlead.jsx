@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -15,22 +16,24 @@ import {
     Users,
     Megaphone,
     Phone,
+    Mail,
     MoreHorizontal,
+    MessageSquare,
 } from "lucide-react";
 import axios from "axios";
+
 function Field({ label, children }) {
     return (
         <div className="flex flex-col gap-2">
             <label className="text-xs text-[#5C6D71] font-medium">
                 {label}
             </label>
-
             {children}
         </div>
     );
 }
-export default function CreateLeadPage() {
 
+export default function CreateLeadPage() {
     const SOURCES = [
         { value: "website", label: "Website", icon: Globe },
         { value: "referral", label: "Referral", icon: Users },
@@ -39,47 +42,91 @@ export default function CreateLeadPage() {
         { value: "other", label: "Other", icon: MoreHorizontal },
     ];
 
-    // bg/text pairs chosen for AA contrast on a light card
     const PRIORITIES = [
-        { value: "low", label: "Low", activeBg: "#E9ECEE", activeText: "#3D4D51" },
-        { value: "medium", label: "Medium", activeBg: "#C9A24A", activeText: "#FFFFFF" },
-        { value: "high", label: "High", activeBg: "#C1523F", activeText: "#FFFFFF" },
+        {
+            value: "low",
+            label: "Low",
+            activeBg: "#E9ECEE",
+            activeText: "#3D4D51",
+        },
+        {
+            value: "medium",
+            label: "Medium",
+            activeBg: "#C9A24A",
+            activeText: "#FFFFFF",
+        },
+        {
+            value: "high",
+            label: "High",
+            activeBg: "#C1523F",
+            activeText: "#FFFFFF",
+        },
     ];
 
-    const STATUSES = ["new", "contacted", "qualified", "proposal", "won", "lost"];
+    const STATUSES = [
+        "new",
+        "contacted",
+        "qualified",
+        "proposal",
+        "won",
+        "lost",
+    ];
 
     const container = {
         hidden: { opacity: 0 },
         show: {
             opacity: 1,
-            transition: { staggerChildren: 0.06, delayChildren: 0.05 },
+            transition: {
+                staggerChildren: 0.06,
+                delayChildren: 0.05,
+            },
         },
     };
 
     const item = {
         hidden: { opacity: 0, y: 12 },
-        show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: "easeOut" } },
+        show: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.35,
+                ease: "easeOut",
+            },
+        },
     };
-const router = useRouter();
-    const [data, setdata] = useState()
+
+    const router = useRouter();
+
+    const [data, setData] = useState([]);
+
     useEffect(() => {
-        const fetchingdata = async () => {
-            const resposne = await fetch("/api/User/AllUser", {
-                method: "Get",
-                headers: {
-                    "content-type": "application/json"
-                },
-            })
-            const dataofapi = await resposne.json();
-            if (!resposne.ok) return;
-            setdata(dataofapi?.allusers)
+        const fetchingData = async () => {
+            try {
+                const response = await fetch("/api/User/AllUser", {
+                    method: "GET",
+                    headers: {
+                        "content-type": "application/json",
+                    },
+                });
 
-        }
-        fetchingdata()
+                const dataOfApi = await response.json();
 
-    }, [])
+                if (!response.ok) return;
+
+                setData(dataOfApi?.allusers);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchingData();
+    }, []);
+
     const [form, setForm] = useState({
         personId: "",
+        email: "",
+        phone: "",
+        message: "",
         source: "website",
         status: "new",
         priority: "medium",
@@ -88,25 +135,43 @@ const router = useRouter();
         lastContactedAt: "",
         lostReason: "",
     });
-    const [status, setStatus] = useState("idle"); 
-    const set = (field) => (val) => setForm((f) => ({ ...f, [field]: val }));
+
+    const [status, setStatus] = useState("idle");
+
+    const set = (field) => (val) =>
+        setForm((f) => ({
+            ...f,
+            [field]: val,
+        }));
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         if (!form.personId) return;
+
         setStatus("saving");
+
         try {
-            const respone = await axios.post("/api/dashboardapi/Leads/CreateLead", form);
-            if(respone?.status===201){
-                router.push("/dashboard/leads")
+            const response = await axios.post(
+                "/api/dashboardapi/Leads/CreateLead",
+                form
+            );
+
+            if (response?.status === 201) {
+                router.push("/dashboard/leads");
             }
+
             setStatus("saved");
         } catch (error) {
-            console.error(error.response?.data || error.message);
+            console.error(
+                error?.response?.data || error?.message
+            );
+
             setStatus("idle");
         }
 
-        await new Promise((r) => setTimeout(r, 900));
+        await new Promise((resolve) => setTimeout(resolve, 900));
+
         setTimeout(() => setStatus("idle"), 1800);
     };
 
@@ -115,30 +180,41 @@ const router = useRouter();
 
     return (
         <div className="relative min-h-screen bg-[#FFF3C8] text-[#22303A] px-6 py-10 flex justify-center overflow-hidden">
-            {/* decorative blobs — same as HeroSection */}
+
+            {/* Background decorations */}
             <div className="pointer-events-none absolute -left-16 bottom-0 h-64 w-64 rounded-full bg-[#458393]/15" />
+
             <div className="pointer-events-none absolute right-10 top-10 h-40 w-40 rounded-full bg-[#458393]/10" />
 
             <div className="relative w-full max-w-xl">
+
+                {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4 }}
                     className="flex items-center gap-3 mb-8"
                 >
-                    <button className="w-8 h-8 rounded-lg bg-white border border-[#E5CB90]/60 flex items-center justify-center text-[#5C6D71] hover:text-[#22303A] hover:border-[#458393] transition-colors shadow-sm">
+                    <button
+                        type="button"
+                        onClick={() => router.back()}
+                        className="w-8 h-8 rounded-lg bg-white border border-[#E5CB90]/60 flex items-center justify-center text-[#5C6D71] hover:text-[#22303A] hover:border-[#458393] transition-colors shadow-sm"
+                    >
                         <ArrowLeft size={15} />
                     </button>
+
                     <div>
                         <h1 className="font-serif text-xl font-medium text-[#22303A] m-0">
                             Create New Lead
                         </h1>
+
                         <p className="text-xs text-[#5C6D71] mt-0.5">
                             Add a new lead to your pipeline
                         </p>
                     </div>
                 </motion.div>
 
+                {/* Form */}
                 <motion.form
                     onSubmit={handleSubmit}
                     variants={container}
@@ -146,15 +222,24 @@ const router = useRouter();
                     animate="show"
                     className="bg-white border border-[#E5CB90]/60 rounded-2xl p-6 flex flex-col gap-5 shadow-md"
                 >
+
                     {/* Person selector */}
                     <Field label="Person or organization name">
                         <div className="relative">
-                            <div className={`${inputClass} flex items-center gap-2`}>
-                                <User size={14} className="text-[#9A9A8F]" />
+                            <div
+                                className={`${inputClass} flex items-center gap-2`}
+                            >
+                                <User
+                                    size={14}
+                                    className="text-[#9A9A8F]"
+                                />
+
                                 <input
                                     type="text"
                                     value={form.personId}
-                                    onChange={(e) => set("personId")(e.target.value)}
+                                    onChange={(e) =>
+                                        set("personId")(e.target.value)
+                                    }
                                     placeholder="Enter the Name"
                                     className="w-full bg-transparent outline-none text-[#22303A] placeholder-[#9A9A8F]"
                                 />
@@ -162,57 +247,159 @@ const router = useRouter();
                         </div>
                     </Field>
 
-                    {/* Source — segmented control */}
-                    <Field label="Source">
-                        <div className="grid grid-cols-5 gap-1.5">
-                            {SOURCES?.map(({ value, label, icon: Icon }) => {
-                                const active = form.source === value;
-                                return (
-                                    <button
-                                        type="button"
-                                        key={value}
-                                        onClick={() => set("source")(value)}
-                                        className={`relative flex flex-col items-center gap-1.5 py-2.5 rounded-xl border text-[11px] font-medium transition-colors ${active
-                                            ? "border-[#458393] text-white"
-                                            : "border-[#E5E5E0] text-[#5C6D71] hover:border-[#C9A24A]"
-                                            }`}
-                                    >
-                                        {active && (
-                                            <motion.div
-                                                layoutId="sourceHighlight"
-                                                className="absolute inset-0 bg-[#458393] rounded-xl"
-                                                transition={{ type: "spring", bounce: 0.25, duration: 0.4 }}
-                                            />
-                                        )}
-                                        <Icon size={15} className="relative" />
-                                        <span className="relative">{label}</span>
-                                    </button>
-                                );
-                            })}
+                    {/* Contact details */}
+                    <div className="grid grid-cols-2 gap-4">
+
+                        {/* Email */}
+                        <Field label="Email">
+                            <div className="relative">
+                                <Mail
+                                    size={14}
+                                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A9A8F]"
+                                />
+
+                                <input
+                                    type="email"
+                                    value={form.email}
+                                    onChange={(e) =>
+                                        set("email")(e.target.value)
+                                    }
+                                    placeholder="name@example.com"
+                                    className={`${inputClass} pl-9`}
+                                />
+                            </div>
+                        </Field>
+
+                        {/* Phone */}
+                        <Field label="Phone">
+                            <div className="relative">
+                                <Phone
+                                    size={14}
+                                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A9A8F]"
+                                />
+
+                                <input
+                                    type="tel"
+                                    value={form.phone}
+                                    onChange={(e) =>
+                                        set("phone")(e.target.value)
+                                    }
+                                    placeholder="+92 300 1234567"
+                                    className={`${inputClass} pl-9`}
+                                />
+                            </div>
+                        </Field>
+                    </div>
+
+                    {/* Message / Comment */}
+                    <Field label="Message / Comment">
+                        <div className="relative">
+                            <MessageSquare
+                                size={14}
+                                className="absolute left-3.5 top-3.5 text-[#9A9A8F]"
+                            />
+
+                            <textarea
+                                value={form.message}
+                                onChange={(e) =>
+                                    set("message")(e.target.value)
+                                }
+                                placeholder="Add a message, comment, or notes about this lead..."
+                                rows={4}
+                                className={`${inputClass} pl-9 resize-none`}
+                            />
                         </div>
                     </Field>
 
-                    {/* Priority — segmented pill control */}
+                    {/* Source */}
+                    <Field label="Source">
+                        <div className="grid grid-cols-5 gap-1.5">
+                            {SOURCES?.map(
+                                ({ value, label, icon: Icon }) => {
+                                    const active =
+                                        form.source === value;
+
+                                    return (
+                                        <button
+                                            type="button"
+                                            key={value}
+                                            onClick={() =>
+                                                set("source")(value)
+                                            }
+                                            className={`relative flex flex-col items-center gap-1.5 py-2.5 rounded-xl border text-[11px] font-medium transition-colors ${
+                                                active
+                                                    ? "border-[#458393] text-white"
+                                                    : "border-[#E5E5E0] text-[#5C6D71] hover:border-[#C9A24A]"
+                                            }`}
+                                        >
+                                            {active && (
+                                                <motion.div
+                                                    layoutId="sourceHighlight"
+                                                    className="absolute inset-0 bg-[#458393] rounded-xl"
+                                                    transition={{
+                                                        type: "spring",
+                                                        bounce: 0.25,
+                                                        duration: 0.4,
+                                                    }}
+                                                />
+                                            )}
+
+                                            <Icon
+                                                size={15}
+                                                className="relative"
+                                            />
+
+                                            <span className="relative">
+                                                {label}
+                                            </span>
+                                        </button>
+                                    );
+                                }
+                            )}
+                        </div>
+                    </Field>
+
+                    {/* Priority */}
                     <Field label="Priority">
                         <div className="flex gap-2">
-                            {PRIORITIES?.map(({ value, label, activeBg, activeText }) => {
-                                const active = form.priority === value;
-                                return (
-                                    <button
-                                        type="button"
-                                        key={value}
-                                        onClick={() => set("priority")(value)}
-                                        style={active ? { backgroundColor: activeBg, color: activeText } : {}}
-                                        className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl border text-xs font-medium transition-colors ${active
-                                            ? "border-transparent"
-                                            : "border-[#E5E5E0] text-[#5C6D71] hover:border-[#C9A24A]"
+                            {PRIORITIES?.map(
+                                ({
+                                    value,
+                                    label,
+                                    activeBg,
+                                    activeText,
+                                }) => {
+                                    const active =
+                                        form.priority === value;
+
+                                    return (
+                                        <button
+                                            type="button"
+                                            key={value}
+                                            onClick={() =>
+                                                set("priority")(value)
+                                            }
+                                            style={
+                                                active
+                                                    ? {
+                                                          backgroundColor:
+                                                              activeBg,
+                                                          color: activeText,
+                                                      }
+                                                    : {}
+                                            }
+                                            className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl border text-xs font-medium transition-colors ${
+                                                active
+                                                    ? "border-transparent"
+                                                    : "border-[#E5E5E0] text-[#5C6D71] hover:border-[#C9A24A]"
                                             }`}
-                                    >
-                                        <Flame size={12} />
-                                        {label}
-                                    </button>
-                                );
-                            })}
+                                        >
+                                            <Flame size={12} />
+                                            {label}
+                                        </button>
+                                    );
+                                }
+                            )}
                         </div>
                     </Field>
 
@@ -220,7 +407,9 @@ const router = useRouter();
                     <Field label="Status">
                         <select
                             value={form.status}
-                            onChange={(e) => set("status")(e.target.value)}
+                            onChange={(e) =>
+                                set("status")(e.target.value)
+                            }
                             className={inputClass}
                         >
                             {STATUSES?.map((s) => (
@@ -231,25 +420,39 @@ const router = useRouter();
                         </select>
                     </Field>
 
-                    {/* Lost reason — animates in only when status is lost */}
+                    {/* Lost reason */}
                     <AnimatePresence>
                         {form?.status === "lost" && (
                             <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: "auto" }}
-                                exit={{ opacity: 0, height: 0 }}
-                                transition={{ duration: 0.25 }}
+                                initial={{
+                                    opacity: 0,
+                                    height: 0,
+                                }}
+                                animate={{
+                                    opacity: 1,
+                                    height: "auto",
+                                }}
+                                exit={{
+                                    opacity: 0,
+                                    height: 0,
+                                }}
+                                transition={{
+                                    duration: 0.25,
+                                }}
                                 className="overflow-hidden"
                             >
                                 <label className="text-xs text-[#5C6D71] mb-2 block font-medium">
                                     Lost Reason
                                 </label>
+
                                 <textarea
                                     value={form.lostReason}
-                                    onChange={(e) => set("lostReason")(e.target.value)}
+                                    onChange={(e) =>
+                                        set("lostReason")(e.target.value)
+                                    }
                                     placeholder="Why was this lead lost?"
                                     rows={2}
-                                    className={inputClass}
+                                    className={`${inputClass} resize-none`}
                                 />
                             </motion.div>
                         )}
@@ -257,27 +460,46 @@ const router = useRouter();
 
                     {/* Value + last contacted */}
                     <div className="grid grid-cols-2 gap-4">
+
+                        {/* Estimated Value */}
                         <Field label="Estimated Value">
                             <div className="relative">
-                                <DollarSign size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A9A8F]" />
+                                <DollarSign
+                                    size={14}
+                                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A9A8F]"
+                                />
+
                                 <input
                                     type="number"
                                     min="0"
                                     value={form.estimatedValue}
-                                    onChange={(e) => set("estimatedValue")(e.target.value)}
+                                    onChange={(e) =>
+                                        set("estimatedValue")(
+                                            e.target.value
+                                        )
+                                    }
                                     placeholder="2500"
                                     className={`${inputClass} pl-9`}
                                 />
                             </div>
                         </Field>
 
+                        {/* Last Contacted */}
                         <Field label="Last Contacted">
                             <div className="relative">
-                                <Calendar size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A9A8F]" />
+                                <Calendar
+                                    size={14}
+                                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A9A8F]"
+                                />
+
                                 <input
                                     type="date"
                                     value={form.lastContactedAt}
-                                    onChange={(e) => set("lastContactedAt")(e.target.value)}
+                                    onChange={(e) =>
+                                        set("lastContactedAt")(
+                                            e.target.value
+                                        )
+                                    }
                                     className={`${inputClass} pl-9`}
                                 />
                             </div>
@@ -287,15 +509,29 @@ const router = useRouter();
                     {/* Assigned to */}
                     <Field label="Assigned To">
                         <div className="relative">
-                            <UserCheck size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A9A8F]" />
+                            <UserCheck
+                                size={14}
+                                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A9A8F]"
+                            />
+
                             <select
-                                value={form.assignedTo}
-                                onChange={(e) => set("assignedTo")(e.target.value)}
+                                value={form.assignedTo ?? ""}
+                                onChange={(e) =>
+                                    set("assignedTo")(
+                                        e.target.value || null
+                                    )
+                                }
                                 className={`${inputClass} pl-9`}
                             >
-                                <option value="">Unassigned</option>
+                                <option value="">
+                                    Unassigned
+                                </option>
+
                                 {data?.map((u) => (
-                                    <option key={u?._id} value={u?._id}>
+                                    <option
+                                        key={u?._id}
+                                        value={u?._id}
+                                    >
                                         {u?.name}
                                     </option>
                                 ))}
@@ -307,11 +543,15 @@ const router = useRouter();
                     <motion.button
                         variants={item}
                         type="submit"
-                        disabled={!form.personId || status === "saving"}
+                        disabled={
+                            !form.personId ||
+                            status === "saving"
+                        }
                         whileTap={{ scale: 0.98 }}
                         className="mt-2 relative flex items-center justify-center gap-2 bg-[#458393] hover:bg-[#3A7180] disabled:opacity-50 disabled:cursor-not-allowed rounded-xl py-3.5 text-sm font-semibold text-white transition-colors overflow-hidden shadow-sm"
                     >
                         <AnimatePresence mode="wait">
+
                             {status === "idle" && (
                                 <motion.span
                                     key="idle"
@@ -323,6 +563,7 @@ const router = useRouter();
                                     Create Lead
                                 </motion.span>
                             )}
+
                             {status === "saving" && (
                                 <motion.span
                                     key="saving"
@@ -331,15 +572,25 @@ const router = useRouter();
                                     exit={{ opacity: 0 }}
                                     className="flex items-center gap-2"
                                 >
-                                    <Loader2 size={15} className="animate-spin" />
+                                    <Loader2
+                                        size={15}
+                                        className="animate-spin"
+                                    />
                                     Creating...
                                 </motion.span>
                             )}
+
                             {status === "saved" && (
                                 <motion.span
                                     key="saved"
-                                    initial={{ opacity: 0, scale: 0.8 }}
-                                    animate={{ opacity: 1, scale: 1 }}
+                                    initial={{
+                                        opacity: 0,
+                                        scale: 0.8,
+                                    }}
+                                    animate={{
+                                        opacity: 1,
+                                        scale: 1,
+                                    }}
                                     exit={{ opacity: 0 }}
                                     className="flex items-center gap-2"
                                 >
@@ -347,6 +598,7 @@ const router = useRouter();
                                     Lead Created
                                 </motion.span>
                             )}
+
                         </AnimatePresence>
                     </motion.button>
                 </motion.form>

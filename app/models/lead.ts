@@ -10,6 +10,17 @@ const leadSchema = new mongoose.Schema(
       enum: ["website", "referral", "ad", "cold_call", "other"],
       default: "other",
     },
+    message:{
+      type:String,
+    },
+    phone:{
+      type:String,
+      required:true
+    },
+    email:{
+      type:String,
+      required:true,
+    },
     status: {
       type: String,
       enum: ["new", "contacted", "qualified", "proposal", "won", "lost"],
