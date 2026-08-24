@@ -532,6 +532,7 @@ export default function LeadsPage() {
                   <tbody>
 
                     {filteredLeads.map((lead) => (
+                      <a href={`/dashboard/leads/${lead?._id}`}>
                       <tr
                         key={lead.id}
                         className="border-b border-[#263248] transition-colors last:border-0 hover:bg-[#151F31]"
@@ -660,6 +661,7 @@ export default function LeadsPage() {
                         </td>
 
                       </tr>
+                      </a>
                     ))}
 
                   </tbody>
