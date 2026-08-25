@@ -117,9 +117,11 @@ export default function LeadDetailPage() {
 
     const handleDelete = async () => {
         setDeleting(true);
+        console.log("making it work")
 
         try {
             await axios.delete(`/api/dashboardapi/Leads/DeleteLead?id=${lead._id}`);
+            
             router.push("/dashboard/leads");
         } catch (err) {
             console.error(err);
