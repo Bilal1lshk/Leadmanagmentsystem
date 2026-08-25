@@ -1,12 +1,8 @@
+"use client"
+import { useState } from "react";
 import Card from "./Card";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 
-const sources = [
-  { label: "Website", pct: 45, color: "#458393" },
-  { label: "LinkedIn", pct: 25, color: "#34A99D" },
-  { label: "Facebook", pct: 15, color: "#E5CB90" },
-  { label: "Referrals", pct: 10, color: "#2A3F45" },
-  { label: "Other", pct: 5, color: "#9CA3AF" },
-];
 
 interface DonutEntry {
   label: string;
@@ -18,7 +14,7 @@ function Donut({ data, size = 150, thickness = 22 }: { data: DonutEntry[]; size?
   const radius = (size - thickness) / 2;
   const circumference = 2 * Math.PI * radius;
   let offset = 0;
-
+  
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
       {data.map((d: DonutEntry) => {
@@ -45,6 +41,53 @@ function Donut({ data, size = 150, thickness = 22 }: { data: DonutEntry[]; size?
 }
 
 export default function LeadSourcesChart() {
+  const lead = useAppSelector((store) => store.LeadSlice.Lead);
+
+  const totalLeads = lead.length;
+
+  const websiteData = lead.filter(
+    (item) => item?.source === "website"
+  );
+
+  const referralData = lead.filter(
+    (item) => item?.source === "referral"
+  );
+
+  const adData = lead.filter(
+    (item) => item?.source === "ad"
+  );
+
+  const coldCallData = lead.filter(
+    (item) => item?.source === "cold_call"
+  );
+
+  const otherData = lead.filter(
+    (item) => item?.source === "other"
+  );
+
+  const websitePercentage =
+    totalLeads > 0 ? (websiteData.length / totalLeads) * 100 : 0;
+
+  const referralPercentage =
+    totalLeads > 0 ? (referralData.length / totalLeads) * 100 : 0;
+
+  const adPercentage =
+    totalLeads > 0 ? (adData.length / totalLeads) * 100 : 0;
+
+  const coldCallPercentage =
+    totalLeads > 0 ? (coldCallData.length / totalLeads) * 100 : 0;
+
+  const otherPercentage =
+    totalLeads > 0 ? (otherData.length / totalLeads) * 100 : 0;
+
+  const sources = [
+    { label: "Website", pct: websitePercentage.toFixed(2), color: "#458393" },
+    { label: "referral", pct: referralPercentage.toFixed(2), color: "#34A99D" },
+    { label: "ad", pct: adPercentage.toFixed(2), color: "#E5CB90" },
+    { label: "coldCall", pct: coldCallPercentage.toFixed(2), color: "#2A3F45" },
+    { label: "other", pct: otherPercentage.toFixed(2), color: "#9CA3AF" },
+  ];
+
   return (
     <Card>
       <h3 className="m-0 mb-3 text-sm text-[#22303A]">Lead Sources (Donut Chart)</h3>
