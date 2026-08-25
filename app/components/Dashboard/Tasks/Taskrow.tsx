@@ -9,10 +9,11 @@ interface TaskRowProps {
   task: Task;
   selected: boolean;
   onToggleSelect: (id: string) => void;
-  onView: (task: Task) => void;
+  onView: (id:string) => void;
+  onDelete:(id: string) => void;
 }
 
-export default function TaskRow({ task, selected, onToggleSelect, onView }: TaskRowProps) {
+export default function TaskRow({ task, selected, onToggleSelect, onView ,onDelete}: TaskRowProps) {
   return (
     <tr className="border-b border-[#E5CB90]/40 last:border-0 hover:bg-[#FFF3C8]/20">
       <td className="w-10 px-4 py-3">
@@ -42,7 +43,7 @@ export default function TaskRow({ task, selected, onToggleSelect, onView }: Task
         <div className="flex items-center gap-3 text-sm">
           <button
             type="button"
-            onClick={() => onView(task)}
+            onClick={() => onView(task.id)}
             className="font-medium text-[#458393] hover:underline"
           >
             View
@@ -50,7 +51,7 @@ export default function TaskRow({ task, selected, onToggleSelect, onView }: Task
           <button type="button" className="font-medium text-[#5C6D71] hover:underline">
             Edit
           </button>
-          <button type="button" className="font-medium text-red-600 hover:underline">
+          <button onClick={() => onDelete(task.id)} type="button" className="font-medium text-red-600 hover:underline">
             Delete
           </button>
           <button

@@ -9,7 +9,9 @@ interface TasksTableProps {
   selectedIds: Set<string>;
   onToggleSelect: (id: string) => void;
   onToggleSelectAll: () => void;
-  onView: (task: Task) => void;
+  onView: (id: string) => void;
+  onDelete: (id: string) => void;
+
 }
 
 const columns = [
@@ -28,6 +30,7 @@ export default function TasksTable({
   onToggleSelect,
   onToggleSelectAll,
   onView,
+  onDelete,
 }: TasksTableProps) {
   const allSelected = tasks.length > 0 && tasks.every((t) => selectedIds.has(t.id));
 
@@ -60,11 +63,12 @@ export default function TasksTable({
         <tbody>
           {tasks.map((task) => (
             <TaskRow
-              key={task.id}
+              key={task._id}
               task={task}
-              selected={selectedIds.has(task.id)}
+              selected={selectedIds.has(task._id)}
               onToggleSelect={onToggleSelect}
               onView={onView}
+            onDelete = { onDelete }
             />
           ))}
         </tbody>

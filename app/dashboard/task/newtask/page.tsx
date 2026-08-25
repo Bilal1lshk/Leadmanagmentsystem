@@ -79,7 +79,8 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
       return;
     }
     const response = await axios.post("/api/Task/Createtask", formData)
-    if (response.status === 200) {
+    console.log(response,response.data.success)
+    if (response.status === 200||response.data.success) {
       alert("Task created successfully");
       handleClose();
     }

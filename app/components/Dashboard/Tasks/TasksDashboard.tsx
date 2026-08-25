@@ -10,7 +10,7 @@ import Pagination from "./Pagination";
 import TaskDetailPanel from "./Taskdetailpanel";
 import { useStatCards, taskDetail } from "./Data";
 import { FilterState, Task } from "./Types";
-import axios from "axios";
+import axios, { Axios } from "axios";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { setTasks } from "@/app/redux/tasks";
 
@@ -44,20 +44,20 @@ function mapApiTask(raw: any): Task {
       raw.priority === "high"
         ? "High"
         : raw.priority === "low"
-        ? "Low"
-        : "Medium",
+          ? "Low"
+          : "Medium",
     status:
       raw.completed === "completed"
         ? "Completed"
         : raw.completed === "inprogress"
-        ? "In Progress"
-        : "Pending",
+          ? "In Progress"
+          : "Pending",
     dueDate: raw.dueDate
       ? new Date(raw.dueDate).toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        })
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
       : "—",
   };
 }
@@ -68,6 +68,8 @@ export default function TasksDashboard() {
   const [filters, setFilters] = useState<FilterState>(emptyFilters);
   const [currentPage, setCurrentPage] = useState(1);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteTaskId, setDeleteTaskId] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   const tasksRaw = useAppSelector((store) => store.tasksSlice);
 
@@ -140,9 +142,26 @@ export default function TasksDashboard() {
       return new Set(pagedTasks.map((t) => t.id));
     });
   }
+  const SetonDelete = async (id: string) => {
+    setDeleteTaskId(id);
+    setShowDeleteConfirm(true);
+  };
+  const confirmDelete = async () => {
+    if (!deleteTaskId) return;
 
+    try {
+      const response = await axios.delete(
+        `/api/Task/Deletetask?id=${deleteTaskId}`
+      );
+      setShowDeleteConfirm(false);
+      setDeleteTaskId(null);
+
+    } catch (error) {
+      console.error("Failed to delete task:", error);
+    }
+  };
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-slate-50 text-slate-900">
+    <div className="flex h-screen w-full overflow-hidden bg-[#FFF3C8] text-[#22303A]">
 
       <div className="flex min-w-0 flex-1 flex-col">
         <TopHeader title="Tasks" searchValue={headerSearch} onSearchChange={setHeaderSearch} />
@@ -159,12 +178,47 @@ export default function TasksDashboard() {
             />
 
             <div className="px-6 pt-4">
+              {showDeleteConfirm && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+                  <div className="w-[350px] rounded-xl bg-white p-6 shadow-2xl">
+                    <h3 className="text-lg font-semibold text-[#22303A]">
+                      Are you sure?
+                    </h3>
+
+                    <p className="mt-2 text-sm text-gray-500">
+                      Are you sure you want to delete this task?
+                    </p>
+
+                    <div className="mt-6 flex justify-end gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setShowDeleteConfirm(false);
+                          setDeleteTaskId(null);
+                        }}
+                        className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                      >
+                        No
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => confirmDelete()}
+                        className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+                      >
+                        Yes
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
               <TasksTable
                 tasks={pagedTasks}
                 selectedIds={selectedIds}
                 onToggleSelect={toggleSelect}
                 onToggleSelectAll={toggleSelectAll}
                 onView={setActiveTask}
+                onDelete={SetonDelete}
               />
             </div>
 
