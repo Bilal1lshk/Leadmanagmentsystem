@@ -41,13 +41,14 @@ export default function TaskRow({ task, selected, onToggleSelect, onView ,onDele
       <td className="px-4 py-3 text-sm text-[#4A5A5F]">{task.dueDate}</td>
       <td className="px-4 py-3">
         <div className="flex items-center gap-3 text-sm">
+          <a href={`/dashboard/task/view/${task.id}`}>
           <button
             type="button"
-            onClick={() => onView(task.id)}
             className="font-medium text-[#458393] hover:underline"
           >
             View
           </button>
+          </a>
           <button type="button" className="font-medium text-[#5C6D71] hover:underline">
             Edit
           </button>
