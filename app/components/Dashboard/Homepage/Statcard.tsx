@@ -9,7 +9,6 @@ export default function StatCards() {
   const newLeads = data?.filter((lead) => lead?.status === "new");
   const won = data?.filter((lead) => lead?.status === "won")
   const converationrate = data.length > 0 ? (won.length / data.length) * 100 : 0;
-  console.log(converationrate)
   const qualifiedleads = data?.filter((lead) => lead?.status === "qualified")
   const pipelinevalue = data.reduce((acc, lead) => acc + lead?.estimatedValue, 0);
   const stats = [

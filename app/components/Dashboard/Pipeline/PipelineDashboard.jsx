@@ -35,19 +35,16 @@ export default function PipelineDashboard() {
 
   // ── Drag handlers ──────────────────────────────────────────────────────────
   const handleCardDragStart = useCallback((e, lead) => {
-    console.log("hitted handleCardDragStart")
     e.dataTransfer.effectAllowed = "move";
     setDraggingLead(lead);
   }, []);
 
   const handleCardDragEnd = useCallback(() => {
-    console.log("hitted handleCardDragEnd")
     setDraggingLead(null);
     setDragOverStage(null);
   }, []);
 
   const handleDragOver = useCallback((e, stage) => {                                                  
-    console.log("hitted handleDragOver")
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
     setDragOverStage(stage);

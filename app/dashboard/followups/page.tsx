@@ -111,7 +111,6 @@ export default function FollowupsPage({
   const completedleads = data?.filter((pending: object) => pending?.status === "completed")
   const date = Date.now();
   const duedate = data?.filter((pending: object) =>  new Date(pending.duedate).getTime() < date)
-  console.log("duedate",duedate)
   const [dateFilter, setDateFilter] = useState("this-week");
 
   const [openMenu, setOpenMenu] = useState<string | null>(
@@ -125,13 +124,11 @@ export default function FollowupsPage({
   useEffect(() => {
     const gettingdata = async () => {
       const response = await axios.get(`/api/followups/All`);
-      console.log(data, "Alldata")
       setdata(response.data.data)
 
     }
     gettingdata()
   }, [])
-  console.log(data)
   const filteredFollowups = useMemo(() => {
     const query = search?.toLowerCase()?.trim();
 

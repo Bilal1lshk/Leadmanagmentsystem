@@ -33,7 +33,6 @@ export async function POST(request: Request) {
       { status: 201 ,}
     );
   } catch (err: any) {
-    console.log(err?.message ?? err, "failed");
     return NextResponse.json(
       { message: "Failed to create follow-up" },
       { status: 500 }

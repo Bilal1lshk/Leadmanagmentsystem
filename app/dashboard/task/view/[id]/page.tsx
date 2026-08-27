@@ -129,7 +129,6 @@ export default function TaskDetailPage() {
     const router = useRouter();
 
     const [task, setTask] = useState<Task | null>(null);
-    console.log(task)
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [statusMenuOpen, setStatusMenuOpen] = useState(false);
@@ -150,14 +149,12 @@ export default function TaskDetailPage() {
                 const response = await axios.get(
                     `/api/Task/SingleTask?id=${id}`
                 );
-                console.log(response,"single")
                 if (!response.data?.singletask) {
                     throw new Error(
                         response.data?.message || "Failed to fetch task"
                     );
                 }
                 const fetchedTask = response.data?.singletask;
-                console.log(fetchedTask)
                 if (!fetchedTask) {
                     throw new Error("Task data was not returned");
                 }
@@ -212,16 +209,13 @@ export default function TaskDetailPage() {
         );
 
         try {
-            const response = await axios.patch(
-                "/api/Task/UpdateStatus",
+            const response = await axios.put(
+                "/api/Task/UpdateTask",
                 {
                     taskId: task._id,
                     completed: newStatus,
                 }
             );
-
-            console.log("Status update response:", response.data);
-
             if (!response.data?.success) {
                 throw new Error(
                     response.data?.message ||
@@ -599,11 +593,7 @@ export default function TaskDetailPage() {
                     {/* ================= INFO GRID ================= */}
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 divide-y sm:divide-y-0 divide-[#F0F0EA]">
-                        <InfoRow
-                            icon={Building2}
-                            label="Related lead"
-                            value={leadLabel}
-                        />
+                    
 
                         <InfoRow
                             icon={UserCheck}
@@ -628,19 +618,7 @@ export default function TaskDetailPage() {
                         />
                     </div>
 
-                    {/* ================= TASK ID ================= */}
-
-                    <div className="mt-4 pt-4 border-t border-[#F0F0EA]">
-                        <div className="flex flex-col gap-1">
-                            <span className="text-[11px] text-[#9A9A8F] font-medium">
-                                Task ID
-                            </span>
-
-                            <span className="text-xs text-[#5C6D71] break-all">
-                                {task._id}
-                            </span>
-                        </div>
-                    </div>
+                
                 </motion.div>
             </div>
         </div>

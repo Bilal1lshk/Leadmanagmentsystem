@@ -5,7 +5,6 @@ export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
         const id = searchParams.get("id");
-        console.log(id)
         if (!id) {
             return Response.json({ success: false, message: "Missing lead id." }, { status: 400 });
         }

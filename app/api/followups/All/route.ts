@@ -16,7 +16,6 @@ export async function GET(request: Request) {
       { status: 200 }
     );
   } catch (err: any) {
-    console.log(err?.message ?? err, "failed");
     return NextResponse.json(
       { message: "Failed to find followups" },
       { status: 500 }

@@ -59,7 +59,6 @@ export async function POST(Request) {
     })
 
     if(!created) return NextResponse.json({message:"Something went wrong in lead creation try again "})
-      console.log("created",created)
     return NextResponse.json({ message: "lead created succesfully", data: created, success: true }, { status: 201 });
   } catch (error) {
     console.error("Create lead error:", error);

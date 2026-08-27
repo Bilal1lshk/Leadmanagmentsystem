@@ -2,7 +2,6 @@ import lead from "@/app/models/lead";
 import { NextResponse } from "next/server";
 
 export async function DELETE(request: Request) {
-    console.log("hitted")
     const { searchParams } = new URL(request.url)
     const id = searchParams.get('id')
     if (!id) return NextResponse.json({

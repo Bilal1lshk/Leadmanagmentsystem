@@ -14,8 +14,11 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
-    const singletask = await taskmodel.findOne({ _id: userId })
-    if (!singletask) return NextResponse.json({
+const singletask = await taskmodel
+    .findOne({ _id: userId })
+    .populate("organization")
+    .populate("assignedTo");
+        if (!singletask) return NextResponse.json({
       message: "something went wrong"
     });
 

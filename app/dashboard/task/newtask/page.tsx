@@ -39,7 +39,6 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
     dueDate: "",
     assignedTo: "",
   });
-  console.log(formData)
   const dispatch = useAppDispatch();
   useEffect(() => {
     const gettingdata = async () => {
@@ -51,7 +50,6 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
         dispatch(setAllLeads(response[0].data.data));
         setUsers(response[1].data.allusers);
       } catch (err) {
-        console.log(err, "failed");
       }
     };
 
@@ -79,7 +77,6 @@ export default function CreateTaskForm({ onClose }: CreateTaskFormProps) {
       return;
     }
     const response = await axios.post("/api/Task/Createtask", formData)
-    console.log(response,response.data.success)
     if (response.status === 200||response.data.success) {
       alert("Task created successfully");
       handleClose();

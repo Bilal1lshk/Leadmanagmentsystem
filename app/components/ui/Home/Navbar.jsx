@@ -10,14 +10,11 @@ export default function Navbar() {
   useEffect(() => {
     const getuser = async () => {
       const data = await axios.get("/api/auth/me")
-      console.log(data)
       setuser(data.data.success)
     }
     const activeOrganization = async () => {
       const data = await axios.get(`/api/organization/my`)
       setactiveorganization(data.data.success)
-
-      console.log(data)
       // setactiveorganization(data.data.success)
     }
 
@@ -25,7 +22,6 @@ export default function Navbar() {
     getuser()
 
   }, [])
-  console.log("organization", activeOrganization, "user", user)
   return (
     <nav className="flex items-center justify-between gap-4 rounded-xl bg-[#FFF3C8] px-5 py-3.5 flex-wrap">
       <div className="flex items-center gap-2">

@@ -9,7 +9,6 @@ async function connectdb() {
         return await mongoose.connect(url)
     }
     catch (err) {
-        console.log(err.message, "failed")
         throw err
     }
 }

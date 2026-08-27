@@ -66,11 +66,9 @@ export default function Sidebar() {
     const gettingdata = async () => {
       try {
         const response = await axios.get("/api/dashboardapi/Leads/AllLead");
-        console.log(response,"response")
         dispatch(setAllLeads(response.data.data));
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
-        console.log(message, "failed");
       }
     };
 

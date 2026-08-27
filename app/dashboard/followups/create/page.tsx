@@ -71,9 +71,7 @@ export default function CreateFollowupForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = await axios.post(`/api/followups/Create`, formData);
-    console.log(data, "success")
     router.push("/dashboard/followups/")
-    console.log(data)
   };
 
   return (
