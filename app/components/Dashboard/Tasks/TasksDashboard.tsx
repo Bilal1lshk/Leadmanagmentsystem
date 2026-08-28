@@ -72,9 +72,8 @@ export default function TasksDashboard() {
   const [deleteTaskId, setDeleteTaskId] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   const tasksRaw = useAppSelector((store) => store.tasksSlice);
-  // Stat cards from the Redux store (hook, called inside component)
+  console.log(tasksRaw)
   const statCards = useStatCards();
-
   useEffect(() => {
     const fetchTasks = async () => {
       try {
