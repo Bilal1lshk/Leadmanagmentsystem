@@ -66,6 +66,7 @@ export default function TasksDashboard() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [headerSearch, setHeaderSearch] = useState("");
   const [filters, setFilters] = useState<FilterState>(emptyFilters);
+  console.log(filters)
   const [currentPage, setCurrentPage] = useState(1);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -173,6 +174,7 @@ export default function TasksDashboard() {
               filters={filters}
               onFilterChange={(patch) => setFilters((prev) => ({ ...prev, ...patch }))}
               onReset={() => setFilters(emptyFilters)}
+              tasks={mappedTasks}
             />
 
             <div className="px-6 pt-4">

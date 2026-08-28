@@ -21,23 +21,23 @@ const companyLinks = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-[#050505] text-white">
+    <footer className="border-t border-[#E5CB90]/60 bg-[#FFF3C8] text-[#22303A]">
       <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
         {/* Main footer */}
         <div className="grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-black">
-                <span className="text-sm font-bold">AI</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#458393] text-white">
+                <span className="text-sm font-bold">L</span>
               </div>
 
-              <span className="text-lg font-semibold tracking-tight">
-                YourProduct
+              <span className="text-lg font-semibold tracking-tight text-[#22303A]">
+                Leadwise
               </span>
             </Link>
 
-            <p className="mt-5 max-w-md text-sm leading-6 text-zinc-400">
+            <p className="mt-5 max-w-md text-sm leading-6 text-[#4A5A5F]">
               An intelligent sales platform built to help businesses capture
               more leads, automate their workflows, and turn opportunities
               into growth.
@@ -45,8 +45,8 @@ export default function Footer() {
 
             {/* CTA */}
             <Link
-              href="/book-demo"
-              className="mt-7 inline-flex items-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-medium text-black transition hover:bg-zinc-200"
+              href="/signup"
+              className="mt-7 inline-flex items-center gap-2 rounded-lg bg-[#458393] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#34A99D]"
             >
               Book a Demo
               <FaArrowUp className="h-4 w-4" />
@@ -55,14 +55,14 @@ export default function Footer() {
 
           {/* Product */}
           <div>
-            <h3 className="text-sm font-semibold">Product</h3>
+            <h3 className="text-sm font-semibold text-[#22303A]">Product</h3>
 
             <ul className="mt-5 space-y-3">
               {productLinks.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-sm text-zinc-500 transition hover:text-white"
+                    className="text-sm text-[#5C6D71] transition hover:text-[#22303A]"
                   >
                     {link.label}
                   </Link>
@@ -73,14 +73,14 @@ export default function Footer() {
 
           {/* Company */}
           <div>
-            <h3 className="text-sm font-semibold">Company</h3>
+            <h3 className="text-sm font-semibold text-[#22303A]">Company</h3>
 
             <ul className="mt-5 space-y-3">
               {companyLinks.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-sm text-zinc-500 transition hover:text-white"
+                    className="text-sm text-[#5C6D71] transition hover:text-[#22303A]"
                   >
                     {link.label}
                   </Link>
@@ -91,32 +91,32 @@ export default function Footer() {
         </div>
 
         {/* Newsletter */}
-        <div className="border-y border-white/10 py-8">
+        <div className="border-y border-[#E5CB90]/60 py-8">
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
             <div>
-              <h3 className="text-sm font-medium">
+              <h3 className="text-sm font-medium text-[#22303A]">
                 Stay ahead with AI-powered sales.
               </h3>
 
-              <p className="mt-1 text-xs text-zinc-500">
+              <p className="mt-1 text-xs text-[#5C6D71]">
                 Get product updates and insights delivered to your inbox.
               </p>
             </div>
 
             <form className="flex w-full max-w-md gap-2">
               <div className="relative flex-1">
-                <CiMail  className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-600" />
+                <CiMail  className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5C6D71]" />
 
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="h-11 w-full rounded-lg border border-white/10 bg-white/[0.03] pl-10 pr-4 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-blue-400/40"
+                  className="h-11 w-full rounded-lg border border-[#E5CB90]/60 bg-white pl-10 pr-4 text-sm text-[#22303A] outline-none placeholder:text-[#5C6D71] focus:border-[#458393]/60"
                 />
               </div>
 
               <button
                 type="submit"
-                className="rounded-lg bg-white px-5 text-sm font-medium text-black transition hover:bg-zinc-200"
+                className="rounded-lg bg-[#458393] px-5 text-sm font-medium text-white transition hover:bg-[#34A99D]"
               >
                 Subscribe
               </button>
@@ -126,21 +126,21 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="flex flex-col gap-6 py-7 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-zinc-600">
-            © {new Date().getFullYear()} YourProduct. All rights reserved.
+          <p className="text-xs text-[#5C6D71]">
+            © {new Date().getFullYear()} Leadwise. All rights reserved.
           </p>
 
           <div className="flex items-center gap-5">
             <Link
               href="/privacy"
-              className="text-xs text-zinc-600 transition hover:text-white"
+              className="text-xs text-[#5C6D71] transition hover:text-[#22303A]"
             >
               Privacy
             </Link>
 
             <Link
               href="/terms"
-              className="text-xs text-zinc-600 transition hover:text-white"
+              className="text-xs text-[#5C6D71] transition hover:text-[#22303A]"
             >
               Terms
             </Link>
@@ -149,7 +149,7 @@ export default function Footer() {
               href="https://linkedin.com"
               target="_blank"
               aria-label="LinkedIn"
-              className="text-zinc-600 transition hover:text-white"
+              className="text-[#5C6D71] transition hover:text-[#22303A]"
             >
               <CiLinkedin className="h-4 w-4" />
             </Link>
@@ -158,7 +158,7 @@ export default function Footer() {
               href="https://twitter.com"
               target="_blank"
               aria-label="Twitter"
-              className="text-zinc-600 transition hover:text-white"
+              className="text-[#5C6D71] transition hover:text-[#22303A]"
             >
               <FaTwitter className="h-4 w-4" />
             </Link>
@@ -167,7 +167,7 @@ export default function Footer() {
               href="https://github.com"
               target="_blank"
               aria-label="GitHub"
-              className="text-zinc-600 transition hover:text-white"
+              className="text-[#5C6D71] transition hover:text-[#22303A]"
             >
               <FaGithub className="h-4 w-4" />
             </Link>
