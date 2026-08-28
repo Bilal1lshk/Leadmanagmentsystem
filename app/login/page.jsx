@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { ChartLine } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
+import { signIn } from "next-auth/react";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { setUser } from "@/app/redux/auth";
 
@@ -122,9 +124,26 @@ export default function Login() {
             </div>
           )}
 
+          <div className="mt-7">
+            <button
+              type="button"
+              onClick={() => signIn("google", { callbackUrl: "/" })}
+              className="flex w-full items-center justify-center gap-3 rounded-lg border border-[#E5CB90] bg-white py-2.5 text-sm font-medium text-[#2A3F45] transition-all hover:bg-gray-50 active:scale-[0.98]"
+            >
+              <FcGoogle className="h-5 w-5" />
+              Log in with Google
+            </button>
+
+            <div className="my-5 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-[#E5CB90] after:mt-0.5 after:flex-1 after:border-t after:border-[#E5CB90]">
+              <p className="mx-4 mb-0 text-center text-xs font-medium text-[#8A8A82]">
+                OR
+              </p>
+            </div>
+          </div>
+
           <form
             onSubmit={handleSubmit}
-            className="mt-7 flex flex-col gap-4"
+            className="flex flex-col gap-4"
           >
 
             {/* Email */}
