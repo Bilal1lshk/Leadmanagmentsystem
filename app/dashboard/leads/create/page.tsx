@@ -1,4 +1,4 @@
-import CreateLeadPage from "./CreateNewlead.jsx";
+import CreateLeadPage from "./CreateNewlead.tsx";
 
 export default function Page() {
   return <CreateLeadPage />;

@@ -107,10 +107,10 @@ export default function FollowupsPage({
   const [status, setStatus] = useState<
     "all" | FollowupStatus
   >("all");
-  const pendingleads = data?.filter((pending: object) => pending?.status === "pending")
-  const completedleads = data?.filter((pending: object) => pending?.status === "completed")
+  const pendingleads = data?.filter((pending: Followup) => pending?.status === "pending")
+  const completedleads = data?.filter((pending: Followup) => pending?.status === "completed")
   const date = Date.now();
-  const duedate = data?.filter((pending: object) =>  new Date(pending.duedate).getTime() < date)
+  const duedate = data?.filter((pending: Followup) =>  new Date(pending.duedate).getTime() < date)
   const [dateFilter, setDateFilter] = useState("this-week");
 
   const [openMenu, setOpenMenu] = useState<string | null>(

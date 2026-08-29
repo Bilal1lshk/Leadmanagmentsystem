@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import leadmodel from "@/app/models/lead";
-import dbConnect from "@/app/config/mongodbconnection.js"
+import dbConnect from "@/app/config/mongodbconnection.ts"
 import { getCurrentOrganization, getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
 export async function GET(request: Request) {
   try {

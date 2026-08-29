@@ -5,7 +5,7 @@ import "../../../models/lead";
 import "../../../models/user";
 import { getCurrentOrganization, getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
 
-export async function GET(request) {
+export async function GET(request:Request) {
   try {
     const user = await getCurrentUser(request);
     if (!user) return unauthorizedResponse();

@@ -19,7 +19,7 @@ const createInviteCode = () => crypto.randomBytes(5).toString("hex").toUpperCase
  * Response:
  *   201 { success, message, organization: { _id, name, companysize, plan } }
  */
-export async function POST(request) {
+export async function POST(request:Request) {
   try {
     const currentUser = await getCurrentUser(request);
     if (!currentUser) {

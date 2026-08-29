@@ -3,8 +3,10 @@ import connectDB from "@/app/config/mongodbconnection";
 import OrganizationMember from "@/app/models/organizationMember";
 import WorkspaceJoinRequest from "@/app/models/workspaceJoinRequest";
 import { getCurrentUser, forbiddenResponse, unauthorizedResponse } from "@/app/lib/auth";
-
-export async function GET(request, { params }) {
+type RouteParams = {
+  params: Promise<{ organizationId: string }>;
+};
+export async function GET(request:Request, { params }:RouteParams) {
   try {
     const user = await getCurrentUser(request);
     if (!user) return unauthorizedResponse();

@@ -5,7 +5,7 @@ import OrganizationMember from "@/app/models/organizationMember";
 import WorkspaceJoinRequest from "@/app/models/workspaceJoinRequest";
 import { getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
 
-export async function POST(request) {
+export async function POST(request:Request) {
   try {
     const user = await getCurrentUser(request);
     if (!user) return unauthorizedResponse();
@@ -23,13 +23,12 @@ export async function POST(request) {
     const joinRequest = await WorkspaceJoinRequest.create({ user: user._id, organization: organization._id, message: message.trim() });
     return NextResponse.json({ success: true, message: `Request sent to ${organization.name}.`, request: joinRequest }, { status: 201 });
   } catch (error) {
-    if (error?.code === 11000) return NextResponse.json({ success: false, message: "You already requested this workspace." }, { status: 409 });
     console.error("Create join request error:", error);
     return NextResponse.json({ success: false, message: "Unable to send request." }, { status: 500 });
   }
 }
 
-export async function GET(request) {
+export async function GET(request:Request) {
   try {
     const user = await getCurrentUser(request);
     if (!user) return unauthorizedResponse();

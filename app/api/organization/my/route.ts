@@ -9,7 +9,7 @@ import { getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
  *
  * Returns all organizations the authenticated user belongs to.
  */
-export async function GET(request) {
+export async function GET(request:Request) {
   try {
     const currentUser = await getCurrentUser(request);
     if (!currentUser) {

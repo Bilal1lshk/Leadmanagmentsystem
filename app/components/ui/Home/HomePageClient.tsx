@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Homee from "@/app/components/ui/Home/Home.jsx";
+import Homee from "@/app/components/ui/Home/Home.tsx";
 import CreateOrganizationOnboarding from "@/app/components/ui/CreateOrganization/CreateOrganizationOnboarding";
 import { useAppDispatch } from "@/app/redux/hooks";
 import {

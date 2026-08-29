@@ -30,6 +30,7 @@ const SOURCE_META = {
     other: { label: "Other", icon: MoreHorizontal },
 };
 
+
 const PRIORITY_META = {
     low: { label: "Low", bg: "#E9ECEE", text: "#3D4D51" },
     medium: { label: "Medium", bg: "#C9A24A", text: "#FFFFFF" },
@@ -64,8 +65,22 @@ function InfoRow({ icon: Icon, label, value }) {
 export default function LeadDetailPage() {
     const { id } = useParams();
     const router = useRouter();
-
-    const [lead, setLead] = useState(null);
+interface Lead {
+    _id: string;
+    name: string;
+    email: string;
+    personId: string;
+    source: string;
+    priority: string;
+    status: string;
+    estimatedValue?: number;
+    lastContactedAt?: string;
+    createdAt: string;
+    assignedTo?: string;
+    sourcedby?: string;
+    lostReason?: string;
+}
+    const [lead, setLead] = useState<Lead>([Lead]);
     const [loading, setLoading] = useState(true);
     const [deleting, setDeleting] = useState(false);
     const [confirmDelete, setConfirmDelete] = useState(false);
@@ -155,6 +170,7 @@ export default function LeadDetailPage() {
     const priorityMeta = PRIORITY_META[lead.priority] || PRIORITY_META.medium;
     const statusMeta = STATUS_META[lead.status] || STATUS_META.new;
     const SourceIcon = sourceMeta.icon;
+    lead
 
     return (
         <div className="relative min-h-screen bg-[#FFF3C8] text-[#22303A] px-6 py-10 flex justify-center overflow-hidden">

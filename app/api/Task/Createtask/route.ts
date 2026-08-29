@@ -3,7 +3,7 @@ import dbConnect from "../../../config/mongodbconnection"
 import taskmodel from "../../../models/task"
 import Lead from "@/app/models/lead";
 import { getCurrentOrganization, getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
-export async function POST(Request) {
+export async function POST(Request:Request) {
     try {   
         const user = await getCurrentUser(Request)
         if (!user) return unauthorizedResponse()

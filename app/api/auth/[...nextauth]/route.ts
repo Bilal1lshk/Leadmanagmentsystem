@@ -3,6 +3,23 @@ import GoogleProvider from "next-auth/providers/google";
 import connectDB from "@/app/config/mongodbconnection";
 import User from "@/app/models/user";
 
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    };
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string;
+  }
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({

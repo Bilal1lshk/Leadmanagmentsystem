@@ -4,7 +4,7 @@ import Organization from "@/app/models/organization";
 import OrganizationMember from "@/app/models/organizationMember";
 import { getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
 
-export async function GET(request) {
+export async function GET(request:Request) {
   try {
     const user = await getCurrentUser(request);
     if (!user) return unauthorizedResponse();

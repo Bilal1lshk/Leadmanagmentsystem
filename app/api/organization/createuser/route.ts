@@ -29,7 +29,7 @@ import { getCurrentUser, unauthorizedResponse, forbiddenResponse } from "@/app/l
  * Response:
  *   201 { success, message, user: { id, name, email }, member: { role } }
  */
-export async function POST(request) {
+export async function POST(request:Request) {
   try {
     // ── 1. Authenticate ───────────────────────────────────────────────────────
     const currentUser = await getCurrentUser(request);
