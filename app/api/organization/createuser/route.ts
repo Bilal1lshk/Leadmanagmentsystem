@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import connectDB from "@/app/config/mongodbconnection";
 import User from "@/app/models/user";
@@ -29,7 +29,7 @@ import { getCurrentUser, unauthorizedResponse, forbiddenResponse } from "@/app/l
  * Response:
  *   201 { success, message, user: { id, name, email }, member: { role } }
  */
-export async function POST(request:Request) {
+export async function POST(request: NextRequest) {
   try {
     // ── 1. Authenticate ───────────────────────────────────────────────────────
     const currentUser = await getCurrentUser(request);

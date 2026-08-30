@@ -1,13 +1,14 @@
-import { NextResponse } from "next/server";
-import bcrypt from 'bcryptjs'
+import { NextRequest, NextResponse } from "next/server";
+import bcrypt from 'bcryptjs';
 import jwt from "jsonwebtoken";
 import connectDB from "@/app/config/mongodbconnection";
 import User from "@/app/models/user";
-export async function POST(request) {
+
+export async function POST(request: NextRequest) {
   try {
     await connectDB();
 
-    const { email, password, } = await request.json();
+    const { email, password } = await request.json();
 
     if (!email || !password) {
       return NextResponse.json(
@@ -70,7 +71,6 @@ export async function POST(request) {
       }
     );
 
-
     const response = NextResponse.json(
       {
         success: true,
@@ -93,7 +93,7 @@ export async function POST(request) {
       path: "/",
       secure: process.env.NODE_ENV === "production",
     });
-    return response
+    return response;
 
   } catch (error) {
     console.error("Login error:", error);

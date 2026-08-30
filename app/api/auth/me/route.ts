@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
 
-export async function GET(request:Request) {
+export async function GET(request: NextRequest) {
   const user = await getCurrentUser(request);
   if (!user) return unauthorizedResponse();
 

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/app/config/mongodbconnection";
 import OrganizationMember from "@/app/models/organizationMember";
 import Organization from "@/app/models/organization";
@@ -9,7 +9,7 @@ import { getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
  *
  * Returns all organizations the authenticated user belongs to.
  */
-export async function GET(request:Request) {
+export async function GET(request: NextRequest) {
   try {
     const currentUser = await getCurrentUser(request);
     if (!currentUser) {

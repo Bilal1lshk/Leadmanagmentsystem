@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/app/config/mongodbconnection";
 import OrganizationMember from "@/app/models/organizationMember";
 import { getCurrentOrganization, getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
 
-export async function GET(request:Request) {
+export async function GET(request: NextRequest) {
     const user = await getCurrentUser(request);
     if (!user) return unauthorizedResponse();
     const membership = await getCurrentOrganization(request, user);

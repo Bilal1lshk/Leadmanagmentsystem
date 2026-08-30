@@ -1,10 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/app/config/mongodbconnection";
 import OrganizationMember from "@/app/models/organizationMember";
 import WorkspaceJoinRequest from "@/app/models/workspaceJoinRequest";
 import { getCurrentUser, forbiddenResponse, unauthorizedResponse } from "@/app/lib/auth";
 
-export async function PATCH(request, { params }) {
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ organizationId: string; requestId: string }> }
+) {
   try {
     const user = await getCurrentUser(request);
     if (!user) return unauthorizedResponse();
@@ -36,8 +39,10 @@ export async function PATCH(request, { params }) {
     joinRequest.reviewedAt = new Date();
     await joinRequest.save();
     return NextResponse.json({ success: true, message: action === "approve" ? "Request approved." : "Request rejected." });
-  } catch (error) {
-    if (error?.code === 11000) return NextResponse.json({ success: false, message: "This user already belongs to a workspace." }, { status: 409 });
+  } catch (error: unknown) {
+    if (typeof error === "object" && error !== null && "code" in error && (error as { code: number }).code === 11000) {
+      return NextResponse.json({ success: false, message: "This user already belongs to a workspace." }, { status: 409 });
+    }
     console.error("Review join request error:", error);
     return NextResponse.json({ success: false, message: "Unable to review request." }, { status: 500 });
   }

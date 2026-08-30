@@ -1,8 +1,8 @@
-import Navbar from './Navbar.tsx'
-import Herosection from "./Herosection.tsx"
-import Carosal from "./Carosal.tsx"
-import Integrations from "./Integration.tsx"
-import AIFeatures from './AIFeatures.tsx';
+import Navbar from './Navbar'
+import Herosection from "./Herosection"
+import Carosal from "./Carosal"
+import Integrations from "./Integration"
+import AIFeatures from './AIFeatures';
 import ProductOverview from './ProductOverview';
 import Footer from './Footer';
 export default function Home() {

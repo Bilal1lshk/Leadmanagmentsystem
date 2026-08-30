@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/app/config/mongodbconnection";
 import OrganizationMember from "@/app/models/organizationMember";
 import WorkspaceJoinRequest from "@/app/models/workspaceJoinRequest";
@@ -6,7 +6,7 @@ import { getCurrentUser, forbiddenResponse, unauthorizedResponse } from "@/app/l
 type RouteParams = {
   params: Promise<{ organizationId: string }>;
 };
-export async function GET(request:Request, { params }:RouteParams) {
+export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const user = await getCurrentUser(request);
     if (!user) return unauthorizedResponse();

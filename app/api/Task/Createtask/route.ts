@@ -1,16 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "../../../config/mongodbconnection"
 import taskmodel from "../../../models/task"
 import Lead from "@/app/models/lead";
 import { getCurrentOrganization, getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
-export async function POST(Request:Request) {
+export async function POST(request: NextRequest) {
     try {   
-        const user = await getCurrentUser(Request)
+        const user = await getCurrentUser(request)
         if (!user) return unauthorizedResponse()
-        const membership = await getCurrentOrganization(Request, user)
+        const membership = await getCurrentOrganization(request, user)
         if (!membership) return NextResponse.json({ message: "Select a workspace first" }, { status: 403 })
         await dbConnect()
-        const { assignedTo, dueDate, leadId, title } = await Request.json()
+        const { assignedTo, dueDate, leadId, title } = await request.json()
         if (!assignedTo || !dueDate || !leadId || !title) return NextResponse.json({ message: "All fields should be filled" }, { status: 400 })
         const lead = await Lead.findOne({ _id: leadId, organization: membership.organization })
         if (!lead) return NextResponse.json({ message: "Lead not found" }, { status: 404 })

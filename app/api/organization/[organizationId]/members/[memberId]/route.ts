@@ -1,11 +1,14 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/app/config/mongodbconnection";
 import OrganizationMember from "@/app/models/organizationMember";
 import { getCurrentUser, forbiddenResponse, unauthorizedResponse } from "@/app/lib/auth";
 
 const assignableRoles = ["employee", "viewer"];
 
-export async function PATCH(request, { params }) {
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ organizationId: string; memberId: string }> }
+) {
   try {
     const currentUser = await getCurrentUser(request);
     if (!currentUser) return unauthorizedResponse();

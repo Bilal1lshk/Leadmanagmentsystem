@@ -1,8 +1,10 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { GripVertical, Phone, Mail, MoreHorizontal, Star } from "lucide-react";
+
+import { Lead } from "@/app/redux/leads";
 
 const priorityColors = {
   high: "bg-red-100 text-red-600 border-red-200",
@@ -16,12 +18,20 @@ const priorityDot = {
   low: "bg-slate-400",
 };
 
-export default function LeadCard({ lead, onDragStart, onDragEnd, isDragging, onView }) {
+interface LeadCardProps {
+  lead: Lead;
+  onDragStart: (e: React.DragEvent<HTMLDivElement>, lead: Lead) => void;
+  onDragEnd: (e: React.DragEvent<HTMLDivElement>) => void;
+  isDragging?: boolean;
+  onView?: (lead: Lead) => void;
+}
+
+export default function LeadCard({ lead, onDragStart, onDragEnd, isDragging, onView }: LeadCardProps) {
   const [showMenu, setShowMenu] = useState(false);
 
   const initials = (lead.personId || "?")
     .split(" ")
-    .map((w) => w[0])
+    .map((w: string) => w[0])
     .join("")
     .toUpperCase()
     .slice(0, 2);
@@ -34,8 +44,8 @@ export default function LeadCard({ lead, onDragStart, onDragEnd, isDragging, onV
       animate={{ opacity: isDragging ? 0.4 : 1, y: 0, scale: isDragging ? 0.97 : 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       draggable
-      onDragStart={(e) => onDragStart(e, lead)}
-      onDragEnd={onDragEnd}
+      onDragStart={(e) => onDragStart(e as unknown as React.DragEvent<HTMLDivElement>, lead)}
+      onDragEnd={(e) => onDragEnd(e as unknown as React.DragEvent<HTMLDivElement>)}
       className="bg-white border border-[#E5CB90]/50 rounded-xl p-3.5 shadow-sm cursor-grab active:cursor-grabbing hover:shadow-md hover:border-[#458393]/40 transition-all group"
     >
       {/* Header row */}
@@ -84,8 +94,8 @@ export default function LeadCard({ lead, onDragStart, onDragEnd, isDragging, onV
 
       {/* Priority & Value */}
       <div className="flex items-center justify-between mb-2.5">
-        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium border ${priorityColors[lead.priority] || priorityColors.medium}`}>
-          <span className={`w-1.5 h-1.5 rounded-full ${priorityDot[lead.priority] || priorityDot.medium}`} />
+        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium border ${priorityColors[(lead.priority as keyof typeof priorityColors) || "medium"]}`}>
+          <span className={`w-1.5 h-1.5 rounded-full ${priorityDot[(lead.priority as keyof typeof priorityDot) || "medium"]}`} />
           {lead.priority || "medium"}
         </span>
         <span className="text-sm font-bold text-[#22303A]">

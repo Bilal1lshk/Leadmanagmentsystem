@@ -159,6 +159,11 @@ export default function TasksDashboard() {
       console.error("Failed to delete task:", error);
     }
   };
+
+  const handleViewTask = (id: string) => {
+    const found = mappedTasks.find((t) => t.id === id || t._id === id);
+    setActiveTask(found || null);
+  };
   return (
     <div className="flex h-screen w-full overflow-hidden bg-[#FFF3C8] text-[#22303A]">
 
@@ -217,7 +222,7 @@ export default function TasksDashboard() {
                 selectedIds={selectedIds}
                 onToggleSelect={toggleSelect}
                 onToggleSelectAll={toggleSelectAll}
-                onView={setActiveTask}
+                onView={handleViewTask}
                 onDelete={SetonDelete}
               />
             </div>

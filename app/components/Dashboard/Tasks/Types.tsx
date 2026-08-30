@@ -7,6 +7,7 @@ export interface Assignee {
 }
 
 export interface Task {
+  _id?: string;
   id: string;
   name: string;
   relatedLead: string;
@@ -18,9 +19,12 @@ export interface Task {
 
 export interface ActivityItem {
   id: string;
-  label: string;
-  timeAgo: string;
-  icon: "check" | "assign" | "comment";
+  label?: string;
+  timeAgo?: string;
+  icon?: "check" | "assign" | "comment";
+  user?: string;
+  action?: string;
+  time?: string;
 }
 
 export interface TaskDetail extends Task {

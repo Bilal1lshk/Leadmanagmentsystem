@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "../../../config/mongodbconnection";
 import taskmodel from "../../../models/task";
 import "../../../models/lead";
 import "../../../models/user";
 import { getCurrentOrganization, getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
 
-export async function GET(request:Request) {
+export async function GET(request: NextRequest) {
   try {
     const user = await getCurrentUser(request);
     if (!user) return unauthorizedResponse();

@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import connectDB from "@/app/config/mongodbconnection";
 import User from "@/app/models/user";
 
-export async function POST(request) {
+export async function POST(request: NextRequest) {
   try {
     await connectDB();
 

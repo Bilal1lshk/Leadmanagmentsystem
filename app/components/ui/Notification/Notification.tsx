@@ -65,7 +65,7 @@ export default function Notifications() {
     );
   };
 
-  const dismiss = (id) => {
+  const dismiss = (id: number | string) => {
     setNotifications((prev) =>
       prev.filter((n) => n.id !== id)
     );

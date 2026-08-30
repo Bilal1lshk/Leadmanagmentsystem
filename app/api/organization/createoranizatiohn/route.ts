@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/app/config/mongodbconnection";
 import Organization from "@/app/models/organization";
 import OrganizationMember from "@/app/models/organizationMember";
@@ -9,17 +9,16 @@ const createInviteCode = () => crypto.randomBytes(5).toString("hex").toUpperCase
 
 /**
  * POST /api/organization/createoranizatiohn
- *
- * Creates a new Organization for the authenticated user.
- * The creator automatically becomes the Owner and an Admin member of the org.
- *
- * Request body:
- *   { name: string, companySize?: string }
- *
- * Response:
+ * Body: { name, companysize, plan }
+ * Behavior:
+ *   - Creates a new Organization
+ *   - Creates the creator's OrganizationMember document as Admin
+ * Returns:
+ *   401 if unauthenticated
+ *   400 if name is missing/empty
  *   201 { success, message, organization: { _id, name, companysize, plan } }
  */
-export async function POST(request:Request) {
+export async function POST(request: NextRequest) {
   try {
     const currentUser = await getCurrentUser(request);
     if (!currentUser) {

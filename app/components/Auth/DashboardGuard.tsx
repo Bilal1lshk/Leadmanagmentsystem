@@ -7,7 +7,7 @@ import { useAppDispatch } from "@/app/redux/hooks";
 import { setActiveOrganization, setOrganizations } from "@/app/redux/organization";
 import { setUser } from "@/app/redux/auth";
 
-export default function DashboardGuard({ children }) {
+export default function DashboardGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [ready, setReady] = useState(false);

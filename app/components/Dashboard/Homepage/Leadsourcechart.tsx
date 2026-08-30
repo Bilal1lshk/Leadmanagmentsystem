@@ -80,12 +80,12 @@ export default function LeadSourcesChart() {
   const otherPercentage =
     totalLeads > 0 ? (otherData.length / totalLeads) * 100 : 0;
 
-  const sources = [
-    { label: "Website", pct: websitePercentage.toFixed(2), color: "#458393" },
-    { label: "referral", pct: referralPercentage.toFixed(2), color: "#34A99D" },
-    { label: "ad", pct: adPercentage.toFixed(2), color: "#E5CB90" },
-    { label: "coldCall", pct: coldCallPercentage.toFixed(2), color: "#2A3F45" },
-    { label: "other", pct: otherPercentage.toFixed(2), color: "#9CA3AF" },
+  const sources: DonutEntry[] = [
+    { label: "Website", pct: websitePercentage, color: "#458393" },
+    { label: "referral", pct: referralPercentage, color: "#34A99D" },
+    { label: "ad", pct: adPercentage, color: "#E5CB90" },
+    { label: "coldCall", pct: coldCallPercentage, color: "#2A3F45" },
+    { label: "other", pct: otherPercentage, color: "#9CA3AF" },
   ];
 
   return (
@@ -98,7 +98,7 @@ export default function LeadSourcesChart() {
             <div key={s.label} className="flex items-center gap-2 text-[12.5px]">
               <span className="w-2 h-2 rounded-full" style={{ background: s.color }} />
               <span className="text-[#4A5A5F] flex-1">{s.label}</span>
-              <span className="text-[#5C6D71]">{s.pct}%</span>
+              <span className="text-[#5C6D71]">{s.pct.toFixed(2)}%</span>
             </div>
           ))}
         </div>

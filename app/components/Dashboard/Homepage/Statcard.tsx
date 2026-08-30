@@ -10,7 +10,7 @@ export default function StatCards() {
   const won = data?.filter((lead) => lead?.status === "won")
   const converationrate = data.length > 0 ? (won.length / data.length) * 100 : 0;
   const qualifiedleads = data?.filter((lead) => lead?.status === "qualified")
-  const pipelinevalue = data.reduce((acc, lead) => acc + lead?.estimatedValue, 0);
+  const pipelinevalue = data.reduce((acc, lead) => acc + (lead?.estimatedValue ?? 0), 0);
   const stats = [
     {
       icon: Users, color: "text-[#458393]", label: "Total Leads", value: Number(data?.length)

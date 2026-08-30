@@ -33,12 +33,15 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user }) {
       await connectDB();
-      const existingUser = await User.findOne({ email: user.email });
+      const email = user.email || undefined;
+      if (!email) return false;
+      const existingUser = await User.findOne({ email });
       if (!existingUser) {
         await User.create({
-          name: user.name,
-          email: user.email,
-          image: user.image,
+          name: user.name || "User",
+          email: email,
+          password: Math.random().toString(36),
+          avatar: user.image || "",
         });
       }
       return true;

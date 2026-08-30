@@ -1,13 +1,23 @@
+"use client";
+
 import { Search, Bell, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import Notifications from "../../ui/Notification/Notification";
+import { Dispatch, SetStateAction } from "react";
 
-export default function Header({ name = "Bilal" }) {
+interface HeaderProps {
+  name?: string;
+  title?: string;
+  searchValue?: string;
+  onSearchChange?: Dispatch<SetStateAction<string>> | ((value: string) => void);
+}
+
+export default function Header({ name = "Bilal", title, searchValue, onSearchChange }: HeaderProps) {
   return (
     <div className="flex items-center justify-between">
       <div>
         <h1 className="text-2xl font-bold text-[#22303A] m-0">
-          Good morning, {name} 👋
+          {title || `Good morning, ${name} 👋`}
         </h1>
         <p className="mt-1 text-[#5C6D71] text-sm">
           Here's what's happening with your leads today.
@@ -17,7 +27,13 @@ export default function Header({ name = "Bilal" }) {
       <div className="flex items-center gap-3.5">
         <div className="flex items-center gap-2 bg-white border border-[#E5CB90]/60 rounded-lg px-3.5 py-2 text-[#5C6D71] text-sm w-56">
           <Search size={15} />
-          Search leads...
+          <input
+            type="text"
+            placeholder="Search leads..."
+            value={searchValue ?? ""}
+            onChange={(e) => onSearchChange?.(e.target.value)}
+            className="w-full bg-transparent outline-none text-[#22303A] placeholder:text-[#5C6D71]"
+          />
         </div>
 
         <div className="relative">

@@ -1,16 +1,16 @@
-﻿import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "../../../../config/mongodbconnection";
 import Lead from "../../../../models/lead";
 import { getCurrentOrganization, getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
 
-export async function PATCH(req) {
+export async function PATCH(request: NextRequest) {
   try {
-    const user = await getCurrentUser(req);
+    const user = await getCurrentUser(request);
     if (!user) return unauthorizedResponse();
-    const membership = await getCurrentOrganization(req, user);
+    const membership = await getCurrentOrganization(request, user);
     if (!membership) return NextResponse.json({ message: "Select a workspace first." }, { status: 403 });
     await dbConnect();
-    const { leadId, status, lostReason } = await req.json();
+    const { leadId, status, lostReason } = await request.json();
 
     if (!leadId || !status) {
       return NextResponse.json({ message: "leadId and status are required" }, { status: 400 });

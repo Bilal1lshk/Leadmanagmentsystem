@@ -1,13 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import leadmodel from "../../../../models/lead";
 import connectDB from "@/app/config/mongodbconnection";
 import { getCurrentOrganization, getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
 import { data } from "framer-motion/client";
-export async function POST(Request) {
+export async function POST(request: NextRequest) {
   try {
-    const user = await getCurrentUser(Request);
+    const user = await getCurrentUser(request);
     if (!user) return unauthorizedResponse();
-    const membership = await getCurrentOrganization(Request, user);
+    const membership = await getCurrentOrganization(request, user);
     if (!membership) return NextResponse.json({ message: "Select a workspace first." }, { status: 403 });
     await connectDB();
     const {
@@ -22,7 +22,7 @@ export async function POST(Request) {
       email,
       phone,
       message
-    } = await Request.json();
+    } = await request.json();
     if (!personId || 
       !status ||
       !priority ||
