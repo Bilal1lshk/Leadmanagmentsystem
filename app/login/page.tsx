@@ -1,11 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { ChartLine } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { signIn } from "next-auth/react";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { setUser } from "@/app/redux/auth";
+import events from "node:events";
+import { NextError } from "next/dist/lib/is-error";
+interface Errorlocal{
+  message?:string
+}
 
 export default function Login() {
   const dispatch = useAppDispatch();
@@ -17,14 +22,15 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
 
-  const handleChange = (e) => {
+  const handleChange = ( e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if(!e)return
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setSuccess("");
@@ -51,7 +57,7 @@ export default function Login() {
       setTimeout(() => {
         window.location.href = "/";
       }, 1000);
-    } catch (err) {
+    } catch (err:any) {
       setError(err.message);
     } finally {
       setLoading(false);

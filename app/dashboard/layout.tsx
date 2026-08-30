@@ -1,8 +1,9 @@
 // app/dashboard/layout.tsx
+import type { ReactNode } from "react";
 import DashboardGuard from "@/app/components/Auth/DashboardGuard";
 import Sidebar from "../components/Dashboard/Homepage/Sidebar";
 
-export default function DashboardLayout({ children }) {
+export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
     <DashboardGuard>
       <div className="leadwise-dashboard flex min-h-screen">

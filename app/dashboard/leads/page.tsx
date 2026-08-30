@@ -46,6 +46,7 @@ type LeadSource =
 
 interface Lead {
   id: string;
+  _id:string
   personId: string;
   email: string;
   assignedTo: string;
@@ -531,7 +532,7 @@ export default function LeadsPage() {
 
                   <tbody>
 
-                    {filteredLeads.map((lead) => (
+                    {filteredLeads.map((lead:Lead) => (
                       <a key={lead?._id} href={`/dashboard/leads/${lead?._id}`}>
                       <tr
                         key={lead.id}

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -19,10 +19,43 @@ import {
     ChevronDown,
     Check,
     X,
+    type LucideIcon,
 } from "lucide-react";
 import axios from "axios";
 
-const SOURCE_META = {
+type LeadSource = "website" | "referral" | "ad" | "cold_call" | "other";
+type LeadPriority = "low" | "medium" | "high";
+type LeadStatus =
+    | "new"
+    | "contacted"
+    | "qualified"
+    | "proposal"
+    | "won"
+    | "lost";
+
+interface Lead {
+    _id: string;
+    name: string;
+    email: string;
+    personId: string;
+    source: LeadSource;
+    priority: LeadPriority;
+    status: LeadStatus;
+    estimatedValue?: number;
+    lastContactedAt?: string;
+    createdAt: string;
+    assignedTo?: string;
+    sourcedby?: string;
+    lostReason?: string;
+}
+
+interface InfoRowProps {
+    icon: LucideIcon;
+    label: string;
+    value?: string | null;
+}
+
+const SOURCE_META: Record<LeadSource, { label: string; icon: LucideIcon }> = {
     website: { label: "Website", icon: Globe },
     referral: { label: "Referral", icon: Users },
     ad: { label: "Ad", icon: Megaphone },
@@ -30,16 +63,15 @@ const SOURCE_META = {
     other: { label: "Other", icon: MoreHorizontal },
 };
 
-
-const PRIORITY_META = {
+const PRIORITY_META: Record<LeadPriority, { label: string; bg: string; text: string }> = {
     low: { label: "Low", bg: "#E9ECEE", text: "#3D4D51" },
     medium: { label: "Medium", bg: "#C9A24A", text: "#FFFFFF" },
     high: { label: "High", bg: "#C1523F", text: "#FFFFFF" },
 };
 
-const STATUSES = ["new", "contacted", "qualified", "proposal", "won", "lost"];
+const STATUSES: LeadStatus[] = ["new", "contacted", "qualified", "proposal", "won", "lost"];
 
-const STATUS_META = {
+const STATUS_META: Record<LeadStatus, { label: string; bg: string; text: string }> = {
     new: { label: "New", bg: "#E9ECEE", text: "#3D4D51" },
     contacted: { label: "Contacted", bg: "#DCE9EC", text: "#2E5B65" },
     qualified: { label: "Qualified", bg: "#458393", text: "#FFFFFF" },
@@ -48,7 +80,7 @@ const STATUS_META = {
     lost: { label: "Lost", bg: "#C1523F", text: "#FFFFFF" },
 };
 
-function InfoRow({ icon: Icon, label, value }) {
+function InfoRow({ icon: Icon, label, value }: InfoRowProps) {
     return (
         <div className="flex items-start gap-3 py-3">
             <div className="w-8 h-8 rounded-lg bg-[#FFF3C8]/70 flex items-center justify-center shrink-0">
@@ -63,29 +95,15 @@ function InfoRow({ icon: Icon, label, value }) {
 }
 
 export default function LeadDetailPage() {
-    const { id } = useParams();
+    const { id } = useParams<{ id: string }>();
     const router = useRouter();
-interface Lead {
-    _id: string;
-    name: string;
-    email: string;
-    personId: string;
-    source: string;
-    priority: string;
-    status: string;
-    estimatedValue?: number;
-    lastContactedAt?: string;
-    createdAt: string;
-    assignedTo?: string;
-    sourcedby?: string;
-    lostReason?: string;
-}
-    const [lead, setLead] = useState<Lead>([Lead]);
-    const [loading, setLoading] = useState(true);
-    const [deleting, setDeleting] = useState(false);
-    const [confirmDelete, setConfirmDelete] = useState(false);
-    const [statusMenuOpen, setStatusMenuOpen] = useState(false);
-    const [updatingStatus, setUpdatingStatus] = useState(false);
+
+    const [lead, setLead] = useState<Lead | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [deleting, setDeleting] = useState<boolean>(false);
+    const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
+    const [statusMenuOpen, setStatusMenuOpen] = useState<boolean>(false);
+    const [updatingStatus, setUpdatingStatus] = useState<boolean>(false);
 
     useEffect(() => {
         if (!id) return;
@@ -93,7 +111,7 @@ interface Lead {
         const fetchLead = async () => {
             try {
                 const res = await axios.get(`/api/dashboardapi/SingleLead?id=${id}`);
-                setLead(res.data?.data?.findedlead);
+                setLead(res.data?.data?.findedlead ?? null);
             } catch (err) {
                 console.error(err);
             } finally {
@@ -104,7 +122,7 @@ interface Lead {
         fetchLead();
     }, [id]);
 
-    const handleStatusChange = async (newStatus) => {
+    const handleStatusChange = async (newStatus: LeadStatus) => {
         if (!lead || newStatus === lead.status) {
             setStatusMenuOpen(false);
             return;
@@ -114,7 +132,7 @@ interface Lead {
 
         const previous = lead.status;
 
-        setLead((l) => ({ ...l, status: newStatus }));
+        setLead((l) => (l ? { ...l, status: newStatus } : l));
         setStatusMenuOpen(false);
 
         try {
@@ -124,18 +142,18 @@ interface Lead {
             });
         } catch (err) {
             console.error(err);
-            setLead((l) => ({ ...l, status: previous }));
+            setLead((l) => (l ? { ...l, status: previous } : l));
         } finally {
             setUpdatingStatus(false);
         }
     };
 
     const handleDelete = async () => {
+        if (!lead) return;
         setDeleting(true);
 
         try {
             await axios.delete(`/api/dashboardapi/Leads/DeleteLead?id=${lead._id}`);
-            
             router.push("/dashboard/leads");
         } catch (err) {
             console.error(err);
@@ -170,7 +188,6 @@ interface Lead {
     const priorityMeta = PRIORITY_META[lead.priority] || PRIORITY_META.medium;
     const statusMeta = STATUS_META[lead.status] || STATUS_META.new;
     const SourceIcon = sourceMeta.icon;
-    lead
 
     return (
         <div className="relative min-h-screen bg-[#FFF3C8] text-[#22303A] px-6 py-10 flex justify-center overflow-hidden">
@@ -265,8 +282,7 @@ interface Lead {
                                         >
                                             {STATUSES.map((s) => {
                                                 const meta = STATUS_META[s];
-                                                const active =
-                                                    s === lead.status;
+                                                const active = s === lead.status;
 
                                                 return (
                                                     <button
@@ -280,8 +296,7 @@ interface Lead {
                                                             <span
                                                                 className="w-2 h-2 rounded-full"
                                                                 style={{
-                                                                    backgroundColor:
-                                                                        meta.bg,
+                                                                    backgroundColor: meta.bg,
                                                                 }}
                                                             />
 
@@ -321,10 +336,7 @@ interface Lead {
                             </p>
 
                             <p className="text-lg font-semibold text-[#22303A]">
-                                $
-                                {Number(
-                                    lead.estimatedValue || 0
-                                ).toLocaleString()}
+                                ${Number(lead.estimatedValue || 0).toLocaleString()}
                             </p>
                         </div>
                     </div>
@@ -332,17 +344,9 @@ interface Lead {
                     {/* Info grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 divide-y sm:divide-y-0 divide-[#F0F0EA]">
 
-                        <InfoRow
-                            icon={User}
-                            label="Name"
-                            value={lead.name}
-                        />
+                        <InfoRow icon={User} label="Name" value={lead.name} />
 
-                        <InfoRow
-                            icon={Phone}
-                            label="Email"
-                            value={lead.email}
-                        />
+                        <InfoRow icon={Phone} label="Email" value={lead.email} />
 
                         <InfoRow
                             icon={Building2}
@@ -361,13 +365,14 @@ interface Lead {
                             label="Last contacted"
                             value={
                                 lead.lastContactedAt
-                                    ? new Date(
-                                          lead.lastContactedAt
-                                      ).toLocaleDateString("en-GB", {
-                                          day: "numeric",
-                                          month: "short",
-                                          year: "numeric",
-                                      })
+                                    ? new Date(lead.lastContactedAt).toLocaleDateString(
+                                          "en-GB",
+                                          {
+                                              day: "numeric",
+                                              month: "short",
+                                              year: "numeric",
+                                          }
+                                      )
                                     : null
                             }
                         />
@@ -375,9 +380,7 @@ interface Lead {
                         <InfoRow
                             icon={Calendar}
                             label="Created"
-                            value={new Date(
-                                lead.createdAt
-                            ).toLocaleDateString("en-GB", {
+                            value={new Date(lead.createdAt).toLocaleDateString("en-GB", {
                                 day: "numeric",
                                 month: "short",
                                 year: "numeric",
@@ -390,11 +393,7 @@ interface Lead {
                             value={lead.assignedTo}
                         />
 
-                        <InfoRow
-                            icon={User}
-                            label="Sourced by"
-                            value={lead.sourcedby}
-                        />
+                        <InfoRow icon={User} label="Sourced by" value={lead.sourcedby} />
                     </div>
 
                     {lead.status === "lost" && lead.lostReason && (
@@ -403,9 +402,7 @@ interface Lead {
                                 Lost reason
                             </p>
 
-                            <p className="text-sm text-[#7A3B30]">
-                                {lead.lostReason}
-                            </p>
+                            <p className="text-sm text-[#7A3B30]">{lead.lostReason}</p>
                         </div>
                     )}
 
@@ -431,9 +428,7 @@ interface Lead {
                                 </span>
 
                                 <button
-                                    onClick={() =>
-                                        setConfirmDelete(false)
-                                    }
+                                    onClick={() => setConfirmDelete(false)}
                                     disabled={deleting}
                                     className="flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium text-[#5C6D71] border border-[#E5E5E0] hover:bg-[#F7F7F2] transition-colors"
                                 >
@@ -447,10 +442,7 @@ interface Lead {
                                     className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold text-white bg-[#C1523F] hover:bg-[#A8432F] disabled:opacity-60 transition-colors"
                                 >
                                     {deleting ? (
-                                        <Loader2
-                                            size={12}
-                                            className="animate-spin"
-                                        />
+                                        <Loader2 size={12} className="animate-spin" />
                                     ) : (
                                         <Trash2 size={12} />
                                     )}

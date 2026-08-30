@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-interface Lead {
+export interface Lead {
   _id?: string;
   id?: string;
   personId?: string;

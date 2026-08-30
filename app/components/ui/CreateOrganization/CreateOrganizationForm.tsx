@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useAppDispatch } from "@/app/redux/hooks";
 import {
   setActiveOrganization,
@@ -15,6 +15,19 @@ const COMPANY_SIZES = [
   { value: "501-1000", label: "501–1,000 employees" },
   { value: "1000+", label: "1,000+ employees" },
 ];
+interface FieldErrors {
+  name?: string;
+  email?: string;
+  phone?: string;
+}
+interface Organization {
+    _id: string;
+    name: string;
+    inviteCode: string;
+    // add any other fields your API returns, e.g.:
+    // slug: string;
+    // createdAt: string;
+}
 
 export default function CreateOrganizationForm() {
   const dispatch = useAppDispatch();
@@ -22,12 +35,14 @@ export default function CreateOrganizationForm() {
     name: "",
     companySize: "1-10",
   });
-  const [fieldErrors, setFieldErrors] = useState({});
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [createdOrganization, setCreatedOrganization] = useState(null);
+  const [createdOrganization, setCreatedOrganization] = useState<Organization|null>(null);
 
-  const handleChange = (e) => {
+  const handleChange = (e:React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
@@ -37,7 +52,7 @@ export default function CreateOrganizationForm() {
   };
 
   const validate = () => {
-    const errors = {};
+    const errors:FieldErrors = {};
     const trimmedName = form.name.trim();
 
     if (!trimmedName) {
@@ -50,7 +65,7 @@ export default function CreateOrganizationForm() {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
 
@@ -78,7 +93,7 @@ export default function CreateOrganizationForm() {
       dispatch(setOrganizations([org]));
       dispatch(setActiveOrganization(org));
       setCreatedOrganization(org);
-    } catch (err) {
+    } catch (err:any) {
       setError(err.message);
     } finally {
       setLoading(false);

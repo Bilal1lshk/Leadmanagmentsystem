@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { ChartLine } from "lucide-react";
 
 export default function SignupPage() {
@@ -14,14 +14,14 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
 
-  const handleChange = (e) => {
+  const handleChange = (e:ChangeEvent<HTMLInputElement | HTMLTextAreaElement|HTMLSelectElement>) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setSuccess("");
@@ -48,7 +48,7 @@ export default function SignupPage() {
       setTimeout(() => {
         window.location.href = "/login";
       }, 1500);
-    } catch (err) {
+    } catch (err:any) {
       setError(err.message);
     } finally {
       setLoading(false);

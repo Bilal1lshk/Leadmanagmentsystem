@@ -1,6 +1,19 @@
-import mongoose from "mongoose";
+// app/models/user.ts
+import mongoose, { Schema, model, models, Model, Document } from "mongoose";
 
-const userSchema = new mongoose.Schema(
+export type UserRole = "admin" | "agent";
+
+export interface IUser extends Document {
+  name: string;
+  email: string;
+  password: string;
+  role: UserRole;
+  avatar: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const userSchema = new Schema<IUser>(
   {
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
@@ -11,4 +24,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.User || mongoose.model("User", userSchema);
+const User: Model<IUser> = models.User || model<IUser>("User", userSchema);
+
+export default User;

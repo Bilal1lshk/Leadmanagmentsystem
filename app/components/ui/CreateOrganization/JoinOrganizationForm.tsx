@@ -1,9 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
+import { ChangeEvent, useEffect, useState } from "react";
+interface DiscoverableOrganization {
+    _id: string;
+    name: string;
+    companysize: string;
+    // add more fields here if /api/organization/discover returns them
+}
 export default function JoinOrganizationForm() {
-  const [organizations, setOrganizations] = useState([]);
+  const [organizations, setOrganizations] = useState<DiscoverableOrganization[]>([]);
   const [selectedOrganization, setSelectedOrganization] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("loading");
@@ -17,7 +22,7 @@ export default function JoinOrganizationForm() {
         if (!response.ok) throw new Error(data.message || "Unable to load workspaces.");
         setOrganizations(data.organizations);
         setStatus("ready");
-      } catch (loadError) {
+      } catch (loadError:any) {
         setError(loadError.message);
         setStatus("error");
       }
@@ -25,7 +30,7 @@ export default function JoinOrganizationForm() {
     loadOrganizations();
   }, []);
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event:React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
     if (!selectedOrganization) return setError("Select a workspace before sending your request.");
@@ -39,7 +44,7 @@ export default function JoinOrganizationForm() {
       const data = await response.json();
       if (!response.ok || !data.success) throw new Error(data.message || "Unable to send request.");
       setStatus("submitted");
-    } catch (submitError) {
+    } catch (submitError:any) {
       setError(submitError.message);
       setStatus("ready");
     }

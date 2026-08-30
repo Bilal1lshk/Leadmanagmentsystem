@@ -1,7 +1,12 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { NextRequest } from "next/server";
 import connectDB from "@/app/config/mongodbconnection";
-import User from "@/app/models/user";
-import OrganizationMember from "@/app/models/organizationMember";
+import User,{IUser} from "@/app/models/user";
+import OrganizationMember, { IOrganizationMember } from "@/app/models/organizationMember";
+
+interface DecodedToken extends JwtPayload {
+  userId: string;
+}
 
 /**
  * Extracts and verifies the JWT from the HTTP-only "token" cookie,
@@ -10,9 +15,11 @@ import OrganizationMember from "@/app/models/organizationMember";
  * Returns null if the cookie is missing, the token is invalid, or
  * the user no longer exists in the database.
  *
- * @param {Request} request - The incoming Next.js route handler request
+ * @param request - The incoming Next.js route handler request
  */
-export async function getCurrentUser(request) {
+export async function getCurrentUser(
+  request: NextRequest
+): Promise<IUser | null> {
   try {
     const tokenCookie = request.cookies.get("token");
     if (!tokenCookie?.value) return null;
@@ -20,7 +27,7 @@ export async function getCurrentUser(request) {
     const jwtSecret = process.env.JWT_SECRET || process.env.AUTH_SECRET;
     if (!jwtSecret) return null;
 
-    const decoded = jwt.verify(tokenCookie.value, jwtSecret);
+    const decoded = jwt.verify(tokenCookie.value, jwtSecret) as DecodedToken;
     if (!decoded?.userId) return null;
 
     await connectDB();
@@ -32,34 +39,26 @@ export async function getCurrentUser(request) {
   }
 }
 
-/**
- * Returns a 401 JSON response. Use when getCurrentUser() returns null.
- */
-export function unauthorizedResponse(message = "Unauthorized") {
+export function unauthorizedResponse(message: string = "Unauthorized"): Response {
   return Response.json({ success: false, message }, { status: 401 });
 }
 
-/**
- * Returns a 403 JSON response. Use when the user is authenticated
- * but does not have the required role/permission.
- */
-export function forbiddenResponse(message = "Forbidden") {
+
+export function forbiddenResponse(message: string = "Forbidden"): Response {
   return Response.json({ success: false, message }, { status: 403 });
 }
 
-/**
- * Resolves an organization from the request and proves that the current user
- * belongs to it. Clients may send x-organization-id; otherwise the user's
- * first membership is used. This keeps every organization-owned API scoped on
- * the server, never on a client-supplied user id.
- */
-export async function getCurrentOrganization(request, currentUser) {
+export async function getCurrentOrganization(
+  request: NextRequest,
+  currentUser?: IUser | null
+): Promise<IOrganizationMember | null> {
   const user = currentUser || (await getCurrentUser(request));
   if (!user) return null;
 
   const requestedOrganizationId = request.headers.get("x-organization-id");
   await connectDB();
-  const query = { user: user._id };
+
+  const query: Record<string, unknown> = { user: user._id };
   if (requestedOrganizationId) query.organization = requestedOrganizationId;
 
   return OrganizationMember.findOne(query).sort({ createdAt: 1 }).lean();

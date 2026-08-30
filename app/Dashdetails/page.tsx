@@ -4,10 +4,10 @@ import React from "react";
 import Navbar from "@/app/components/ui/Home/Navbar";
 import Footer from "@/app/components/ui/Home/Footer";
 import { ArrowRight, BarChart3, PieChart, TrendingUp, Download, Eye } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion ,type Variants} from "framer-motion";
 
 export default function ReportsPage() {
-  const containerVariants = {
+  const containerVariants:Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -17,7 +17,7 @@ export default function ReportsPage() {
     }
   };
 
-  const itemVariants = {
+  const itemVariants:Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
   };
