@@ -19,8 +19,10 @@ export async function GET(request: NextRequest) {
     await connectDB();
 
     const memberships = await OrganizationMember.find({ user: currentUser._id })
-      .populate("organization")
-      .sort({ createdAt: -1 });
+      .populate({
+        path: "organization",
+        model: Organization,
+      }).sort({ createdAt: -1 });
 
     const organizations = memberships
       .filter((m) => m.organization)
