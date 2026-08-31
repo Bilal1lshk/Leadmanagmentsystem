@@ -163,18 +163,7 @@ export default function PipelineDashboard() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="relative">
-              <Search
-                size={15}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-[#5C6D71]"
-              />
-              <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search leads..."
-                className="pl-9 pr-3 py-2 rounded-xl border border-[#E5CB90]/60 bg-white text-sm text-[#22303A] placeholder:text-slate-400 focus:outline-none focus:border-[#458393] w-52"
-              />
-            </div>
+            
             <button
               onClick={refresh}
               disabled={loading}
