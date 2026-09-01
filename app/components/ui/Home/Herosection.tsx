@@ -1,5 +1,5 @@
-import { useAppSelector } from "@/app/redux/hooks";
-
+import Image from "next/image";
+import { useAppSelector } from "@/app/redux/hooks"
 export default function HeroSection() {
   const { user } = useAppSelector((state) => state.auth);
   console.log(user, "herosection")
@@ -75,10 +75,7 @@ export default function HeroSection() {
         <div className="rounded-2xl border border-[#E5CB90]/60 bg-white p-4 shadow-sm">
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[#458393]">
-                <span className="text-xs font-medium text-white">L</span>
-              </div>
-              <span className="text-sm font-medium text-[#22303A]">Leadwise</span>
+              <Image src="/favicon.ico" alt="Leadwise" width={24} height={24} />
             </div>
             <div className="hidden w-40 rounded-md border border-[#E5E5E0] px-2 py-1 text-xs text-[#8A8A82] sm:block">
               Search

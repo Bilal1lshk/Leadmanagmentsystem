@@ -1,7 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
-import { ChartLine, Building2 } from "lucide-react";
+import { Building2 } from "lucide-react";
 import CreateOrganizationForm from "./CreateOrganizationForm";
 import JoinOrganizationForm from "./JoinOrganizationForm";
 
@@ -15,10 +16,7 @@ export default function CreateOrganizationOnboarding() {
       <div className="relative z-10 grid w-full max-w-4xl grid-cols-1 overflow-hidden rounded-2xl border border-[#E5CB90] bg-white shadow-[0_20px_60px_-15px_rgba(69,131,147,0.25)] md:grid-cols-2">
         <div className="hidden flex-col justify-between bg-[#458393] p-10 md:flex">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#FFF3C8]">
-              <ChartLine className="h-4 w-4 text-[#458393]" />
-            </div>
-            <span className="text-lg font-medium text-white">Leadwise</span>
+            <Image src="/favicon.ico" alt="Leadwise" width={32} height={32} />
           </div>
 
           <div>
@@ -40,10 +38,7 @@ export default function CreateOrganizationOnboarding() {
 
         <div className="p-8 md:p-10">
           <div className="mb-6 flex items-center gap-2 md:hidden">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#458393]">
-              <ChartLine className="h-4 w-4 text-[#FFF3C8]" />
-            </div>
-            <span className="text-lg font-medium text-[#2A3F45]">Leadwise</span>
+            <Image src="/favicon.ico" alt="Leadwise" width={32} height={32} />
           </div>
 
           <h1 className="text-2xl font-medium text-[#2A3F45]">{mode === "create" ? "Set up your workspace" : "Join a workspace"}</h1>

@@ -1,4 +1,5 @@
 "use client"
+import Image from "next/image";
 import {
   LayoutDashboard,
   Users,
@@ -6,7 +7,6 @@ import {
   MessageCircle,
   BarChart3,
   Settings,
-  TrendingUp,
   FileDown 
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
@@ -90,13 +90,7 @@ export default function Sidebar() {
 
       {/* Logo */}
       <div className="flex items-center gap-2 px-2 pb-5">
-        <div className="w-8 h-8 rounded-lg bg-[#458393] flex items-center justify-center">
-          <TrendingUp size={16} className="text-[#FFF3C8]" />
-        </div>
-
-        <span className="font-bold text-[17px] text-[#2A3F45]">
-          Leadwise
-        </span>
+        <Image src="/favicon.ico" alt="Leadwise" width={32} height={32} />
       </div>
 
       {/* Navigation */}

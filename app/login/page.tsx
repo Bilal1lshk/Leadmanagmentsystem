@@ -1,7 +1,7 @@
 "use client";
 
+import Image from "next/image";
 import { ChangeEvent, FormEvent, useState } from "react";
-import { ChartLine } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { signIn } from "next-auth/react";
 import { useAppDispatch } from "@/app/redux/hooks";
@@ -78,13 +78,7 @@ export default function Login() {
 
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#FFF3C8]">
-              <ChartLine className="h-4 w-4 text-[#458393]" />
-            </div>
-
-            <span className="text-lg font-medium text-white">
-              Leadwise
-            </span>
+            <Image src="/favicon.ico" alt="Leadwise" width={32} height={32} />
           </div>
 
           {/* Content */}

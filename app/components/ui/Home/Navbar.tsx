@@ -1,6 +1,6 @@
 "use client";
 
-import { ChartLine } from "lucide-react";
+import Image from "next/image";
 import { useAppSelector } from "@/app/redux/hooks";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -25,10 +25,7 @@ export default function Navbar() {
   return (
     <nav className="flex items-center justify-between gap-4 rounded-xl bg-[#FFF3C8] px-5 py-3.5 flex-wrap">
       <div className="flex items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#458393]">
-          <ChartLine className="h-4.5 w-4.5 text-[#FFF3C8]" />
-        </div>
-        <span className="text-[17px] font-medium text-[#2A3F45]">Leadwise</span>
+        <Image src="/favicon.ico" alt="Leadwise" width={32} height={32} />
       </div>
 
       <div className="hidden items-center gap-7 md:flex">

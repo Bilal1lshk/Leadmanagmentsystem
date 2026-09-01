@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { CiLinkedin ,CiMail } from "react-icons/ci";
 import { FaTwitter,FaGithub,FaArrowUp } from "react-icons/fa";
 
@@ -28,13 +29,8 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#458393] text-white">
-                <span className="text-sm font-bold">L</span>
-              </div>
-
-              <span className="text-lg font-semibold tracking-tight text-[#22303A]">
-                Leadwise
-              </span>
+              <Image src="/favicon.ico" alt="Leadwise" width={36} height={36} />
+              <span className="text-lg font-semibold tracking-tight text-[#22303A]" style={{display: "none"}}>Leadwise</span>
             </Link>
 
             <p className="mt-5 max-w-md text-sm leading-6 text-[#4A5A5F]">
