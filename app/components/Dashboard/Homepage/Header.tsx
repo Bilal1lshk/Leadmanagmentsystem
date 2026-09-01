@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, Bell, ChevronDown } from "lucide-react";
+import { Search, Bell, ChevronDown, Settings } from "lucide-react";
 import Link from "next/link";
 import Notifications from "../../ui/Notification/Notification";
 import { Dispatch, SetStateAction } from "react";
@@ -42,10 +42,13 @@ export default function Header({ name = "Bilal", title, searchValue, onSearchCha
         </div>
 
         <div className="flex items-center gap-1.5">
-          <div className="w-8 h-8 rounded-full bg-[#458393] flex items-center justify-center text-[13px] font-bold text-[#FFF3C8]">
-            B
-          </div>
-          <ChevronDown size={14} className="text-[#5C6D71]" />
+          <Link
+            href="/dashboard/settings"
+            aria-label="Open settings"
+            className="w-8 h-8 rounded-full bg-[#458393] flex items-center justify-center text-[#FFF3C8] transition hover:opacity-90"
+          >
+            <Settings size={16} />
+          </Link>
         </div>
       </div>
     </div>
