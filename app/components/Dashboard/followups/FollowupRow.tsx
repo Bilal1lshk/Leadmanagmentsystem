@@ -1,6 +1,7 @@
 import { MoreHorizontal } from "lucide-react";
 import { Followup, statusConfig } from "@/app/dashboard/followups/page";
 import formatDate from "@/app/components/Dashboard/followups/Formatdate";
+import Link from "next/link";
 
 export default function FollowupRow({
   followup,
@@ -71,7 +72,7 @@ export default function FollowupRow({
               className="h-8 w-8 rounded-full object-cover"
             />
           ) : (
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-xs font-semibold text-blue-700">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full  text-xs font-semibold text-blue-700">
               {avatarLetter}
             </div>
           )}
@@ -96,13 +97,16 @@ export default function FollowupRow({
       </td>
 
       {/* Status Badge */}
-      <td className="px-4 py-4">
-        <span
-          className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${status.className}`}
-        >
-          {status.label}
-        </span>
-      </td>
+    <td className="px-4 py-4">
+  <span
+    className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold"
+  >
+    <span
+      className="w-1.5 h-1.5 rounded-full"
+    />
+    {status.label}
+  </span>
+</td>
 
       {/* Comments */}
       <td className="max-w-[280px] px-4 py-4">
@@ -117,12 +121,21 @@ export default function FollowupRow({
       {/* Actions */}
       <td className="relative px-4 py-4">
         <div className="flex items-center gap-2 whitespace-nowrap">
-          <button
-            onClick={onEdit}
+          <Link
+            href={`/dashboard/followups/view/${followup._id}`}
+            className="text-sm font-medium text-blue-700 hover:underline"
+          >
+            View
+          </Link>
+
+          <span className="text-gray-300">|</span>
+
+          <Link
+            href={`/dashboard/followups/${followup._id}`}
             className="text-sm font-medium text-blue-700 hover:underline"
           >
             Edit
-          </button>
+          </Link>
 
           <span className="text-gray-300">|</span>
 

@@ -71,19 +71,19 @@ export const statusConfig: Record<
 > = {
   pending: {
     label: "Pending",
-    className: "bg-yellow-100 text-yellow-800",
+    className: "bg-[#E9ECEE] text-[#3D4D51]",
   },
   completed: {
     label: "Completed",
-    className: "bg-green-100 text-green-800",
+    className: "bg-[#3C8F6B] text-white",
   },
   missed: {
     label: "Missed",
-    className: "bg-red-100 text-red-800",
+    className: "bg-[#C1523F] text-white",
   },
   rescheduled: {
     label: "Rescheduled",
-    className: "bg-blue-100 text-blue-800",
+    className: "bg-[#C9A24A] text-white",
   },
 };
 
@@ -99,7 +99,7 @@ export default function FollowupsPage({
 }: FollowupsPageProps) {
   const [search, setSearch] = useState("");
   const [data, setdata] = useState<Followup[]>([]);
-  const [loading, setLoading] = useState(initialLoading || true);
+  const [loading, setLoading] = useState<boolean>(initialLoading ?? true);
   const [error, setError] = useState<string | null>(initialError);
   const [status, setStatus] = useState<"all" | FollowupStatus>("all");
   const [dateFilter, setDateFilter] = useState("all");
@@ -303,7 +303,7 @@ export default function FollowupsPage({
               onChange={(event) =>
                 setStatus(event.target.value as "all" | FollowupStatus)
               }
-              className="h-10 rounded-lg border border-gray-300 bg-white px-3 text-sm outline-none focus:border-blue-500"
+              className="h-10 rounded-lg border border-gray-300 bg-white px-2 text-sm outline-none focus:border-blue-500"
             >
               <option value="all">All Statuses</option>
               <option value="pending">Pending</option>
@@ -324,13 +324,12 @@ export default function FollowupsPage({
               <option value="this-week">This Week</option>
               <option value="overdue">Overdue</option>
             </select>
-
             {/* Create Button */}
             <Link href="/dashboard/followups/create">
               <button
                 type="button"
                 onClick={onCreate}
-                className="inline-flex h-10 w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition hover:bg-blue-700"
+                className="inline-flex h-10 w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-[#458393] px-4 text-sm font-medium text-white transition hover:bg-[#3A7180]"
               >
                 <Plus size={18} />
                 New Follow-up

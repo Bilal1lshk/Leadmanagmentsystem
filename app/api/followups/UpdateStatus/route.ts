@@ -11,7 +11,8 @@ export async function PATCH(request: NextRequest) {
     if (!membership) return NextResponse.json({ message: "Select a workspace first." }, { status: 403 });
 
     await connectDB();
-    const { id, status, duedate } = await request.json();
+    const body = await request.json();
+    const { id, lead, comments, duedate, assignedTo, status } = body;
 
     if (!id) {
       return NextResponse.json({ message: "Follow-up ID is required" }, { status: 400 });
@@ -20,6 +21,9 @@ export async function PATCH(request: NextRequest) {
     const updatePayload: Record<string, any> = {};
     if (status) updatePayload.status = status;
     if (duedate) updatePayload.duedate = duedate;
+    if (comments !== undefined) updatePayload.comments = comments;
+    if (lead) updatePayload.lead = lead;
+    if (assignedTo) updatePayload.assignedTo = assignedTo;
 
     const updated = await FollowUp.findOneAndUpdate(
       { _id: id, organization: membership.organization },
@@ -34,9 +38,13 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ message: "Follow-up not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ data: updated, message: "Follow-up status updated", success: true });
+    return NextResponse.json({ data: updated, followup: updated, message: "Follow-up updated", success: true });
   } catch (err) {
     console.error("Update followup error:", err);
     return NextResponse.json({ message: "Failed to update follow-up" }, { status: 500 });
   }
+}
+
+export async function PUT(request: NextRequest) {
+  return PATCH(request);
 }

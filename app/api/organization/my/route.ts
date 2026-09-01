@@ -3,12 +3,6 @@ import connectDB from "@/app/config/mongodbconnection";
 import OrganizationMember from "@/app/models/organizationMember";
 import Organization from "@/app/models/organization";
 import { getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
-
-/**
- * GET /api/organization/my
- *
- * Returns all organizations the authenticated user belongs to.
- */
 export async function GET(request: NextRequest) {
   try {
     const currentUser = await getCurrentUser(request);
