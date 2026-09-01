@@ -56,6 +56,7 @@ export default function SettingsPage() {
     role: "employee",
   });
   const [addingMember, setAddingMember] = useState<boolean>(false);
+  const [loggingOut, setLoggingOut] = useState<boolean>(false);
 
   useEffect(() => {
     if (organization && organization.role !== "Admin") {
@@ -156,6 +157,21 @@ export default function SettingsPage() {
       } else {
         setError("Unable to update position.");
       }
+    }
+  }
+
+  async function handleLogout() {
+    try {
+      setLoggingOut(true);
+      await axios.post("/api/auth/logout");
+      router.push("/login");
+    } catch (logoutError) {
+      if (isAxiosError(logoutError)) {
+        setError(logoutError.response?.data?.message || "Unable to logout.");
+      } else {
+        setError("Unable to logout.");
+      }
+      setLoggingOut(false);
     }
   }
 
@@ -260,7 +276,7 @@ export default function SettingsPage() {
                 </button>
               </form>
             </section>
-            <section className="mt-6">
+            <section className="mt-6 border-b border-[#E5CB90]/70 pb-8">
               <h2 className="text-lg font-semibold">Join requests</h2>
               <div className="mt-3 space-y-3">
                 {requests.length === 0 ? (
@@ -297,6 +313,21 @@ export default function SettingsPage() {
                     </div>
                   ))
                 )}
+              </div>
+            </section>
+            <section className="mt-6">
+              <h2 className="text-lg font-semibold">Account</h2>
+              <p className="mt-1 text-sm text-[#5C6D71]">
+                Manage your account settings and logout.
+              </p>
+              <div className="mt-4">
+                <button
+                  onClick={handleLogout}
+                  disabled={loggingOut}
+                  className="rounded-lg border border-red-300 bg-red-50 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-100 disabled:opacity-50"
+                >
+                  {loggingOut ? "Logging out..." : "Logout"}
+                </button>
               </div>
             </section>
           </>

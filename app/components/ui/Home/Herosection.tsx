@@ -1,4 +1,8 @@
+import { useAppSelector } from "@/app/redux/hooks";
+
 export default function HeroSection() {
+  const { user } = useAppSelector((state) => state.auth);
+  console.log(user, "herosection")
   const columns = [
     {
       title: "New lead",
@@ -54,9 +58,16 @@ export default function HeroSection() {
             <a href="/signup" className="rounded-lg bg-[#458393] px-6 py-3 text-sm font-medium text-white">
               Get started free
             </a>
-            <a href="/login" className="rounded-lg border border-[#E5CB90] bg-transparent px-6 py-3 text-sm font-medium text-[#22303A] hover:bg-white/60">
-              Log in
-            </a>
+            {
+              user ? (
+                <a href="/dashboard" className="rounded-lg border border-[#458393] px-6 py-3 text-sm font-medium text-[#458393]">
+                  Go to dashboard
+                </a>
+              ) : (
+                <a href="/login" className="rounded-lg border border-[#458393] px-6 py-3 text-sm font-medium text-[#458393]">
+                  Log in
+                </a>
+              )}
           </div>
         </div>
 

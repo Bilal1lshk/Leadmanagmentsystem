@@ -53,6 +53,8 @@ function Donut({
         />
 
         {data.map((item, index) => {
+          if (item.pct <= 0) return null;
+
           const dash = (item.pct / 100) * circumference;
           const currentOffset = offset;
 
@@ -158,7 +160,7 @@ export default function LeadSourcesChart() {
       label: "Cold Call",
       count: getCount("cold_call"),
       pct: getPercentage(getCount("cold_call")),
-      color: "#2A3F45",
+      color: "#F59E0B",
       icon: Phone,
     },
     {
@@ -175,9 +177,7 @@ export default function LeadSourcesChart() {
   )[0];
 
   return (
-    <div className="space-y-5">
-
-      {/* ================= HEADER ================= */}
+    <div className="space-y-5 my-2.5">
 
       <motion.div
         initial={{ opacity: 0, y: 15 }}
@@ -188,7 +188,7 @@ export default function LeadSourcesChart() {
           <div className="flex items-center gap-2 mb-2">
             <span className="h-2 w-2 rounded-full bg-[#34A99D]" />
 
-            <span className="text-[10px] font-bold tracking-[0.16em] uppercase text-[#7A898D]">
+            <span className="text-[10px] pt-5 font-bold tracking-[0.16em] uppercase text-[#7A898D]">
               Acquisition Analytics
             </span>
           </div>
@@ -216,7 +216,6 @@ export default function LeadSourcesChart() {
         </div>
       </motion.div>
 
-      {/* ================= MAIN ANALYTICS ================= */}
 
       <Card>
         <div className="grid lg:grid-cols-[1fr_1.4fr] gap-10">
