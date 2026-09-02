@@ -14,10 +14,10 @@ export default function PageActions({ onNewTask, onExport, onRefresh }: PageActi
       <button
         type="button"
         onClick={onNewTask}
-        className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+        className="flex items-center gap-1.5 rounded-lg  px-4 py-2 text-sm font-medium text-black bg-white"
       >
         <Plus className="h-4 w-4" />
-       <a href="/dashboard/task/newtask" className="text-white hover:text-blue-200">
+       <a href="/dashboard/task/newtask" className="text-black font-bold hover:text-blue-200">
           New Task
         </a>
       </button>

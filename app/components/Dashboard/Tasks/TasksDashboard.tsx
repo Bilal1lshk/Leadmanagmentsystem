@@ -171,7 +171,7 @@ export default function TasksDashboard() {
         <TopHeader title="Tasks" searchValue={headerSearch} onSearchChange={setHeaderSearch} />
 
         <div className="flex flex-1 overflow-hidden">
-          <main className="flex-1 overflow-y-auto pb-6">
+          <main className="flex-1 min-h-full overflow-y-auto scrollbar-hide">
             <PageActions />
             <StatsGrid stats={statCards} />
 

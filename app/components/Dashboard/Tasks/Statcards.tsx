@@ -2,14 +2,31 @@
 
 import { FileText, Clock, Loader2, CheckCircle2, ArrowUp, ArrowDown } from "lucide-react";
 import { StatCardData } from "./Types";
-
 const iconByKind = {
-  total: { Icon: FileText, bg: "bg-blue-50", fg: "text-blue-600" },
-  pending: { Icon: Clock, bg: "bg-amber-50", fg: "text-amber-600" },
-  inProgress: { Icon: Loader2, bg: "bg-sky-50", fg: "text-sky-600" },
-  completed: { Icon: CheckCircle2, bg: "bg-emerald-50", fg: "text-emerald-600" },
-} as const;
+  total: {
+    Icon: FileText,
+    bg: "bg-[#DBEAFE]",
+    fg: "text-[#1D4ED8]",
+  },
 
+  pending: {
+    Icon: Clock,
+    bg: "bg-[#FEF3C7]",
+    fg: "text-[#B45309]",
+  },
+
+  inProgress: {
+    Icon: Loader2,
+    bg: "bg-[#DBEAFE]",
+    fg: "text-[#1E40AF]",
+  },
+
+  completed: {
+    Icon: CheckCircle2,
+    bg: "bg-[#FEF3C7]",
+    fg: "text-[#A16207]",
+  },
+} as const;
 export default function StatCard({ label, value, changePct, changeDirection, kind }: StatCardData) {
   const { Icon, bg, fg } = iconByKind[kind];
   const isUp = changeDirection === "up";
@@ -23,14 +40,7 @@ export default function StatCard({ label, value, changePct, changeDirection, kin
       </div>
       <div className="flex items-end justify-between">
         <span className="text-3xl font-semibold text-slate-900">{value}</span>
-        <span
-          className={`flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-xs font-medium ${
-            isUp ? "bg-emerald-50 text-emerald-600" : "bg-amber-50 text-amber-600"
-          }`}
-        >
-          {isUp ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />}
-          {changePct}
-        </span>
+        
       </div>
     </div>
   );
