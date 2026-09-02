@@ -5,6 +5,8 @@ import Integrations from "./Integration"
 import AIFeatures from './AIFeatures';
 import ProductOverview from './ProductOverview';
 import Footer from './Footer';
+import ChatbotWidget from "../ChatbotWidget";
+
 export default function Home() {
     return (
         <>
@@ -15,7 +17,7 @@ export default function Home() {
             <AIFeatures />
             <ProductOverview />
             <Footer/>
-
+            <ChatbotWidget />
         </>
     )
 }

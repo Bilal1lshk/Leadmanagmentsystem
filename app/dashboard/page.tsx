@@ -9,6 +9,7 @@ import LeadSourcesChart from "../components/Dashboard/Homepage/Leadsourcechart";
 import FollowUps from "../components/Dashboard/Homepage/Followup";
 import LeadsChart from "../components/Dashboard/Homepage/Leadchart";
 import LeadPriority from "../components/Dashboard/Homepage/Leadpriority";
+import ChatbotWidget from "../components/ui/ChatbotWidget";
 
 export default function Dashboard() {
   return (
@@ -37,6 +38,8 @@ export default function Dashboard() {
           <LeadPriority />
         </div>
       </main>
+
+      <ChatbotWidget />
     </div>
   );
 }
