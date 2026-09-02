@@ -36,7 +36,7 @@ function Donut({
   let offset = 0;
 
   return (
-    <div className="relative flex items-center justify-center">
+    <div className="relative  flex items-center justify-center">
       <svg
         width={size}
         height={size}
@@ -177,7 +177,7 @@ export default function LeadSourcesChart() {
   )[0];
 
   return (
-    <div className="space-y-5 my-2.5">
+    <div className="space-y-5 m-2 my-2.5">
 
       <motion.div
         initial={{ opacity: 0, y: 15 }}

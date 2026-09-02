@@ -1,6 +1,7 @@
 "use client"
 import Image from "next/image";
 import {
+  Home,
   LayoutDashboard,
   Users,
   KanbanSquare,
@@ -13,13 +14,12 @@ import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { setAllLeads } from "@/app/redux/leads";
 import { clearAuth } from "@/app/redux/auth";
 
-
-
 import Link from "next/link";
 import { useEffect } from "react";
 import axios from "axios";
 
 const navItems = [
+ 
   {
     icon: LayoutDashboard,
     label: "Dashboard",
@@ -55,6 +55,10 @@ const navItems = [
     label: "Settings",
     link: "/dashboard/settings",
     adminOnly: true,
+  }, {
+    icon: Home,
+    label: "Return",
+    link: "/",
   },
   
 ];
@@ -86,7 +90,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="w-56 min-h-screen mr-3 bg-white border-r border-[#E5CB90]/60 p-3.5 flex justify-start flex-col gap-1">
+    <aside className="w-56 min-h-screen  bg-white border-r border-[#E5CB90]/60 p-3.5 flex justify-start flex-col gap-1">
 
       {/* Logo */}
       <div className="flex items-center gap-2 px-2 pb-5">

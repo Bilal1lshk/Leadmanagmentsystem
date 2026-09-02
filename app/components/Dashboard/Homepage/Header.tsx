@@ -14,7 +14,7 @@ interface HeaderProps {
 
 export default function Header({ name = "Bilal", title, searchValue, onSearchChange }: HeaderProps) {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center p-4 justify-between">
       <div>
         <h1 className="text-2xl font-bold text-[#22303A] m-0">
           {title || `Good morning, ${name} 👋`}

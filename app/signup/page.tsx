@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { FcGoogle } from "react-icons/fc";
+import { signIn } from "next-auth/react";
 
 export default function SignupPage() {
   const [form, setForm] = useState({
@@ -21,7 +23,7 @@ export default function SignupPage() {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setSuccess("");
@@ -43,13 +45,13 @@ export default function SignupPage() {
       }
 
       setSuccess("Account created successfully!");
-      
-      // Redirect after brief delay
+
       setTimeout(() => {
         window.location.href = "/login";
       }, 1500);
-    } catch (err:any) {
-      setError(err.message);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to sign up";
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -114,9 +116,26 @@ export default function SignupPage() {
             </div>
           )}
 
+          <div className="mt-7 animate-[fadeIn_0.35s_ease-out]">
+            <button
+              type="button"
+              onClick={() => signIn("google", { callbackUrl: "/" })}
+              className="flex w-full items-center justify-center gap-3 rounded-lg border border-[#E5CB90] bg-white py-2.5 text-sm font-medium text-[#2A3F45] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#F8FAFC] hover:shadow-md active:scale-[0.98]"
+            >
+              <FcGoogle className="h-5 w-5" />
+              Continue with Google
+            </button>
+
+            <div className="my-5 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-[#E5CB90] after:mt-0.5 after:flex-1 after:border-t after:border-[#E5CB90]">
+              <p className="mx-4 mb-0 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8A8A82]">
+                Or
+              </p>
+            </div>
+          </div>
+
           <form
             onSubmit={handleSubmit}
-            className="mt-7 flex flex-col gap-4"
+            className="flex flex-col gap-4"
           >
 
             {/* Full Name */}
