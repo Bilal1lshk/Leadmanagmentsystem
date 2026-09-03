@@ -44,7 +44,7 @@ export default function HeroSection() {
       <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-2">
         {/* Left: copy */}
         <div>
-          <h1 className="font-serif text-5xl font-medium leading-tight text-[#22303A] md:text-6xl">
+          <h1 className="font-serif text-3xl md:text-5xl font-medium leading-tight text-[#22303A] md:text-6xl">
             Track leads,<br />not spreadsheets.
           </h1>
 
@@ -84,7 +84,7 @@ export default function HeroSection() {
 
           <p className="mb-3 text-base font-medium text-[#22303A]">Pipeline</p>
 
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {columns.map((col) => (
               <div key={col.title}>
                 <p className="mb-2 text-xs font-medium text-[#5C6D71]">
