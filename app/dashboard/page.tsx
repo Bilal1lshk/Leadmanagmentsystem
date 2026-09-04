@@ -13,13 +13,13 @@ import ChatbotWidget from "../components/ui/ChatbotWidget";
 
 export default function Dashboard() {
   return (
-    <div className="flex min-h-screen bg-[#FFF3C8] text-[#22303A] font-sans">
-      <main className="flex-1 p-6 flex flex-col gap-4">
+    <div className="flex min-h-full w-full bg-[#FFF3C8] font-sans text-[#22303A]">
+      <main className="flex min-h-full min-w-0 flex-1 flex-col gap-4 p-4 sm:p-5 lg:p-6">
         <Header />
 
         <StatCards />
 
-        <div className="grid grid-cols-[2.4fr_1fr] gap-3.5">
+        <div className="grid min-w-0 grid-cols-1 gap-3.5 lg:grid-cols-[2.4fr_1fr]">
           <PipelineBoard />
           <div className="flex flex-col gap-3.5">
             <AIInsights />
@@ -27,12 +27,12 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="grid grid-cols-[2.4fr_1fr] gap-3.5">
+        <div className="grid min-w-0 grid-cols-1 gap-3.5 lg:grid-cols-[2.4fr_1fr]">
           <RecentLeadsTable />
           <LeadSourcesChart />
         </div>
 
-        <div className="grid grid-cols-[1fr_1.6fr_1fr] gap-3.5">
+        <div className="grid min-w-0 grid-cols-1 gap-3.5 lg:grid-cols-[1fr_1.6fr_1fr]">
           <FollowUps />
           <LeadsChart />
           <LeadPriority />

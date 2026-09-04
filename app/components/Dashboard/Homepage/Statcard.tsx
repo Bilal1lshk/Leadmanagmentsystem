@@ -21,7 +21,7 @@ export default function StatCards() {
     { icon: CheckCircle2, color: "text-[#34A99D]", label: "Conversion Rate", value: `${converationrate}%`  },
   ];
   return (
-    <div className="grid grid-cols-5 gap-3.5">
+    <div className="grid grid-cols-1 md:grid-cols-5 gap-3.5">
       {stats.map((s) => (
         <Card key={s.label}>
           <div className="flex items-center gap-2 mb-2.5">
