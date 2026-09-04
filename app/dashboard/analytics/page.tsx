@@ -36,11 +36,12 @@ function Donut({
   let offset = 0;
 
   return (
-    <div className="relative  flex items-center justify-center">
+    <div className="relative flex h-full w-full items-center justify-center">
       <svg
         width={size}
         height={size}
         viewBox={`0 0 ${size} ${size}`}
+        className="max-w-full"
       >
         {/* Background */}
         <circle
@@ -70,9 +71,7 @@ function Donut({
               stroke={item.color}
               strokeWidth={thickness}
               strokeLinecap="round"
-              strokeDasharray={`${dash} ${
-                circumference - dash
-              }`}
+              strokeDasharray={`${dash} ${circumference - dash}`}
               strokeDashoffset={-currentOffset}
               transform={`rotate(-90 ${size / 2} ${size / 2})`}
               initial={{
@@ -81,9 +80,7 @@ function Donut({
               }}
               animate={{
                 opacity: 1,
-                strokeDasharray: `${dash} ${
-                  circumference - dash
-                }`,
+                strokeDasharray: `${dash} ${circumference - dash}`,
               }}
               transition={{
                 duration: 1,
@@ -101,17 +98,17 @@ function Donut({
           initial={{ opacity: 0, scale: 0.7 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="text-[42px] font-bold tracking-[-0.04em] text-[#22303A]"
+          className="text-[32px] font-bold tracking-[-0.04em] text-[#22303A] sm:text-[38px] lg:text-[42px]"
         >
           {data.reduce((sum, item) => sum + item.count, 0)}
         </motion.span>
 
-        <span className="text-xs font-medium text-[#7A898D]">
+        <span className="text-[10px] font-medium text-[#7A898D] sm:text-xs">
           Total Leads
         </span>
 
-        <div className="flex items-center gap-1 mt-2 text-[10px] font-semibold text-[#34A99D]">
-          <TrendingUp size={11} />
+        <div className="mt-1.5 flex items-center gap-1 text-[9px] font-semibold text-[#34A99D] sm:mt-2 sm:text-[10px]">
+          <TrendingUp size={10} />
           Live data
         </div>
       </div>
@@ -120,9 +117,7 @@ function Donut({
 }
 
 export default function LeadSourcesChart() {
-  const lead = useAppSelector(
-    (store) => store.LeadSlice.Lead
-  );
+  const lead = useAppSelector((store) => store.LeadSlice.Lead);
 
   const totalLeads = lead.length;
 
@@ -177,57 +172,52 @@ export default function LeadSourcesChart() {
   )[0];
 
   return (
-    <div className="space-y-5 m-2 my-2.5">
-
+    <div className="w-full min-w-0 space-y-5 px-2 py-2.5 sm:px-3">
+      {/* HEADER */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-end justify-between"
+        className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-end sm:justify-between"
       >
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <span className="h-2 w-2 rounded-full bg-[#34A99D]" />
+        <div className="min-w-0">
+          <div className="mb-2 flex items-center gap-2">
+            <span className="h-2 w-2 shrink-0 rounded-full bg-[#34A99D]" />
 
-            <span className="text-[10px] pt-5 font-bold tracking-[0.16em] uppercase text-[#7A898D]">
+            <span className="text-[9px] font-bold uppercase tracking-[0.14em] text-[#7A898D] sm:text-[10px] sm:tracking-[0.16em]">
               Acquisition Analytics
             </span>
           </div>
 
-          <h1 className="text-[32px] font-bold tracking-[-0.035em] text-[#22303A]">
-            Where your leads
-            <span className="text-[#458393]">
-              {" "}come from.
-            </span>
+          <h1 className="text-[25px] font-bold leading-tight tracking-[-0.035em] text-[#22303A] sm:text-[28px] lg:text-[32px]">
+            Where your leads{" "}
+            <span className="text-[#458393]">come from.</span>
           </h1>
 
-          <p className="mt-2 max-w-xl text-sm leading-relaxed text-[#7A898D]">
-            Understand which channels are bringing prospects
-            into your pipeline and identify where your sales
-            efforts are performing best.
+          <p className="mt-2 max-w-xl text-xs leading-relaxed text-[#7A898D] sm:text-sm">
+            Understand which channels are bringing prospects into your
+            pipeline and identify where your sales efforts are performing
+            best.
           </p>
         </div>
 
-        <div className="hidden md:flex items-center gap-2 rounded-xl border border-[#E5EAEB] bg-white px-3 py-2">
-          <div className="h-2 w-2 rounded-full bg-[#34A99D]" />
+        <div className="flex w-fit shrink-0 items-center gap-2 rounded-xl border border-[#E5EAEB] bg-white px-3 py-2">
+          <div className="h-2 w-2 shrink-0 rounded-full bg-[#34A99D]" />
 
-          <span className="text-xs font-medium text-[#5C6D71]">
+          <span className="whitespace-nowrap text-[10px] font-medium text-[#5C6D71] sm:text-xs">
             Tracking {totalLeads} leads
           </span>
         </div>
       </motion.div>
 
-
+      {/* MAIN CARD */}
       <Card>
-        <div className="grid lg:grid-cols-[1fr_1.4fr] gap-10">
-
+        <div className="grid min-w-0 grid-cols-1 gap-8 lg:grid-cols-[minmax(280px,0.9fr)_minmax(0,1.4fr)] lg:gap-10">
           {/* DONUT */}
-
-          <div className="flex flex-col items-center justify-center py-6">
-
-            <div className="relative">
-
+          <div className="flex min-w-0 flex-col items-center justify-center py-4 sm:py-6">
+            <div className="relative flex w-full max-w-[280px] items-center justify-center">
+              {/* Glow */}
               <motion.div
-                className="absolute inset-10 rounded-full bg-[#34A99D]/10 blur-3xl"
+                className="absolute inset-[12%] rounded-full bg-[#34A99D]/10 blur-3xl"
                 animate={{
                   scale: [1, 1.08, 1],
                   opacity: [0.4, 0.6, 0.4],
@@ -238,33 +228,41 @@ export default function LeadSourcesChart() {
                 }}
               />
 
-              <Donut data={sources} />
-
+              <div className="relative w-full">
+                <div className="mx-auto aspect-square w-[210px] sm:w-[240px] lg:w-[280px]">
+                  <Donut
+                    data={sources}
+                    size={280}
+                    thickness={34}
+                  />
+                </div>
+              </div>
             </div>
 
+            {/* TOP SOURCE */}
             {topSource && topSource.count > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
-                className="mt-5 flex items-center gap-2 rounded-full border border-[#E5EAEB] bg-[#F8FAFA] px-3 py-1.5"
+                className="mt-4 flex max-w-full items-center gap-1.5 rounded-full border border-[#E5EAEB] bg-[#F8FAFA] px-2.5 py-1.5 sm:mt-5 sm:gap-2 sm:px-3"
               >
                 <span
-                  className="h-2 w-2 rounded-full"
+                  className="h-2 w-2 shrink-0 rounded-full"
                   style={{
                     backgroundColor: topSource.color,
                   }}
                 />
 
-                <span className="text-[11px] text-[#7A898D]">
+                <span className="text-[10px] text-[#7A898D] sm:text-[11px]">
                   Top source:
                 </span>
 
-                <span className="text-[11px] font-semibold text-[#22303A]">
+                <span className="truncate text-[10px] font-semibold text-[#22303A] sm:text-[11px]">
                   {topSource.label}
                 </span>
 
-                <span className="text-[11px] font-bold text-[#458393]">
+                <span className="shrink-0 text-[10px] font-bold text-[#458393] sm:text-[11px]">
                   {topSource.pct}%
                 </span>
               </motion.div>
@@ -272,22 +270,18 @@ export default function LeadSourcesChart() {
           </div>
 
           {/* SOURCE BREAKDOWN */}
-
-          <div className="flex flex-col justify-center">
-
-            <div className="mb-5">
-              <h2 className="text-lg font-semibold text-[#22303A]">
+          <div className="flex min-w-0 flex-col justify-center">
+            <div className="mb-4 sm:mb-5">
+              <h2 className="text-base font-semibold text-[#22303A] sm:text-lg">
                 Lead Source Breakdown
               </h2>
 
-              <p className="mt-1 text-xs text-[#7A898D]">
-                Distribution of leads across your acquisition
-                channels.
+              <p className="mt-1 text-[11px] leading-relaxed text-[#7A898D] sm:text-xs">
+                Distribution of leads across your acquisition channels.
               </p>
             </div>
 
-            <div className="space-y-3">
-
+            <div className="space-y-2.5 sm:space-y-3">
               {sources.map((source, index) => {
                 const Icon = source.icon;
 
@@ -308,48 +302,38 @@ export default function LeadSourcesChart() {
                     whileHover={{
                       x: 4,
                     }}
-                    className="group rounded-xl border border-[#E8EDEE] bg-[#FAFBFB] p-3.5 transition-all hover:bg-white hover:shadow-[0_8px_25px_rgba(34,48,58,0.06)]"
+                    className="group min-w-0 rounded-xl border border-[#E8EDEE] bg-[#FAFBFB] p-2.5 transition-all hover:bg-white hover:shadow-[0_8px_25px_rgba(34,48,58,0.06)] sm:p-3.5"
                   >
-
-                    <div className="flex items-center gap-3">
-
+                    <div className="flex min-w-0 items-center gap-2 sm:gap-3">
                       {/* ICON */}
-
                       <div
-                        className="flex h-9 w-9 items-center justify-center rounded-lg"
+                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg sm:h-9 sm:w-9"
                         style={{
                           backgroundColor: `${source.color}15`,
                           color: source.color,
                         }}
                       >
-                        <Icon size={16} />
+                        <Icon size={15} className="sm:hidden" />
+                        <Icon size={16} className="hidden sm:block" />
                       </div>
 
-                      {/* NAME */}
-
-                      <div className="flex-1">
-
-                        <div className="flex justify-between">
-
-                          <span className="text-xs font-semibold text-[#34444A]">
+                      {/* NAME + PROGRESS */}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="truncate text-[11px] font-semibold text-[#34444A] sm:text-xs">
                             {source.label}
                           </span>
 
-                          <span className="text-xs font-bold text-[#22303A]">
+                          <span className="shrink-0 text-[11px] font-bold text-[#22303A] sm:text-xs">
                             {source.pct}%
                           </span>
-
                         </div>
 
-                        {/* PROGRESS */}
-
-                        <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[#E9EEEF]">
-
+                        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#E9EEEF] sm:mt-2">
                           <motion.div
                             className="h-full rounded-full"
                             style={{
-                              backgroundColor:
-                                source.color,
+                              backgroundColor: source.color,
                             }}
                             initial={{
                               width: 0,
@@ -359,57 +343,45 @@ export default function LeadSourcesChart() {
                             }}
                             transition={{
                               duration: 0.8,
-                              delay:
-                                0.3 +
-                                index * 0.1,
+                              delay: 0.3 + index * 0.1,
                             }}
                           />
-
                         </div>
-
                       </div>
 
                       {/* COUNT */}
-
-                      <div className="min-w-[55px] text-right">
-
-                        <div className="text-sm font-bold text-[#22303A]">
+                      <div className="w-10 shrink-0 text-right sm:min-w-[55px]">
+                        <div className="text-xs font-bold text-[#22303A] sm:text-sm">
                           {source.count}
                         </div>
 
-                        <div className="text-[9px] text-[#9AA5A8]">
+                        <div className="text-[8px] text-[#9AA5A8] sm:text-[9px]">
                           leads
                         </div>
-
                       </div>
 
+                      {/* ARROW */}
                       <ArrowUpRight
-                        size={14}
-                        className="text-[#B5C0C3] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                        size={13}
+                        className="hidden shrink-0 text-[#B5C0C3] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 sm:block"
                       />
-
                     </div>
-
                   </motion.div>
                 );
               })}
-
             </div>
           </div>
         </div>
 
-        {/* ================= BOTTOM INSIGHT ================= */}
-
-        <div className="mt-8 border-t border-[#EEF1F2] pt-5">
-
-          <div className="flex flex-wrap items-center justify-between gap-4">
-
-            <div>
-              <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#9AA5A8]">
+        {/* BOTTOM INSIGHT */}
+        <div className="mt-6 border-t border-[#EEF1F2] pt-4 sm:mt-8 sm:pt-5">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+            <div className="min-w-0">
+              <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#9AA5A8] sm:text-[10px]">
                 Analytics Insight
               </div>
 
-              <p className="mt-1 text-xs text-[#5C6D71]">
+              <p className="mt-1 text-[10px] leading-relaxed text-[#5C6D71] sm:text-xs">
                 Your strongest acquisition channel is{" "}
                 <span className="font-semibold text-[#22303A]">
                   {topSource?.label || "—"}
@@ -422,13 +394,11 @@ export default function LeadSourcesChart() {
               </p>
             </div>
 
-            <button className="flex items-center gap-2 rounded-lg border border-[#E1E7E8] bg-white px-3 py-2 text-[11px] font-semibold text-[#458393] transition-all hover:border-[#458393]/30 hover:bg-[#458393]/5">
+            <button className="flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-[#E1E7E8] bg-white px-3 py-2 text-[10px] font-semibold text-[#458393] transition-all hover:border-[#458393]/30 hover:bg-[#458393]/5 sm:w-auto sm:text-[11px]">
               View detailed analytics
               <ArrowUpRight size={13} />
             </button>
-
           </div>
-
         </div>
       </Card>
     </div>

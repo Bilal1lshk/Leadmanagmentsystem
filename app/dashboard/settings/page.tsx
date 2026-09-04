@@ -68,7 +68,7 @@ export default function SettingsPage() {
     if (!organization || organization.role !== "Admin") return;
 
     async function loadRequests() {
-          if (!organization) return; // <-- add this line
+      if (!organization) return; // <-- add this line
       try {
         const [requestsResponse, membersResponse] = await Promise.all([
           axios.get(`/api/organization/${organization._id}/join-requests`),
@@ -80,7 +80,7 @@ export default function SettingsPage() {
         if (isAxiosError(requestError)) {
           setError(
             requestError.response?.data?.message ||
-              "Only workspace Admins can view join requests."
+            "Only workspace Admins can view join requests."
           );
         } else {
           setError("Only workspace Admins can view join requests.");
@@ -176,42 +176,75 @@ export default function SettingsPage() {
   }
 
   return (
-    <main className="min-h-screen w-full bg-[#FFF3C8] flex flex-row  p-6 text-[#22303A]">
-      <div className="mx-auto min-w-4xl rounded-2xl border border-[#E5CB90] bg-white p-6 shadow-sm">
-        <h1 className="text-2xl font-semibold">Workspace settings</h1>
-        <p className="mt-1 text-sm text-[#5C6D71]">
-          Review people who requested to join {organization?.name || "your workspace"}.
-        </p>
+    <main className="min-h-screen w-full min-w-0 bg-[#FFF3C8] p-3 text-[#22303A] sm:p-4 md:p-5 lg:p-6">
+      <div className="mx-auto w-full min-w-0 max-w-5xl rounded-xl border border-[#E5CB90] bg-white p-4 shadow-sm sm:rounded-2xl sm:p-5 md:p-6">
+        {/* HEADER */}
+        <div className="min-w-0">
+          <h1 className="text-xl font-semibold sm:text-2xl">
+            Workspace settings
+          </h1>
+
+          <p className="mt-1 max-w-2xl text-xs leading-relaxed text-[#5C6D71] sm:text-sm">
+            Review people who requested to join{" "}
+            <span className="font-medium text-[#22303A]">
+              {organization?.name || "your workspace"}
+            </span>
+            .
+          </p>
+        </div>
+
+        {/* ERROR */}
         {error && (
-          <div className="mt-5 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600">
+          <div className="mt-4 rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-600 sm:mt-5 sm:text-sm">
             {error}
           </div>
         )}
+
+        {/* LOADING */}
         {loading ? (
-          <p className="mt-6 text-sm text-[#5C6D71]">Loading workspace settings...</p>
+          <p className="mt-5 text-xs text-[#5C6D71] sm:mt-6 sm:text-sm">
+            Loading workspace settings...
+          </p>
         ) : (
           <>
-            <section className="mt-6 border-b border-[#E5CB90]/70 pb-8">
-              <h2 className="text-lg font-semibold">Team members</h2>
+            {/* ================= TEAM MEMBERS ================= */}
+            <section className="mt-5 border-b border-[#E5CB90]/70 pb-6 sm:mt-6 sm:pb-8">
+              <h2 className="text-base font-semibold sm:text-lg">
+                Team members
+              </h2>
+
               <div className="mt-3 space-y-2">
                 {members.map((member) => (
                   <div
                     key={member.membershipId}
-                    className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-[#FFF3C8]/40 p-3"
+                    className="flex min-w-0 flex-col gap-3 rounded-lg bg-[#FFF3C8]/40 p-3 sm:flex-row sm:items-center sm:justify-between"
                   >
-                    <div>
-                      <p className="text-sm font-medium">{member.name}</p>
-                      <p className="text-xs text-[#5C6D71]">{member.email}</p>
+                    {/* MEMBER INFO */}
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium">
+                        {member.name}
+                      </p>
+
+                      <p className="truncate text-xs text-[#5C6D71]">
+                        {member.email}
+                      </p>
                     </div>
+
+                    {/* ROLE */}
                     {member.organizationRole === "Admin" ? (
-                      <span className="text-sm font-medium text-[#458393]">Admin</span>
+                      <span className="w-fit shrink-0 text-xs font-medium text-[#458393] sm:text-sm">
+                        Admin
+                      </span>
                     ) : (
                       <select
                         value={member.organizationRole}
                         onChange={(event) =>
-                          updatePosition(member.membershipId, event.target.value)
+                          updatePosition(
+                            member.membershipId,
+                            event.target.value
+                          )
                         }
-                        className="rounded-md border border-[#E5CB90] bg-white px-2 py-1 text-sm"
+                        className="w-full rounded-md border border-[#E5CB90] bg-white px-2.5 py-2 text-xs outline-none transition focus:border-[#458393] sm:w-auto sm:text-sm"
                       >
                         <option value="employee">Employee</option>
                         <option value="viewer">Viewer</option>
@@ -220,41 +253,58 @@ export default function SettingsPage() {
                   </div>
                 ))}
               </div>
+
+              {/* ADD MEMBER */}
               <form
                 onSubmit={addMember}
-                className="mt-5 grid gap-3 rounded-xl bg-[#FFF3C8]/40 p-4 md:grid-cols-2"
+                className="mt-5 grid grid-cols-1 gap-3 rounded-xl bg-[#FFF3C8]/40 p-3 sm:p-4 md:grid-cols-2"
               >
-                <h3 className="md:col-span-2 text-sm font-semibold">Add team member</h3>
+                <h3 className="text-sm font-semibold md:col-span-2">
+                  Add team member
+                </h3>
+
                 <input
                   required
                   value={newMember.name}
                   onChange={(event) =>
-                    setNewMember({ ...newMember, name: event.target.value })
+                    setNewMember({
+                      ...newMember,
+                      name: event.target.value,
+                    })
                   }
                   placeholder="Name"
-                  className="rounded-lg border border-[#E5CB90] bg-white px-3 py-2 text-sm"
+                  className="h-10 w-full min-w-0 rounded-lg border border-[#E5CB90] bg-white px-3 text-xs outline-none transition focus:border-[#458393] sm:text-sm"
                 />
+
                 <input
                   required
                   type="email"
                   value={newMember.email}
                   onChange={(event) =>
-                    setNewMember({ ...newMember, email: event.target.value })
+                    setNewMember({
+                      ...newMember,
+                      email: event.target.value,
+                    })
                   }
                   placeholder="Email"
-                  className="rounded-lg border border-[#E5CB90] bg-white px-3 py-2 text-sm"
+                  className="h-10 w-full min-w-0 rounded-lg border border-[#E5CB90] bg-white px-3 text-xs outline-none transition focus:border-[#458393] sm:text-sm"
                 />
+
                 <input
                   required
                   type="password"
                   minLength={6}
                   value={newMember.password}
                   onChange={(event) =>
-                    setNewMember({ ...newMember, password: event.target.value })
+                    setNewMember({
+                      ...newMember,
+                      password: event.target.value,
+                    })
                   }
                   placeholder="Temporary password"
-                  className="rounded-lg border border-[#E5CB90] bg-white px-3 py-2 text-sm"
+                  className="h-10 w-full min-w-0 rounded-lg border border-[#E5CB90] bg-white px-3 text-xs outline-none transition focus:border-[#458393] sm:text-sm"
                 />
+
                 <select
                   value={newMember.role}
                   onChange={(event) =>
@@ -263,49 +313,78 @@ export default function SettingsPage() {
                       role: event.target.value as "employee" | "viewer",
                     })
                   }
-                  className="rounded-lg border border-[#E5CB90] bg-white px-3 py-2 text-sm"
+                  className="h-10 w-full min-w-0 rounded-lg border border-[#E5CB90] bg-white px-3 text-xs outline-none transition focus:border-[#458393] sm:text-sm"
                 >
                   <option value="employee">Employee</option>
                   <option value="viewer">Viewer</option>
                 </select>
+
                 <button
                   disabled={addingMember}
-                  className="rounded-lg bg-[#34A99D] px-4 py-2 text-sm font-medium text-[#04342C] disabled:opacity-50 md:col-span-2"
+                  className="h-10 w-full rounded-lg bg-[#34A99D] px-4 text-xs font-medium text-[#04342C] transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 md:col-span-2 sm:text-sm"
                 >
                   {addingMember ? "Adding..." : "Add member"}
                 </button>
               </form>
             </section>
-            <section className="mt-6 border-b border-[#E5CB90]/70 pb-8">
-              <h2 className="text-lg font-semibold">Join requests</h2>
+
+            {/* ================= JOIN REQUESTS ================= */}
+            <section className="mt-5 border-b border-[#E5CB90]/70 pb-6 sm:mt-6 sm:pb-8">
+              <div>
+                <h2 className="text-base font-semibold sm:text-lg">
+                  Join requests
+                </h2>
+
+                <p className="mt-1 text-[11px] text-[#7A898D] sm:text-xs">
+                  Review requests from people who want to join your workspace.
+                </p>
+              </div>
+
               <div className="mt-3 space-y-3">
                 {requests.length === 0 ? (
-                  <p className="rounded-lg bg-[#FFF3C8]/50 p-4 text-sm text-[#5C6D71]">
+                  <p className="rounded-lg bg-[#FFF3C8]/50 p-3 text-xs text-[#5C6D71] sm:p-4 sm:text-sm">
                     No pending join requests.
                   </p>
                 ) : (
                   requests.map((request) => (
                     <div
                       key={request._id}
-                      className="rounded-xl border border-[#E5CB90]/70 p-4"
+                      className="min-w-0 rounded-xl border border-[#E5CB90]/70 p-3 sm:p-4"
                     >
-                      <p className="font-medium">{request.user?.name}</p>
-                      <p className="text-sm text-[#5C6D71]">{request.user?.email}</p>
+                      {/* USER */}
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-medium">
+                          {request.user?.name}
+                        </p>
+
+                        <p className="truncate text-xs text-[#5C6D71] sm:text-sm">
+                          {request.user?.email}
+                        </p>
+                      </div>
+
+                      {/* MESSAGE */}
                       {request.message && (
-                        <p className="mt-3 rounded-md bg-[#FFF3C8]/50 p-3 text-sm">
+                        <p className="mt-3 break-words rounded-md bg-[#FFF3C8]/50 p-3 text-xs leading-relaxed sm:text-sm">
                           {request.message}
                         </p>
                       )}
-                      <div className="mt-4 flex gap-2">
+
+                      {/* ACTIONS */}
+                      <div className="mt-3 grid grid-cols-2 gap-2 sm:mt-4 sm:flex">
                         <button
-                          onClick={() => reviewRequest(request._id, "approve")}
-                          className="rounded-lg bg-[#34A99D] px-4 py-2 text-sm font-medium text-[#04342C]"
+                          onClick={() =>
+                            reviewRequest(request._id, "approve")
+                          }
+                          className="rounded-lg bg-[#34A99D] px-3 py-2 text-xs font-medium text-[#04342C] transition hover:opacity-90 sm:px-4 sm:text-sm"
                         >
                           Approve
                         </button>
+
                         <button
-                          onClick={() => reviewRequest(request._id, "reject")}
-                          className="rounded-lg border border-[#E5CB90] px-4 py-2 text-sm font-medium text-[#2A3F45]"
+                          onClick={() =>
+                            reviewRequest(request._id, "reject")
+                          }
+                          className="rounded-lg border border-[#E5CB90] px-3 py-2 text-xs font-medium text-[#2A3F45] transition hover:bg-[#FFF3C8]/40 sm:px-4 sm:text-sm"
                         >
                           Reject
                         </button>
@@ -315,16 +394,22 @@ export default function SettingsPage() {
                 )}
               </div>
             </section>
-            <section className="mt-6">
-              <h2 className="text-lg font-semibold">Account</h2>
-              <p className="mt-1 text-sm text-[#5C6D71]">
+
+            {/* ================= ACCOUNT ================= */}
+            <section className="mt-5 sm:mt-6">
+              <h2 className="text-base font-semibold sm:text-lg">
+                Account
+              </h2>
+
+              <p className="mt-1 text-xs leading-relaxed text-[#5C6D71] sm:text-sm">
                 Manage your account settings and logout.
               </p>
+
               <div className="mt-4">
                 <button
                   onClick={handleLogout}
                   disabled={loggingOut}
-                  className="rounded-lg border border-red-300 bg-red-50 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-100 disabled:opacity-50"
+                  className="w-full rounded-lg border border-red-300 bg-red-50 px-4 py-2.5 text-xs font-medium text-red-600 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:text-sm"
                 >
                   {loggingOut ? "Logging out..." : "Logout"}
                 </button>
