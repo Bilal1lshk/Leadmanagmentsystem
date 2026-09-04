@@ -20,7 +20,7 @@ export default function RecentLeadsTable({ onAddLead }: { onAddLead?: () => void
           onClick={onAddLead}
           className="flex items-center gap-1.5 bg-[#34A99D] rounded-lg px-3.5 py-2 text-sm font-semibold text-[#04342C] hover:bg-[#2F998E] transition-colors"
         >
-          <Plus size={14} /> Add New Lead
+         <a href="/dashboard/leads/create"> <Plus size={14} /> Add New Lead</a>
         </button>
       </div>
 
