@@ -66,14 +66,12 @@ export default function TasksDashboard() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [headerSearch, setHeaderSearch] = useState("");
   const [filters, setFilters] = useState<FilterState>(emptyFilters);
-  console.log(filters)
   const [currentPage, setCurrentPage] = useState(1);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteTaskId, setDeleteTaskId] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   const tasksRaw = useAppSelector((store) => store.tasksSlice);
-  console.log(tasksRaw)
   const statCards = useStatCards();
   useEffect(() => {
     const fetchTasks = async () => {

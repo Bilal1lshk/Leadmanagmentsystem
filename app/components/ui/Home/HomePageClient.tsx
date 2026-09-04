@@ -27,7 +27,6 @@ export default function HomePageClient() {
           fetch("/api/organization/my"),
         ]);
         const [session, data] = await Promise.all([sessionResponse.json(), response.json()]);
-        console.log(session,data)
 
         if (cancelled) return;
 

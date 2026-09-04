@@ -12,7 +12,6 @@ export async function GET(request: NextRequest) {
         );
     }
     catch (err) {
-        console.log(err)
         return NextResponse.json({ message: "Error in Deleting task" }, { status: 500 })
     }
 }

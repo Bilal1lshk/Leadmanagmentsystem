@@ -19,7 +19,6 @@ export default function FilterDropdown({
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSelect = (option: string) => {
-    console.log(option)
     onChange(option);
     setIsOpen(false);
   };

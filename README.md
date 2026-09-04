@@ -1,109 +1,126 @@
 # Lead Management System
 
-A full‑stack lead management application built with **Next.js 16**, **TypeScript**, **Tailwind CSS**, and **MongoDB** (via Mongoose). It provides dashboards for leads, tasks, and follow‑ups, along with authentication via **next‑auth**.
+A full-stack lead management dashboard built with Next.js, TypeScript, Tailwind CSS, Redux Toolkit, and MongoDB.
 
----
+## Features
 
-## ✨ Features
-- **Leads Dashboard** – view, create, edit, delete leads.
-- **Tasks Dashboard** – manage tasks linked to leads.
-- **Follow‑ups Dashboard** – schedule and track follow‑up actions, with real‑time status updates.
-- **Authentication** – sign‑up, login, logout using JWT and NextAuth.
-- **API Layer** – REST‑style routes under `app/api/` for leads, tasks, follow‑ups, and users.
-- **Responsive UI** – built with Tailwind CSS and Shadcn components.
-- **Data Seeding** – auto‑seeds demo data on first run.
+- User signup, login, logout, and authenticated sessions
+- Organization and workspace setup
+- Lead creation, status updates, editing, and deletion
+- Pipeline view for tracking lead progress
+- Task creation, editing, and deletion
+- Follow-up scheduling and status management
+- Dashboard analytics, notifications, and search
+- Responsive desktop and mobile dashboard layouts
 
----
+## Tech Stack
 
-## 🛠️ Tech Stack
-- **Framework**: Next.js 16 (App Router)
-- **Language**: TypeScript 5
-- **Styling**: Tailwind CSS 4, Shadcn UI components
-- **State Management**: Redux Toolkit
-- **Database**: MongoDB (Mongoose 9)
-- **Authentication**: NextAuth (credentials + JWT)
-- **Server‑Side**: API routes in `app/api/*`
-- **Deployment**: Vercel (or any Node host)
+- Next.js 16 App Router
+- React 19 and TypeScript
+- Tailwind CSS 4
+- Redux Toolkit and React Redux
+- MongoDB with Mongoose
+- NextAuth, JWT, and bcrypt-based authentication utilities
+- Axios for client-side API requests
+- Framer Motion and Lucide React for interface interactions
 
----
+## Getting Started
 
-## 📦 Getting Started
 ### Prerequisites
-- Node.js 20+ (recommended)
-- npm, yarn, pnpm or bun
-- MongoDB instance (local or Atlas) with connection string
 
-### Installation
+- Node.js 20 or newer
+- npm
+- A MongoDB database, either local or hosted with MongoDB Atlas
+
+### Install
+
 ```bash
-# Clone the repo
-git clone <repo-url>
+git clone <repository-url>
 cd leadmanagmentsystem
-
-# Install dependencies
-npm install   # or yarn, pnpm, bun
+npm install
 ```
 
-### Environment Variables
-Create a `.env.local` file in the project root:
-```
-MONGODB_URI=<your-mongodb-connection-string>
-NEXTAUTH_SECRET=<random‑string>
+### Configure environment variables
+
+Create `.env.local` in the project root:
+
+```env
+MONGODB_URI=your-mongodb-connection-string
+NEXTAUTH_SECRET=your-nextauth-secret
 NEXTAUTH_URL=http://localhost:3000
-JWT_SECRET=<jwt-secret>
+JWT_SECRET=your-jwt-secret
 ```
 
-### Run the Development Server
+Do not commit `.env.local` or any secret values.
+
+### Start development
+
 ```bash
-npm run dev   # or yarn dev, pnpm dev, bun dev
+npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
 
----
+Open [http://localhost:3000](http://localhost:3000).
 
-## 📂 Project Structure (highlights)
-- `app/api/` – API routes (Leads, Tasks, Follow‑ups, Users, Auth)
-- `app/dashboard/` – UI pages for each entity (list, view, edit, create)
-- `app/components/` – Reusable components (tables, forms, cards)
-- `app/models/` – Mongoose schemas (`lead.ts`, `task.ts`, `followup.ts`, `user.ts`)
-- `app/follow/page.tsx` – shortcut route redirecting to follow‑ups dashboard
+## Available Scripts
 
----
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm run start` | Start the production server |
+| `npm run lint` | Run ESLint |
 
-## 🔧 Available Scripts
-| Script | Description |
-|--------|-------------|
-| `dev` | Starts the Next.js development server |
-| `build` | Compiles the app for production |
-| `start` | Starts the production server |
-| `lint` | Runs ESLint |
+## Main Routes
 
----
+| Route | Purpose |
+| --- | --- |
+| `/` | Public home page |
+| `/login` | User login |
+| `/signup` | User registration |
+| `/setupworkspace` | Create or configure a workspace |
+| `/dashboard` | Main dashboard |
+| `/dashboard/leads` | Lead management |
+| `/dashboard/pipeline` | Pipeline view |
+| `/dashboard/followups` | Follow-up management |
+| `/dashboard/task` | Task management |
+| `/dashboard/analytics` | Dashboard analytics |
+| `/dashboard/settings` | Workspace settings |
 
-## 📚 API Overview
-| Entity | Endpoints | Description |
-|--------|-----------|-------------|
-| **Leads** | `GET /api/dashboardapi/Leads/AllLead` – list leads<br>`POST /api/dashboardapi/Leads/CreateLead` – create lead<br>`PATCH /api/dashboardapi/Leads/UpdateStatus` – update lead status<br>`DELETE /api/dashboardapi/Leads/DeleteLead` – delete lead | CRUD for leads |
-| **Tasks** | `GET /api/Task/AllTasks` – list tasks<br>`POST /api/Task/Createtask` – create task<br>`PATCH /api/Task/UpdateTask` – update task<br>`DELETE /api/Task/Deletetask` – delete task | Task management linked to leads |
-| **Follow‑ups** | `GET /api/followups/All` – list follow‑ups (populated)<br>`GET /api/followups/Singlefollowup?id=...` – single follow‑up<br>`POST /api/followups/Create` – create follow‑up<br>`PATCH /api/followups/UpdateStatus` – update fields/status<br>`DELETE /api/followups/Delete` – delete follow‑up | Follow‑up scheduling and tracking |
-| **Auth** | `POST /api/auth/signup` – register<br>`POST /api/auth/login` – login<br>`POST /api/auth/logout` – logout<br>`GET /api/auth/me` – current user | User authentication |
+## API Areas
 
----
+API route handlers are under `app/api/`:
 
-## 🤝 Contributing
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/xyz`)
-3. Make your changes and ensure the TypeScript build passes:
-   ```bash
-   npx tsc --noEmit
-   ```
-4. Open a Pull Request describing your changes
+- `app/api/auth/` - authentication and current-user endpoints
+- `app/api/organization/` - workspace, member, and join-request endpoints
+- `app/api/dashboardapi/Leads/` - lead operations
+- `app/api/Task/` - task operations
+- `app/api/followups/` - follow-up operations
 
----
+## Project Structure
 
-## 📜 License
-This project is licensed under the MIT License.
+```text
+app/
+   api/           API route handlers
+   components/    Shared UI and dashboard components
+   dashboard/     Authenticated dashboard pages
+   models/        Mongoose models
+   redux/         Redux store and feature slices
+   lib/           Authentication and utility helpers
+public/          Static assets
+```
 
----
+## Validation
 
-## 🙋‍♂️ Author
-Created by **Bilal1lshk** – Lead Management System prototype.
+Before opening a pull request, run:
+
+```bash
+npm run lint
+npm run build
+```
+
+## Contributing
+
+1. Create a feature branch.
+2. Make focused changes consistent with the existing patterns.
+3. Run lint and build checks.
+4. Open a pull request with a summary and validation details.

@@ -2,7 +2,6 @@ import Image from "next/image";
 import { useAppSelector } from "@/app/redux/hooks"
 export default function HeroSection() {
   const { user } = useAppSelector((state) => state.auth);
-  console.log(user, "herosection")
   const columns = [
     {
       title: "New lead",

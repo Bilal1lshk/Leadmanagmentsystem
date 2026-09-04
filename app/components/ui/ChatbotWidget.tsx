@@ -50,6 +50,7 @@ export default function ChatbotWidget() {
             );
 
             const botReply = response.data.response;
+            console.log("AI response:", botReply);
 
             setMessages((prev) => [
                 ...prev,
