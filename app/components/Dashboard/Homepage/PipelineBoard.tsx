@@ -76,8 +76,8 @@ export default function PipelineBoard() {
   return (
     <Card>
       {/* Header */}
-      <a href="/dashboard/pipeline">
-      <div className="flex flex-col gap-4 mb-5">
+      <a href="/dashboard/pipeline" className="block">
+      <div className="mb-5 flex flex-col gap-4">
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
