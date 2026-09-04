@@ -78,7 +78,7 @@ export default function PipelineBoard() {
       {/* Header */}
       <a href="/dashboard/pipeline" className="block">
       <div className="mb-5 flex flex-col gap-4">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
             <div className="flex items-center gap-2">
               <h3 className="m-0 text-[15px] font-semibold text-[#22303A]">
@@ -95,8 +95,8 @@ export default function PipelineBoard() {
             </p>
           </div>
 
-          <div className="flex items-center gap-5">
-            <div className="text-right">
+          <div className="grid grid-cols-2 gap-3 md:flex md:items-center md:gap-5">
+            <div className="text-left md:text-right">
               <div className="text-[10px] uppercase tracking-wider text-[#7A898D]">
                 Total Leads
               </div>
@@ -105,7 +105,7 @@ export default function PipelineBoard() {
               </div>
             </div>
 
-            <div className="text-right">
+            <div className="text-left md:text-right">
               <div className="text-[10px] uppercase tracking-wider text-[#7A898D]">
                 Pipeline Value
               </div>
@@ -117,7 +117,7 @@ export default function PipelineBoard() {
         </div>
 
         {/* Pipeline direction */}
-        <div className="flex items-center gap-2">
+        <div className="hidden items-center gap-2 md:flex">
           {stages.map((stage, index) => (
             <div key={stage.name} className="flex items-center flex-1">
               <div className="h-1.5 flex-1 rounded-full bg-[#EEF2F3] overflow-hidden">
@@ -146,7 +146,7 @@ export default function PipelineBoard() {
       </div>
 
       {/* Pipeline columns */}
-      <div className="grid grid-cols-5 gap-2.5">
+      <div className="grid auto-cols-[minmax(220px,85vw)] grid-flow-col gap-2.5 overflow-x-auto pb-2 snap-x snap-mandatory md:grid-cols-5 md:grid-flow-row md:auto-cols-auto md:overflow-visible md:pb-0 md:snap-none">
         {stages.map((stage, index) => (
           <motion.div
             key={stage.name}
@@ -158,7 +158,7 @@ export default function PipelineBoard() {
               ease: [0.22, 1, 0.36, 1],
             }}
             whileHover={{ y: -3 }}
-            className="relative overflow-hidden rounded-xl border border-[#E8EDEE] bg-[#F9FAFA]"
+            className="relative min-w-0 snap-start overflow-hidden rounded-xl border border-[#E8EDEE] bg-[#F9FAFA]"
           >
             {/* Stage color */}
             <div

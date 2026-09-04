@@ -90,7 +90,7 @@ export default function Sidebar() {
       {/* Mobile drawer — fixed positioning = takes ZERO space in layout flow */}
       <aside
         className={`
-          fixed md:hidden top-0 left-0 z-50
+          fixed md:hidden top-0 left-0 z-[100]
           h-screen overflow-hidden bg-white
           flex flex-col justify-start gap-1
           transition-[width,padding,border-color] duration-300 ease-out
