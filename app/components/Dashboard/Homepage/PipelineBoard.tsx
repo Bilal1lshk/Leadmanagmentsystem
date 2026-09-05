@@ -109,7 +109,7 @@ export default function PipelineBoard() {
                   grid-cols-2
                   gap-3
                   sm:w-auto
-                  sm:min-w-[220px]
+                  sm:min-w-55
                   md:flex
                   md:items-center
                   md:justify-end
@@ -210,7 +210,7 @@ export default function PipelineBoard() {
               >
                 {/* STAGE COLOR */}
                 <div
-                  className="absolute left-0 right-0 top-0 h-[3px]"
+                  className="absolute left-0 right-0 top-0 h-0.75"
                   style={{ backgroundColor: stage.color }}
                 />
 
@@ -338,7 +338,7 @@ export default function PipelineBoard() {
                         </motion.div>
                       ))
                     ) : (
-                      <div className="flex h-[61px] min-w-0 items-center justify-center rounded-lg border border-dashed border-[#DDE3E4] px-2">
+                      <div className="flex h-15.25 min-w-0 items-center justify-center rounded-lg border border-dashed border-[#DDE3E4] px-2">
                         <span className="truncate text-[10px] text-[#9AA5A8]">
                           No leads to display
                         </span>

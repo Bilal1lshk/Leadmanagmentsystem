@@ -42,7 +42,7 @@ export default function FilterDropdown({
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 top-full z-50 mt-2 min-w-[160px] rounded-lg border border-slate-200 bg-white p-1 shadow-lg">
+        <div className="absolute left-0 top-full z-50 mt-2 min-w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg">
           {options?.map((option) => (
             <button
               key={option}

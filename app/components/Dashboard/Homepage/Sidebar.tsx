@@ -193,7 +193,7 @@ export default function Sidebar() {
               className="
                 fixed
                 inset-0
-                z-[90]
+                z-90
                 bg-black/30
                 backdrop-blur-[1px]
                 md:hidden
@@ -214,10 +214,10 @@ export default function Sidebar() {
                 fixed
                 left-0
                 top-0
-                z-[100]
+                z-100
                 flex
                 h-screen
-                w-[260px]
+                w-65
                 max-w-[85vw]
                 flex-col
                 overflow-hidden

@@ -43,7 +43,7 @@ export default function HeroSection() {
       <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-2">
         {/* Left: copy */}
         <div>
-          <h1 className="font-serif text-3xl md:text-5xl font-medium leading-tight text-[#22303A] md:text-6xl">
+          <h1 className="font-serif text-3xl font-medium leading-tight text-[#22303A] md:text-6xl">
             Track leads,<br />not spreadsheets.
           </h1>
 

@@ -183,7 +183,7 @@ export default function TasksDashboard() {
             <div className="px-6 pt-4">
               {showDeleteConfirm && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-                  <div className="w-[350px] rounded-xl bg-white p-6 shadow-2xl">
+                  <div className="w-87.5 rounded-xl bg-white p-6 shadow-2xl">
                     <h3 className="text-lg font-semibold text-[#22303A]">
                       Are you sure?
                     </h3>

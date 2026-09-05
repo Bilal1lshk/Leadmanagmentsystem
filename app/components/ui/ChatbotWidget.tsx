@@ -78,7 +78,7 @@ export default function ChatbotWidget() {
         <div className="fixed bottom-5 right-5 z-50">
 
             {isOpen ? (
-                <div className="w-[360px] overflow-hidden rounded-2xl border border-[#E5CB90]/80 bg-white shadow-[0_18px_55px_rgba(17,24,39,0.16)]">
+                <div className="w-90 overflow-hidden rounded-2xl border border-[#E5CB90]/80 bg-white shadow-[0_18px_55px_rgba(17,24,39,0.16)]">
 
                     {/* Header */}
                     <div className="flex items-center justify-between bg-[#22303A] px-4 py-3 text-white">
@@ -114,7 +114,7 @@ export default function ChatbotWidget() {
 
 
                     {/* Chat Area */}
-                    <div className="flex max-h-[420px] min-h-[360px] flex-col bg-[#FFF7E0]">
+                    <div className="flex max-h-105 min-h-90 flex-col bg-[#FFF7E0]">
 
                         <div className="flex-1 space-y-3 overflow-y-auto p-4">
 

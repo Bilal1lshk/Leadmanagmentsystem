@@ -66,15 +66,15 @@ export default function Header({
               className="
                 box-border
                 flex
-                h-[40px]
-                w-[200px]
-                min-h-[40px]
-                min-w-[200px]
-                max-h-[40px]
-                max-w-[200px]
+                h-10
+                w-50
+                min-h-10
+                min-w-50
+                max-h-10
+                max-w-50
                 shrink-0
                 grow-0
-                basis-[200px]
+                basis-50
                 items-center
                 gap-2
                 overflow-hidden
@@ -105,9 +105,9 @@ export default function Header({
                 className="
                   block
                   h-full
-                  w-[152px]
-                  min-w-[152px]
-                  max-w-[152px]
+                  w-38
+                  min-w-38
+                  max-w-38
                   shrink-0
                   grow-0
                   border-0
@@ -122,7 +122,7 @@ export default function Header({
             </div>
 
             {/* NOTIFICATIONS */}
-            <div className="relative h-[40px] w-[40px] shrink-0">
+            <div className="relative h-10 w-10 shrink-0">
               <Notifications />
 
               <span
@@ -147,12 +147,12 @@ export default function Header({
               aria-label="Open settings"
               className="
                 flex
-                h-[40px]
-                w-[40px]
-                min-h-[40px]
-                min-w-[40px]
-                max-h-[40px]
-                max-w-[40px]
+                h-10
+                w-10
+                min-h-10
+                min-w-10
+                max-h-10
+                max-w-10
                 shrink-0
                 grow-0
                 items-center
@@ -197,7 +197,7 @@ export default function Header({
                   mt-1.5
                   truncate
                   text-[13px]
-                  leading-[19px]
+                  leading-4.75
                   text-[#5C6D71]
                   sm:text-[14px]
                 "
@@ -210,7 +210,7 @@ export default function Header({
             <div className="flex shrink-0 items-center gap-2">
 
               {/* NOTIFICATIONS */}
-              <div className="relative h-[36px] w-[36px] shrink-0">
+              <div className="relative h-9 w-9 shrink-0">
                 <Notifications />
 
                 <span
@@ -235,12 +235,12 @@ export default function Header({
                 aria-label="Open settings"
                 className="
                   flex
-                  h-[36px]
-                  w-[36px]
-                  min-h-[36px]
-                  min-w-[36px]
-                  max-h-[36px]
-                  max-w-[36px]
+                  h-9
+                  w-9
+                  min-h-9
+                  min-w-9
+                  max-h-9
+                  max-w-9
                   shrink-0
                   grow-0
                   items-center
@@ -264,15 +264,15 @@ export default function Header({
             className="
               box-border
               flex
-              h-[40px]
-              w-[200px]
-              min-h-[40px]
-              min-w-[200px]
-              max-h-[40px]
-              max-w-[200px]
+              h-10
+              w-50
+              min-h-10
+              min-w-50
+              max-h-10
+              max-w-50
               shrink-0
               grow-0
-              basis-[200px]
+              basis-50
               items-center
               gap-2
               overflow-hidden
@@ -303,9 +303,9 @@ export default function Header({
               className="
                 block
                 h-full
-                w-[152px]
-                min-w-[152px]
-                max-w-[152px]
+                w-38
+                min-w-38
+                max-w-38
                 shrink-0
                 grow-0
                 border-0
