@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "./providers";
+import ChatbotWidget from "./components/ui/ChatbotWidget";
 
 export const metadata: Metadata = {
   title: "Lead managment system",
@@ -16,7 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`h-full antialiased `}>
       <body className="min-h-full flex flex-col "suppressHydrationWarning>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <ChatbotWidget />
+        </Providers>
       </body>
     </html>
   );
