@@ -92,6 +92,7 @@ export async function POST(request: NextRequest) {
       maxAge: 60 * 60 * 24 * 7, // 7 days
       path: "/",
       secure: process.env.NODE_ENV === "production",
+      domain: process.env.AUTH_COOKIE_DOMAIN || undefined,
     });
     return response;
 

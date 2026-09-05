@@ -2,7 +2,6 @@
 
 import { Search, Settings } from "lucide-react";
 import Link from "next/link";
-import Notifications from "../../ui/Notification/Notification";
 import { Dispatch, SetStateAction } from "react";
 
 interface HeaderProps {
@@ -121,26 +120,6 @@ export default function Header({
               />
             </div>
 
-            {/* NOTIFICATIONS */}
-            <div className="relative h-10 w-10 shrink-0">
-              <Notifications />
-
-              <span
-                className="
-                  pointer-events-none
-                  absolute
-                  right-0
-                  top-0
-                  h-2
-                  w-2
-                  rounded-full
-                  bg-red-500
-                  ring-2
-                  ring-white
-                "
-              />
-            </div>
-
             {/* SETTINGS */}
             <Link
               href="/dashboard/settings"
@@ -208,26 +187,6 @@ export default function Header({
 
             {/* ACTIONS */}
             <div className="flex shrink-0 items-center gap-2">
-
-              {/* NOTIFICATIONS */}
-              <div className="relative h-9 w-9 shrink-0">
-                <Notifications />
-
-                <span
-                  className="
-                    pointer-events-none
-                    absolute
-                    right-0
-                    top-0
-                    h-2
-                    w-2
-                    rounded-full
-                    bg-red-500
-                    ring-2
-                    ring-white
-                  "
-                />
-              </div>
 
               {/* SETTINGS */}
               <Link
