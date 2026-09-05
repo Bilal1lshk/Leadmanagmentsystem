@@ -71,7 +71,7 @@ interface LeadsResponse {
 const statusStyles: Record<LeadStatus, string> = {
   new: "border-blue-500/20 bg-blue-500/10 text-blue-400",
   contacted:
-    "border-indigo-500/20 bg-indigo-500/10 text-indigo-400",
+    "border-indigo-500/20  text-indigo-400",
   qualified:
     "border-cyan-500/20 bg-cyan-500/10 text-cyan-400",
   proposal:

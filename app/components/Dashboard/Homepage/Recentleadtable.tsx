@@ -23,7 +23,7 @@ interface LeadsResponse {
 
 const statusStyles: Record<string, string> = {
   new: "bg-[#458393]/15 text-[#458393] font-semibold border border-[#458393]/30",
-  contacted: "bg-blue-500/15 text-blue-600 font-semibold border border-blue-500/30",
+  contacted: " text-blue-600 font-semibold border border-blue-500/30",
   qualified: "bg-[#34A99D]/15 text-[#34A99D] font-semibold border border-[#34A99D]/30",
   proposal: "bg-purple-500/15 text-purple-600 font-semibold border border-purple-500/30",
   won: "bg-emerald-500/15 text-emerald-600 font-semibold border border-emerald-500/30",
@@ -135,7 +135,9 @@ export default function RecentLeadsTable({ onAddLead }: { onAddLead?: () => void
                   <Link href={`/dashboard/leads/${lead._id}`} aria-label={`Edit ${lead.personId}`}>
                     <Pencil size={14} className="cursor-pointer hover:text-[#22303A]" />
                   </Link>
-                  <Trash2 size={14} className="cursor-pointer hover:text-red-600" />
+                  <Link href={`/dashboard/leads/${lead._id}`} aria-label={`Delete ${lead.personId}`}>
+                    <Trash2 size={14} className="cursor-pointer hover:text-red-600" />
+                  </Link>
                 </div>
               </td>
             </tr>

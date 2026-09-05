@@ -1,23 +1,53 @@
+"use client";
+
+import { useAppSelector } from "@/app/redux/hooks";
 import Card from "./Card";
 
+const statuses = [
+  { key: "new", label: "New", color: "bg-[#458393]" },
+  { key: "contacted", label: "Contacted", color: "bg-[#34A99D]" },
+  { key: "qualified", label: "Qualified", color: "bg-[#E5CB90]" },
+  { key: "proposal", label: "Proposal", color: "bg-[#458393]/70" },
+  { key: "won", label: "Won", color: "bg-[#34A99D]/70" },
+  { key: "lost", label: "Lost", color: "bg-[#C1523F]" },
+];
+
 export default function Leadchart() {
+  const leads = useAppSelector((store) => store.LeadSlice.Lead);
+  const totalLeads = leads.length;
+
   return (
     <Card>
-      <h3 className="m-0 mb-3 text-sm text-[#22303A]">Lead Priority 🔥</h3>
-
-      <div className="flex justify-between text-[11px] text-[#5C6D71] mb-2">
-        <span>Hot Lead</span>
-        <span>Score</span>
-        <span>Action</span>
+      <div className="mb-4 flex items-center justify-between">
+        <div>
+          <h3 className="m-0 text-sm text-[#22303A]">Lead Status</h3>
+          <p className="mt-1 text-[11px] text-[#5C6D71]">
+            Current organization pipeline
+          </p>
+        </div>
+        <span className="text-lg font-bold text-[#22303A]">{totalLeads}</span>
       </div>
 
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-full bg-[#458393]/20 flex items-center justify-center text-[10px] font-bold text-[#458393]">JS</div>
-          <span className="text-[12.5px] text-[#22303A]">John Smith</span>
-        </div>
-        <span className="text-[12.5px] text-[#34A99D] font-semibold">92/100</span>
-        <span className="text-[12.5px] text-[#458393] font-semibold">Contact Today</span>
+      <div className="flex flex-col gap-2.5">
+        {statuses.map((status) => {
+          const count = leads.filter((lead) => lead.status === status.key).length;
+          const percentage = totalLeads ? (count / totalLeads) * 100 : 0;
+
+          return (
+            <div key={status.key}>
+              <div className="mb-1 flex items-center justify-between text-[11px]">
+                <span className="text-[#4A5A5F]">{status.label}</span>
+                <span className="font-semibold text-[#22303A]">{count}</span>
+              </div>
+              <div className="h-1.5 overflow-hidden rounded-full bg-[#EEF2F3]">
+                <div
+                  className={`h-full rounded-full transition-all ${status.color}`}
+                  style={{ width: `${percentage}%` }}
+                />
+              </div>
+            </div>
+          );
+        })}
       </div>
     </Card>
   );
