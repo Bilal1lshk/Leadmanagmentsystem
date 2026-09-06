@@ -19,7 +19,6 @@ export default function Header({
   searchValue = "",
   onSearchChange,
 }: HeaderProps) {
-  const heading = title || `Good morning, ${name} 👋`;
 
   return (
     <header className="w-full min-w-0">
@@ -40,7 +39,7 @@ export default function Header({
                 lg:text-[25px]
               "
             >
-              {heading}
+              Welcome back
             </h1>
 
             <p
@@ -168,7 +167,7 @@ export default function Header({
                   sm:text-[21px]
                 "
               >
-                {heading}
+                Welcome back
               </h1>
 
               <p
