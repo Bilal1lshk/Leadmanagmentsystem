@@ -1,7 +1,19 @@
 // app/dashboard/layout.tsx
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import DashboardGuard from "@/app/components/Auth/DashboardGuard";
 import Sidebar from "../components/Dashboard/Homepage/Sidebar";
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: {
+      index: false,
+      follow: false,
+    },
+  },
+};
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
