@@ -6,6 +6,7 @@ import { FcGoogle } from "react-icons/fc";
 import { signIn } from "next-auth/react";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { setUser } from "@/app/redux/auth";
+import Link from "next/link";
 import events from "node:events";
 import { NextError } from "next/dist/lib/is-error";
 interface Errorlocal{
@@ -133,6 +134,17 @@ export default function Login() {
               <FcGoogle className="h-5 w-5" />
               Log in with Google
             </button>
+
+            <p className="mt-3 text-center text-[11px] leading-5 text-[#6B7280]">
+              By continuing, you agree to our{" "}
+              <Link href="/terms" className="underline hover:text-[#22303A]">
+                Terms of Service
+              </Link>{" "}
+              and acknowledge our{" "}
+              <Link href="/privacy" className="underline hover:text-[#22303A]">
+                Privacy Policy
+              </Link>.
+            </p>
 
             <div className="my-5 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-[#E5CB90] after:mt-0.5 after:flex-1 after:border-t after:border-[#E5CB90]">
               <p className="mx-4 mb-0 text-center text-xs font-medium text-[#8A8A82]">
