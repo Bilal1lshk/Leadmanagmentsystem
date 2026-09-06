@@ -75,10 +75,10 @@ export default function ChatbotWidget() {
     };
 
     return (
-        <div className="fixed bottom-5 right-5 z-50">
+        <div className="fixed inset-x-4 bottom-4 z-50 sm:inset-x-auto sm:bottom-5 sm:right-5">
 
             {isOpen ? (
-                <div className="w-90 overflow-hidden rounded-2xl border border-[#E5CB90]/80 bg-white shadow-[0_18px_55px_rgba(17,24,39,0.16)]">
+                <div className="flex max-h-[calc(100dvh-2rem)] w-full max-w-90 flex-col overflow-hidden rounded-2xl border border-[#E5CB90]/80 bg-white shadow-[0_18px_55px_rgba(17,24,39,0.16)] sm:w-90">
 
                     {/* Header */}
                     <div className="flex items-center justify-between bg-[#22303A] px-4 py-3 text-white">
@@ -114,9 +114,9 @@ export default function ChatbotWidget() {
 
 
                     {/* Chat Area */}
-                    <div className="flex max-h-105 min-h-90 flex-col bg-[#FFF7E0]">
+                    <div className="flex min-h-0 flex-1 flex-col bg-[#FFF7E0]">
 
-                        <div className="flex-1 space-y-3 overflow-y-auto p-4">
+                        <div className="h-[min(28rem,calc(100dvh-9rem))] min-h-0 flex-1 space-y-3 overflow-y-auto p-3 sm:p-4">
 
                             {messages.map((message, index) => (
 
@@ -130,7 +130,7 @@ export default function ChatbotWidget() {
                                 >
 
                                     <div
-                                        className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-6 shadow-sm ${
+                                        className={`max-w-[85%] wrap-break-word rounded-2xl px-3 py-2 text-sm leading-6 shadow-sm ${
                                             message.role === "user"
                                                 ? "bg-[#22303A] text-white"
                                                 : "bg-white text-[#22303A] ring-1 ring-[#E5CB90]/70"
@@ -167,7 +167,7 @@ export default function ChatbotWidget() {
                         {/* Input */}
                         <div className="border-t border-[#E5CB90]/70 bg-white p-3">
 
-                            <div className="flex items-center gap-2 rounded-xl border border-[#E5CB90]/70 bg-[#FFFDF8] px-2.5 py-2">
+                            <div className="flex min-w-0 items-center gap-2 rounded-xl border border-[#E5CB90]/70 bg-[#FFFDF8] px-2.5 py-2">
 
                                 <input
                                     value={input}
@@ -181,7 +181,7 @@ export default function ChatbotWidget() {
                                         }
                                     }}
                                     placeholder="Ask the AI..."
-                                    className="flex-1 border-0 bg-transparent text-sm text-[#22303A] outline-none placeholder:text-[#6B7280]"
+                                    className="min-w-0 flex-1 border-0 bg-transparent text-sm text-[#22303A] outline-none placeholder:text-[#6B7280]"
                                 />
 
                                 <button
@@ -209,11 +209,11 @@ export default function ChatbotWidget() {
                 <button
                     type="button"
                     onClick={() => setIsOpen(true)}
-                    className="group flex h-16 w-16 items-center justify-center rounded-full bg-[#22303A] text-white shadow-[0_18px_40px_rgba(34,48,58,0.25)] transition duration-200 hover:scale-105 hover:bg-[#2d4353]"
+                    className="group ml-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#22303A] text-white shadow-[0_18px_40px_rgba(34,48,58,0.25)] transition duration-200 hover:scale-105 hover:bg-[#2d4353] sm:h-16 sm:w-16"
                     aria-label="Open AI chat"
                 >
 
-                    <MessageCircle className="h-7 w-7 transition group-hover:scale-110" />
+                    <MessageCircle className="h-5 w-5 md:h-7 md:w-7 transition group-hover:scale-110" />
 
                 </button>
 
