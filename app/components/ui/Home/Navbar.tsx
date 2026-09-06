@@ -28,7 +28,6 @@ export default function Navbar() {
           Boolean(organizationResponse.data.organizations?.length),
         );
       } catch (error: unknown) {
-        console.error("Failed to fetch user or organization:", error);
         setUser(false);
         setActiveOrganization(false);
       } finally {

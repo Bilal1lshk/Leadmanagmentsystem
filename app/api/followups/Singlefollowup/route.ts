@@ -40,7 +40,6 @@ export async function GET(request: NextRequest) {
       { status: 200 }
     );
   } catch (err: any) {
-    console.error("Fetch single followup error:", err);
     return NextResponse.json(
       { message: "Failed to fetch follow-up" },
       { status: 500 }

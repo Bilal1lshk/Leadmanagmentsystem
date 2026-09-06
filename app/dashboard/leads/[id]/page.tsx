@@ -113,7 +113,6 @@ export default function LeadDetailPage() {
                 const res = await axios.get(`/api/dashboardapi/SingleLead?id=${id}`);
                 setLead(res.data?.data?.findedlead ?? null);
             } catch (err) {
-                console.error(err);
             } finally {
                 setLoading(false);
             }
@@ -141,7 +140,6 @@ export default function LeadDetailPage() {
                 status: newStatus,
             });
         } catch (err) {
-            console.error(err);
             setLead((l) => (l ? { ...l, status: previous } : l));
         } finally {
             setUpdatingStatus(false);
@@ -156,7 +154,6 @@ export default function LeadDetailPage() {
             await axios.delete(`/api/dashboardapi/Leads/DeleteLead?id=${lead._id}`);
             router.push("/dashboard/leads");
         } catch (err) {
-            console.error(err);
             setDeleting(false);
         }
     };

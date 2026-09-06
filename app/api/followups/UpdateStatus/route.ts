@@ -40,7 +40,6 @@ export async function PATCH(request: NextRequest) {
 
     return NextResponse.json({ data: updated, followup: updated, message: "Follow-up updated", success: true });
   } catch (err) {
-    console.error("Update followup error:", err);
     return NextResponse.json({ message: "Failed to update follow-up" }, { status: 500 });
   }
 }

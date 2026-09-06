@@ -60,7 +60,6 @@ export async function PUT(
             { status: 200 }
         );
     } catch (error) {
-        console.error("Update task status error:", error);
 
         return NextResponse.json(
             {

@@ -24,7 +24,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ success: true, organizations });
   } catch (error) {
-    console.error("Discover organizations error:", error);
     return NextResponse.json({ success: false, message: "Unable to load workspaces." }, { status: 500 });
   }
 }

@@ -117,7 +117,6 @@ export async function GET(request: NextRequest) {
       { status: 200 }
     );
   } catch (err: any) {
-    console.error("Fetch followups error:", err);
     return NextResponse.json(
       { message: "Failed to find followups" },
       { status: 500 }

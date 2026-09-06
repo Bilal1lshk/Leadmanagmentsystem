@@ -29,7 +29,6 @@ export async function DELETE(request: NextRequest) {
 
     return NextResponse.json({ message: "Follow-up deleted successfully", success: true });
   } catch (err) {
-    console.error("Delete followup error:", err);
     return NextResponse.json({ message: "Failed to delete follow-up" }, { status: 500 });
   }
 }

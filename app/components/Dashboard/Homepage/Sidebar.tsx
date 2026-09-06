@@ -82,11 +82,7 @@ export default function Sidebar() {
         );
 
         dispatch(setAllLeads(response.data.data));
-      } catch (err) {
-        console.error(
-          "Failed to fetch leads:",
-          err instanceof Error ? err.message : String(err)
-        );
+      } catch {
       }
     };
 
@@ -119,8 +115,7 @@ export default function Sidebar() {
       ];
 
       window.location.href = "/login";
-    } catch (error) {
-      console.error("Logout failed:", error);
+    } catch {
     }
   };
 

@@ -156,7 +156,6 @@ export default function FollowupDetailPage() {
         }
         setFollowup(response.data.singlefollowup);
       } catch (err: any) {
-        console.error("Failed to fetch follow-up:", err);
         setError(
           err.response?.data?.message ||
             err.message ||
@@ -200,7 +199,6 @@ export default function FollowupDetailPage() {
         setFollowup(response.data.data);
       }
     } catch (err) {
-      console.error("Failed to update status:", err);
       // Rollback
       setFollowup((current) =>
         current ? { ...current, status: previousStatus } : current

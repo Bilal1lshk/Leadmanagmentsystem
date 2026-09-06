@@ -86,7 +86,6 @@ export default function EditFollowupPage() {
           });
         }
       } catch (err: any) {
-        console.error("Failed to load edit form data:", err);
         setError(
           err.response?.data?.message || err.message || "Failed to load follow-up details"
         );
@@ -127,7 +126,6 @@ export default function EditFollowupPage() {
         throw new Error(response.data?.message || "Failed to save follow-up");
       }
     } catch (err: any) {
-      console.error("Failed to save follow-up:", err);
       setError(
         err.response?.data?.message || err.message || "Failed to update follow-up"
       );

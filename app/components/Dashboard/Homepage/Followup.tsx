@@ -41,7 +41,6 @@ export default function FollowUps() {
 
         setFollowUps(upcoming);
       } catch (error) {
-        console.error("Failed to load upcoming follow-ups:", error);
       } finally {
         setLoading(false);
       }

@@ -50,7 +50,6 @@ export default function ChatbotWidget() {
             );
 
             const botReply = response.data.response;
-            console.log("AI response:", botReply);
 
             setMessages((prev) => [
                 ...prev,
@@ -60,7 +59,6 @@ export default function ChatbotWidget() {
                 },
             ]);
         } catch (error: unknown) {
-            console.error("AI chat failed:", error);
 
             setMessages((prev) => [
                 ...prev,

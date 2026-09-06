@@ -199,7 +199,6 @@ export default function LeadsPage() {
 
       setLeads(apiLeads);
     } catch (error) {
-      console.error("Failed to fetch leads:", error);
 
       setLeads([]);
 

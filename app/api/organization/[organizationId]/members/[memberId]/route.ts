@@ -31,7 +31,6 @@ export async function PATCH(
 
     return NextResponse.json({ success: true, member: { membershipId: member._id, user: member.user, organizationRole: member.role } });
   } catch (error) {
-    console.error("Update member role error:", error);
     return NextResponse.json({ success: false, message: "Unable to update position." }, { status: 500 });
   }
 }

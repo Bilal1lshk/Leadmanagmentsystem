@@ -106,7 +106,6 @@ export default function PipelineDashboard() {
           lostReason: reason,
         });
       } catch (err) {
-        console.error("Failed to update lead status:", err);
         dispatch(setAllLeads(leads)); // rollback
       }
     },
@@ -145,7 +144,6 @@ export default function PipelineDashboard() {
       const res = await axios.get("/api/dashboardapi/Leads/AllLead");
       dispatch(setAllLeads(res.data.data || []));
     } catch (err) {
-      console.error("Failed to refresh leads:", err);
     } finally {
       setLoading(false);
     }

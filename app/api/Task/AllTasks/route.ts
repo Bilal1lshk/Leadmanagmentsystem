@@ -23,7 +23,6 @@ export async function GET(request: NextRequest) {
       success: true,
     });
   } catch (err) {
-    console.error("Error fetching tasks:", err);
     return NextResponse.json(
       { message: "Error in fetching tasks" },
       { status: 500 }

@@ -180,7 +180,6 @@ export default function CreateLeadPage() {
                 }
             } catch (error) {
                 if ((error as { name?: string })?.name !== "AbortError") {
-                    console.error(error);
                 }
             } finally {
                 if (isMounted.current) setUsersLoading(false);
@@ -237,7 +236,6 @@ export default function CreateLeadPage() {
                 ? error.response?.data?.message ?? error.message
                 : "Something went wrong. Please try again.";
 
-            console.error(message);
 
             if (isMounted.current) {
                 setStatus("error");

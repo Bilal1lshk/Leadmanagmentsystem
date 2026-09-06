@@ -32,7 +32,6 @@ export async function PATCH(request: NextRequest) {
 
     return NextResponse.json({ lead: updated, message: "Lead status updated", success: true });
   } catch (err) {
-    console.error("UpdateStatus error:", err);
     return NextResponse.json({ message: "Failed to update lead status" }, { status: 500 });
   }
 }

@@ -118,6 +118,10 @@ npm run lint
 npm run build
 ```
 
+## Product Documentation
+
+- [MVP Feature Overview](docs/mvp-feature-overview.md)
+
 ## Contributing
 
 1. Create a feature branch.

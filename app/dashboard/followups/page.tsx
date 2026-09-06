@@ -114,7 +114,6 @@ export default function FollowupsPage({
         setdata(response.data.data);
       }
     } catch (err: any) {
-      console.error("Error loading followups:", err);
       setError(err.response?.data?.message || "Failed to load follow-ups.");
     } finally {
       setLoading(false);
@@ -207,7 +206,6 @@ export default function FollowupsPage({
         );
       }
     } catch (err) {
-      console.error("Failed to complete followup:", err);
     }
   };
 
@@ -225,7 +223,6 @@ export default function FollowupsPage({
         setdata((prev) => prev.filter((f) => f._id !== item._id));
       }
     } catch (err) {
-      console.error("Failed to delete followup:", err);
     }
   };
 
@@ -254,7 +251,6 @@ export default function FollowupsPage({
         );
       }
     } catch (err) {
-      console.error("Failed to reschedule followup:", err);
     }
   };
 

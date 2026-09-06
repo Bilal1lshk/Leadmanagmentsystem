@@ -43,7 +43,6 @@ export async function PATCH(
     if (typeof error === "object" && error !== null && "code" in error && (error as { code: number }).code === 11000) {
       return NextResponse.json({ success: false, message: "This user already belongs to a workspace." }, { status: 409 });
     }
-    console.error("Review join request error:", error);
     return NextResponse.json({ success: false, message: "Unable to review request." }, { status: 500 });
   }
 }

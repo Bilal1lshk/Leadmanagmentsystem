@@ -13,7 +13,6 @@ export async function GET(request: NextRequest) {
         if (!findedlead) return NextResponse.json({succes:false,message:"NO lead like this avalible"})
         return Response.json({ success: true, data: {findedlead} }, { status: 200 });
     } catch (err) {
-        console.error(err);
         return Response.json({ success: false, message: "Internal server error." }, { status: 500 });
     }
 }

@@ -79,7 +79,6 @@ export default function TasksDashboard() {
         const res = await axios.get("/api/Task/AllTasks");
         dispatch(setTasks(res.data.alltasks || []));
       } catch (err) {
-        console.error("Failed to fetch tasks:", err);
       }
     };
     fetchTasks();
@@ -154,7 +153,6 @@ export default function TasksDashboard() {
       setDeleteTaskId(null);
 
     } catch (error) {
-      console.error("Failed to delete task:", error);
     }
   };
 

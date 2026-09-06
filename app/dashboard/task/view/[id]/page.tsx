@@ -161,7 +161,6 @@ export default function TaskDetailPage() {
 
                 setTask(fetchedTask);
             } catch (err) {
-                console.error("Failed to fetch task:", err);
 
                 if (axios.isAxiosError(err)) {
                     setError(
@@ -229,7 +228,6 @@ export default function TaskDetailPage() {
                 setTask(response.data.task);
             }
         } catch (err) {
-            console.error("Failed to update task status:", err);
 
             // Roll back optimistic update
             setTask((currentTask) =>

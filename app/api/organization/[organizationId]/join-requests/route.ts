@@ -21,7 +21,6 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       .lean();
     return NextResponse.json({ success: true, requests });
   } catch (error) {
-    console.error("Get admin join requests error:", error);
     return NextResponse.json({ success: false, message: "Unable to load join requests." }, { status: 500 });
   }
 }

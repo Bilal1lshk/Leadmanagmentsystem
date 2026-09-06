@@ -153,7 +153,6 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Create org user error:", error);
     return NextResponse.json(
       { success: false, message: "Internal server error." },
       { status: 500 }

@@ -97,7 +97,6 @@ export async function POST(request: NextRequest) {
     return response;
 
   } catch (error) {
-    console.error("Login error:", error);
 
     const isDbConfigError =
       error instanceof Error && error.message.includes("Missing MongoDB connection string");

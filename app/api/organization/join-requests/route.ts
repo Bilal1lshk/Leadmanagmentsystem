@@ -23,7 +23,6 @@ export async function POST(request: NextRequest) {
     const joinRequest = await WorkspaceJoinRequest.create({ user: user._id, organization: organization._id, message: message.trim() });
     return NextResponse.json({ success: true, message: `Request sent to ${organization.name}.`, request: joinRequest }, { status: 201 });
   } catch (error) {
-    console.error("Create join request error:", error);
     return NextResponse.json({ success: false, message: "Unable to send request." }, { status: 500 });
   }
 }
@@ -36,7 +35,6 @@ export async function GET(request: NextRequest) {
     const requests = await WorkspaceJoinRequest.find({ user: user._id }).populate("organization", "name companysize").sort({ createdAt: -1 }).lean();
     return NextResponse.json({ success: true, requests });
   } catch (error) {
-    console.error("Get join requests error:", error);
     return NextResponse.json({ success: false, message: "Unable to load requests." }, { status: 500 });
   }
 }
