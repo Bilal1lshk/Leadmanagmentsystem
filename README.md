@@ -121,6 +121,7 @@ npm run build
 ## Product Documentation
 
 - [MVP Feature Overview](docs/mvp-feature-overview.md)
+- [Email Feature Plan](docs/email-feature-plan.md)
 
 ## Contributing
 
