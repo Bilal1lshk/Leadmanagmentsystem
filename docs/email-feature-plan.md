@@ -158,8 +158,9 @@ Add server-only values to `.env.local` and deployment settings:
 
 ```env
 EMAIL_PROVIDER=resend
-EMAIL_API_KEY=replace-with-provider-key
+RESEND_API_KEY=replace-with-provider-key
 EMAIL_FROM="LeadWise <hello@example.com>"
+EMAIL_TO=test-recipient@example.com
 EMAIL_REPLY_TO=support@example.com
 EMAIL_WEBHOOK_SECRET=replace-with-webhook-secret
 ```
