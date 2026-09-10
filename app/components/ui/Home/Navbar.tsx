@@ -44,12 +44,14 @@ export default function Navbar() {
         {/* Logo */}{" "}
         <div className="flex items-center gap-2">
           {" "}
-          <Image
-            src="/favicon.ico"
-            alt="Leadwise"
-            width={32}
-            height={32}
-          />{" "}
+          <a href="/" aria-label="Go to home">
+            <Image
+              src="/favicon.ico"
+              alt="Leadwise"
+              width={32}
+              height={32}
+            />
+          </a>{" "}
         </div>{" "}
         {/* Desktop Navigation */}{" "}
         <div className="hidden items-center gap-7 md:flex">
