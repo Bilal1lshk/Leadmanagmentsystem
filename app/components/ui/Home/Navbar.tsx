@@ -14,7 +14,6 @@ interface OrganizationApiResponse extends ApiResponse {
 export default function Navbar() {
   const [user, setUser] = useState<boolean>(false);
   const [activeOrganization, setActiveOrganization] = useState<boolean>(false);
-  console.log(user, activeOrganization)
   const [authLoading, setAuthLoading] = useState<boolean>(true);
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   useEffect(() => {
@@ -37,7 +36,6 @@ export default function Navbar() {
     };
     getUserAndOrganization();
   }, []);
-  console.log(activeOrganization ? "/dashboard" : "/setupworkspace")
   return (
     <nav className="relative rounded-xl bg-[#FFF3C8] px-5 py-3.5">
       {" "}
