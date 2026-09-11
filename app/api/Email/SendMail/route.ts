@@ -1,59 +1,49 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 
-export async function GET() {
-    const resendApiKey = process.env.RESEND_API_KEY;
-    const to = process.env.EMAIL_TO;
+export const runtime = "nodejs";
 
-    if (!resendApiKey || !to) {
-        return NextResponse.json(
-            {
-                success: false,
-                message: "Email service is not configured.",
-            },
-            { status: 503 }
-        );
+export async function GET(request: Request) {
+  try {
+    const smtpHost = process.env.SMTP_HOST;
+    const smtpPort = Number(process.env.SMTP_PORT || 587);
+    const smtpUser = process.env.SMTP_USER;
+    const smtpPass = process.env.SMTP_PASS;
+    const emailFrom = process.env.EMAIL_FROM || smtpUser;
+    const searchParams = new URL(request.url).searchParams;
+    const emailTo = searchParams.get("to") || process.env.EMAIL_TO;
+
+    if (!smtpHost || !smtpUser || !smtpPass || !emailFrom || !emailTo) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "SMTP_HOST, SMTP_USER, SMTP_PASS, EMAIL_FROM, and EMAIL_TO are required.",
+        },
+        { status: 500 },
+      );
     }
 
+    const transporter = nodemailer.createTransport({
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpPort === 465,
+      auth: {
+        user: smtpUser,
+        pass: smtpPass,
+      },
+    });
 
-    try {
-        const resend = new Resend(resendApiKey);
-        const { data, error } = await resend.emails.send({
-            from: "delivered@resend.dev",
-            to:to,
-            subject: "Checking Resend email",
-            html: "<h1>It is working</h1><p>This is a test email from LeadWise.</p>",
-        });
+    const info = await transporter.sendMail({
+      from: emailFrom,
+      to: emailTo,
+      subject: searchParams.get("subject") || "Leadwise email test",
+      text:
+        searchParams.get("text") ||
+        "This is a test email sent with Nodemailer.",
+    });
 
-        if (error) {
-            const providerMessage =
-                typeof error.message === "string" ? error.message : "Unknown provider error";
-
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: providerMessage.includes("only send testing emails")
-                        ? "Resend testing mode only allows delivery to your Resend account email. Update EMAIL_TO or verify a sending domain."
-                        : "The email provider rejected the message.",
-                },
-                { status: 502 }
-            );
-        }
-
-        return NextResponse.json(
-            {
-                success: true,
-                message: "Email sent successfully.",
-                data,
-            },
-        );
-    } catch {
-        return NextResponse.json(
-            {
-                success: false,
-                message: "Unable to send email right now.",
-            },
-            { status: 502 }
-        );
-    }
+    return NextResponse.json({ success: true, messageId: info.messageId });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: String(error) }, { status: 500 });
+  }
 }
