@@ -1,48 +1,60 @@
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import crypto from "crypto";
+import { sendEmail } from "@/app/lib/mailer";
+import connectDB from "@/app/config/mongodbconnection";
+import User from "@/app/models/user";
 
 export const runtime = "nodejs";
 
-export async function GET(request: Request) {
+export async function POST(request: Request) {
   try {
-    const smtpHost = process.env.SMTP_HOST;
-    const smtpPort = Number(process.env.SMTP_PORT || 587);
-    const smtpUser = process.env.SMTP_USER;
-    const smtpPass = process.env.SMTP_PASS;
-    const emailFrom = process.env.EMAIL_FROM || smtpUser;
-    const searchParams = new URL(request.url).searchParams;
-    const emailTo = searchParams.get("to") || process.env.EMAIL_TO;
+    const body = await request.json();
+    const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
 
-    if (!smtpHost || !smtpUser || !smtpPass || !emailFrom || !emailTo) {
+    if (!email) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "SMTP_HOST, SMTP_USER, SMTP_PASS, EMAIL_FROM, and EMAIL_TO are required.",
-        },
-        { status: 500 },
+        { success: false, message: "Email is required." },
+        { status: 400 },
       );
     }
 
-    const transporter = nodemailer.createTransport({
-      host: smtpHost,
-      port: smtpPort,
-      secure: smtpPort === 465,
-      auth: {
-        user: smtpUser,
-        pass: smtpPass,
-      },
+    await connectDB();
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return NextResponse.json(
+        { success: false, message: "No account was found for this email." },
+        { status: 404 },
+      );
+    }
+
+    if (user.verified) {
+      return NextResponse.json(
+        { success: false, message: "This email is already verified." },
+        { status: 400 },
+      );
+    }
+
+    const verificationCode = crypto.randomInt(100000, 1000000).toString();
+    user.verificationCodeHash = crypto
+      .createHash("sha256")
+      .update(verificationCode)
+      .digest("hex");
+    user.verificationCodeExpiry = new Date(Date.now() + 10 * 60 * 1000);
+    await user.save();
+
+    const info = await sendEmail({
+      to: email,
+      subject: "Verify your Leadwise account",
+      text: `Your Leadwise verification code is ${verificationCode}. It expires in 10 minutes.`,
+      html: `<p>Your Leadwise verification code is:</p><p style="font-size: 24px; font-weight: 700; letter-spacing: 6px">${verificationCode}</p><p>This code expires in 10 minutes.</p>`,
     });
 
-    const info = await transporter.sendMail({
-      from: emailFrom,
-      to: emailTo,
-      subject: searchParams.get("subject") || "Leadwise email test",
-      text:
-        searchParams.get("text") ||
-        "This is a test email sent with Nodemailer.",
+    return NextResponse.json({
+      success: true,
+      message: "Verification code sent.",
+      messageId: info.messageId,
     });
-
-    return NextResponse.json({ success: true, messageId: info.messageId });
   } catch (error) {
     return NextResponse.json({ success: false, error: String(error) }, { status: 500 });
   }

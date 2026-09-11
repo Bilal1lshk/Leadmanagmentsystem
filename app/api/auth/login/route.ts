@@ -32,6 +32,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!user.verified) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Please verify your email before logging in.",
+        },
+        { status: 403 },
+      );
+    }
+
     // Compare password
     const isPasswordCorrect = await bcrypt.compare(
       password,

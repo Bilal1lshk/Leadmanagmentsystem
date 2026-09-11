@@ -57,6 +57,7 @@ export const authOptions: NextAuthOptions = {
           email: email,
           password: Math.random().toString(36),
           avatar: user.image || "",
+          verified: true,
         });
       }
       return true;

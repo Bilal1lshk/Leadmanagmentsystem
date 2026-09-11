@@ -11,6 +11,9 @@ export interface IUser extends Document {
   avatar: string;
   createdAt: Date;
   updatedAt: Date;
+  verified: boolean;
+  verificationCodeHash?: string;
+  verificationCodeExpiry?: Date;
 }
 
 const userSchema = new Schema<IUser>(
@@ -20,6 +23,9 @@ const userSchema = new Schema<IUser>(
     password: { type: String, required: true, minlength: 6 },
     role: { type: String, enum: ["admin", "agent"], default: "agent" },
     avatar: { type: String, default: "" },
+    verified: { type: Boolean, default: false },
+    verificationCodeHash: { type: String },
+    verificationCodeExpiry: { type: Date },
   },
   { timestamps: true }
 );

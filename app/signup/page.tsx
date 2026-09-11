@@ -5,6 +5,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import axios from "axios";
 
 export default function SignupPage() {
   const [form, setForm] = useState({
@@ -16,6 +17,9 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
+  const [awaitingVerification, setAwaitingVerification] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
+  const [sendingVerificationCode, setSendingVerificationCode] = useState(false);
 
   const handleChange = (e:ChangeEvent<HTMLInputElement | HTMLTextAreaElement|HTMLSelectElement>) => {
     setForm({
@@ -31,30 +35,84 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
+      const response = await axios.post("/api/auth/signup", form);
+      const data = response.data;
 
-      const data = await response.json();
-
-      if (!response.ok || !data.success) {
+      if (!data.success) {
         throw new Error(data.message || "Failed to sign up");
       }
 
-      setSuccess("Account created successfully!");
-
-      setTimeout(() => {
-        window.location.href = "/login";
-      }, 1500);
+      setAwaitingVerification(true);
+      setSuccess("We sent a six-digit verification code to your email.");
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to sign up";
+      const message = axios.isAxiosError(err)
+        ? err.response?.data?.message || err.response?.data?.error
+        : err instanceof Error
+          ? err.message
+          : "Failed to sign up";
       setError(message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleVerify = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    setLoading(true);
+
+    try {
+      const response = await axios.post("/api/auth/verify-email", {
+        email: form.email.trim().toLowerCase(),
+        code: verificationCode,
+      });
+      const data = response.data;
+
+      if (!data.success) {
+        throw new Error(data.message || "Unable to verify your email.");
+      }
+
+      setSuccess("Email verified successfully. Redirecting to login...");
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1000);
+    } catch (err) {
+      const message = axios.isAxiosError(err)
+        ? err.response?.data?.message || err.response?.data?.error
+        : err instanceof Error
+          ? err.message
+          : "Unable to verify your email.";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendVerification = async () => {
+    setError("");
+    setSuccess("");
+    setSendingVerificationCode(true);
+
+    try {
+      const response = await axios.post("/api/Email/SendMail", {
+        email: form.email.trim().toLowerCase(),
+      });
+
+      if (!response.data.success) {
+        throw new Error(response.data.message || "Unable to send the verification code.");
+      }
+
+      setSuccess("A new verification code was sent to your email.");
+    } catch (err) {
+      const message = axios.isAxiosError(err)
+        ? err.response?.data?.message || err.response?.data?.error
+        : err instanceof Error
+          ? err.message
+          : "Unable to send the verification code.";
+      setError(message);
+    } finally {
+      setSendingVerificationCode(false);
     }
   };
 
@@ -117,7 +175,7 @@ export default function SignupPage() {
             </div>
           )}
 
-          <div className="mt-7 animate-[fadeIn_0.35s_ease-out]">
+          {!awaitingVerification && <div className="mt-7 animate-[fadeIn_0.35s_ease-out]">
             <button
               type="button"
               onClick={() => signIn("google", { callbackUrl: "/" })}
@@ -143,9 +201,44 @@ export default function SignupPage() {
                 Or
               </p>
             </div>
-          </div>
+          </div>}
 
-          <form
+          {awaitingVerification ? (
+            <form onSubmit={handleVerify} className="flex flex-col gap-4">
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-[#2A3F45]">
+                  Verification code
+                </label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  value={verificationCode}
+                  onChange={(event) => setVerificationCode(event.target.value.replace(/\D/g, "").slice(0, 6))}
+                  placeholder="123456"
+                  required
+                  maxLength={6}
+                  disabled={loading}
+                  className="w-full rounded-lg border border-[#E5CB90] bg-[#FFF3C8]/30 px-4 py-2.5 text-center text-lg tracking-[0.35em] text-[#2A3F45] outline-none focus:border-[#458393] focus:bg-white"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={loading || verificationCode.length !== 6}
+                className="mt-2 rounded-lg bg-[#34A99D] py-2.5 text-sm font-medium text-[#04342C] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {loading ? "Verifying..." : "Verify email"}
+              </button>
+              <button
+                type="button"
+                onClick={handleResendVerification}
+                disabled={loading || sendingVerificationCode}
+                className="text-sm font-medium text-[#458393] hover:text-[#2A3F45] disabled:opacity-50"
+              >
+                {sendingVerificationCode ? "Sending code..." : "Resend verification code"}
+              </button>
+            </form>
+          ) : <form
             onSubmit={handleSubmit}
             className="flex flex-col gap-4"
           >
@@ -232,7 +325,7 @@ export default function SignupPage() {
             >
               {loading ? "Creating account..." : "Create account"}
             </button>
-          </form>
+          </form>}
 
           {/* Login */}
           <p className="mt-6 text-center text-xs text-[#8A8A82]">
