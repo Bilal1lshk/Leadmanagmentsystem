@@ -27,6 +27,7 @@ interface Organization {
   companysize: string;
   plan: string;
   role?: string;
+  inviteCode?: string;
 }
 
 interface OrganizationApiResponse {

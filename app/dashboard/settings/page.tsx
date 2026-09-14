@@ -12,6 +12,7 @@ interface ActiveOrganization {
   _id: string;
   name: string;
   role: OrganizationRole;
+  inviteCode?: string;
 }
 
 interface Member {
@@ -57,6 +58,7 @@ export default function SettingsPage() {
   });
   const [addingMember, setAddingMember] = useState<boolean>(false);
   const [loggingOut, setLoggingOut] = useState<boolean>(false);
+  const [copiedInviteCode, setCopiedInviteCode] = useState<boolean>(false);
 
   useEffect(() => {
     if (organization && organization.role !== "Admin") {
@@ -160,6 +162,18 @@ export default function SettingsPage() {
     }
   }
 
+  async function copyInviteCode() {
+    if (!organization?.inviteCode) return;
+
+    try {
+      await navigator.clipboard.writeText(organization.inviteCode);
+      setCopiedInviteCode(true);
+      window.setTimeout(() => setCopiedInviteCode(false), 1500);
+    } catch {
+      setError("Unable to copy workspace invitation code.");
+    }
+  }
+
   async function handleLogout() {
     try {
       setLoggingOut(true);
@@ -192,6 +206,32 @@ export default function SettingsPage() {
             .
           </p>
         </div>
+
+        <section className="mt-5 rounded-xl border border-[#E5CB90] bg-[#FFF3C8]/50 p-4 sm:mt-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
+              <h2 className="text-base font-semibold sm:text-lg">
+                Invitation code
+              </h2>
+              <p className="mt-1 text-[11px] leading-relaxed text-[#5C6D71] sm:text-xs">
+                Share this code with teammates so they can join your workspace.
+              </p>
+            </div>
+
+            <div className="flex min-w-0 items-center gap-2">
+              <code className="min-w-[140px] rounded-lg border border-[#E5CB90] bg-white px-4 py-2 text-center text-sm font-semibold tracking-[0.2em] text-[#458393] sm:min-w-[160px]">
+                {organization?.inviteCode || "—"}
+              </code>
+              <button
+                type="button"
+                onClick={copyInviteCode}
+                className="rounded-lg bg-[#34A99D] px-4 py-2.5 text-xs font-medium text-[#04342C] transition hover:opacity-90 sm:text-sm"
+              >
+                {copiedInviteCode ? "Copied" : "Copy"}
+              </button>
+            </div>
+          </div>
+        </section>
 
         {/* ERROR */}
         {error && (

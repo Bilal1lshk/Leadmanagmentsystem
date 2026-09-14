@@ -26,6 +26,7 @@ export async function GET(request: NextRequest) {
         companysize: m.organization.companysize,
         plan: m.organization.plan,
         role: m.role,
+        inviteCode: m.organization.inviteCode,
       }));
 
     return NextResponse.json(
