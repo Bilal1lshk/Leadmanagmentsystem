@@ -5,7 +5,26 @@ import User from "@/app/models/user";
 
 export async function POST(request: Request) {
   try {
-    const { email, code } = await request.json();
+    const rawBody = await request.text();
+    let body: unknown;
+
+    try {
+      body = JSON.parse(rawBody);
+    } catch {
+      return NextResponse.json(
+        { success: false, message: "Invalid verification request body." },
+        { status: 400 },
+      );
+    }
+
+    const email =
+      typeof body === "object" && body !== null && "email" in body
+        ? body.email
+        : undefined;
+    const code =
+      typeof body === "object" && body !== null && "code" in body
+        ? body.code
+        : undefined;
 
     if (typeof email !== "string" || typeof code !== "string" || !/^\d{6}$/.test(code)) {
       return NextResponse.json(
@@ -16,7 +35,6 @@ export async function POST(request: Request) {
 
     await connectDB();
     const user = await User.findOne({ email: email.trim().toLowerCase() });
-
     if (!user || user.verified) {
       return NextResponse.json({ success: false, message: "Invalid verification request." }, { status: 400 });
     }
@@ -34,9 +52,12 @@ export async function POST(request: Request) {
     user.verificationCodeHash = undefined;
     user.verificationCodeExpiry = undefined;
     await user.save();
-
     return NextResponse.json({ success: true, message: "Email verified successfully." });
-  } catch {
-    return NextResponse.json({ success: false, message: "Unable to verify your email." }, { status: 500 });
+  } catch (error) {
+    console.error("Error verifying email:", error);
+    return NextResponse.json(
+      { success: false, message: "Unable to verify your email." },
+      { status: 500 },
+    );
   }
 }
