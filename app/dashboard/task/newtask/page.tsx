@@ -4,15 +4,9 @@ import { useState, useEffect } from "react";
 import { Calendar, FileText, X } from "lucide-react";
 import { useRouter } from "next/navigation"
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { setAllLeads } from "@/app/redux/leads";
+import { setAllLeads, type Lead } from "@/app/redux/leads";
 import axios from "axios";
 
-interface Lead {
-  _id?: string;
-  id?: string;
-  personId?: string;
-  name?: string;
-}
 interface UserType {
   _id: string;
   name: string;

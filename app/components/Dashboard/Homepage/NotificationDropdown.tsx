@@ -64,6 +64,7 @@ export default function NotificationDropdown() {
 
   // Redux leads integration to supplement dynamic notifications if leads exist
   const reduxLeads = useAppSelector((store) => store?.LeadSlice?.Lead || []);
+  console.log("Redux Leads in NotificationDropdown:", reduxLeads);
 
   // Load from local storage on mount
   useEffect(() => {

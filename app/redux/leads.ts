@@ -9,6 +9,7 @@ export interface Lead {
   id?: string;
   organization?: string;
   personId?: string;
+  name?: string;
   sourcedby?: string;
   source?: LeadSource;
   message?: string;
@@ -19,7 +20,7 @@ export interface Lead {
   estimatedValue?: number;
   assignedTo?: string | null;
   lastContactedAt?: string | Date | null;
-  lostReason?: string;
+  lostReason?: string | null;
   createdAt?: string;
   updatedAt?: string;
   __v?: number;
