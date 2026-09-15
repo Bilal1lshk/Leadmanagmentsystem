@@ -1,18 +1,28 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
+export type LeadStatus = "new" | "contacted" | "qualified" | "proposal" | "won" | "lost";
+export type LeadPriority = "low" | "medium" | "high";
+export type LeadSource = "website" | "referral" | "ad" | "cold_call" | "other";
+
 export interface Lead {
   _id?: string;
   id?: string;
+  organization?: string;
   personId?: string;
-  name?: string;
+  sourcedby?: string;
+  source?: LeadSource;
+  message?: string;
+  phone?: string;
   email?: string;
-  assignedTo?: string;
-  status?: string;
-  priority?: string;
-  source?: string;
+  status?: LeadStatus;
+  priority?: LeadPriority;
   estimatedValue?: number;
-  lastContactedAt?: string;
+  assignedTo?: string | null;
+  lastContactedAt?: string | Date | null;
+  lostReason?: string;
   createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
 }
 
 interface LeadState {

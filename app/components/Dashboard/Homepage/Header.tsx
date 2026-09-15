@@ -4,6 +4,8 @@ import { Search, Settings } from "lucide-react";
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
 
+import NotificationDropdown from "./NotificationDropdown";
+
 interface HeaderProps {
   name?: string;
   title?: string;
@@ -119,6 +121,9 @@ export default function Header({
               />
             </div>
 
+            {/* NOTIFICATIONS */}
+            <NotificationDropdown />
+
             {/* SETTINGS */}
             <Link
               href="/dashboard/settings"
@@ -186,6 +191,8 @@ export default function Header({
 
             {/* ACTIONS */}
             <div className="flex shrink-0 items-center gap-2">
+              {/* NOTIFICATIONS */}
+              <NotificationDropdown />
 
               {/* SETTINGS */}
               <Link
