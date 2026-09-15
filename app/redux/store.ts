@@ -3,12 +3,16 @@ import { configureStore } from "@reduxjs/toolkit";
 import tasksSlice from "./tasks";
 import organizationSlice from "./organization";
 import authSlice from "./auth";
+import notificationReducer from "./notifications";
+
 export const store = configureStore({
   reducer: {
     LeadSlice: leadReducer,
     tasksSlice,
     organizationSlice,
     auth: authSlice,
+    notifications: notificationReducer,
+    notificationSlice: notificationReducer,
   },
 });
 

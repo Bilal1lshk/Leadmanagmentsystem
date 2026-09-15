@@ -39,10 +39,22 @@ const LeadSlice = createSlice({
   initialState,
   reducers: {
     setAllLeads: (state, action: PayloadAction<Lead[]>) => {
-      state.Lead = action.payload;
+      state.Lead = Array.isArray(action.payload) ? action.payload : [];
+    },
+    addLead: (state, action: PayloadAction<Lead>) => {
+      if (!action.payload) return;
+      const targetId = action.payload._id || action.payload.id;
+      const index = state.Lead.findIndex(
+        (l) => (l._id && l._id === targetId) || (l.id && l.id === targetId)
+      );
+      if (index >= 0) {
+        state.Lead[index] = action.payload;
+      } else {
+        state.Lead.unshift(action.payload);
+      }
     },
   },
 });
 
-export const { setAllLeads } = LeadSlice.actions;
+export const { setAllLeads, addLead } = LeadSlice.actions;
 export default LeadSlice.reducer;

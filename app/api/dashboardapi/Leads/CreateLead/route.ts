@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import leadmodel from "../../../../models/lead";
 import connectDB from "@/app/config/mongodbconnection";
 import { getCurrentOrganization, getCurrentUser, unauthorizedResponse } from "@/app/lib/auth";
-import { data } from "framer-motion/client";
+
 export async function POST(request: NextRequest) {
   try {
     const user = await getCurrentUser(request);
@@ -55,11 +55,19 @@ export async function POST(request: NextRequest) {
       email,
       phone,
       message
+    });
 
-    })
+    if(!created) return NextResponse.json({message:"Something went wrong in lead creation try again "});
 
-    if(!created) return NextResponse.json({message:"Something went wrong in lead creation try again "})
-    return NextResponse.json({ message: "lead created succesfully", data: created, success: true }, { status: 201 });
+    const allLeads = await leadmodel.find({ organization: membership.organization }).sort({ createdAt: -1 });
+
+    return NextResponse.json({ 
+      message: "lead created succesfully", 
+      data: created, 
+      allLeads: allLeads,
+      leads: allLeads,
+      success: true 
+    }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ message: "Error" }, { status: 500 });
   }

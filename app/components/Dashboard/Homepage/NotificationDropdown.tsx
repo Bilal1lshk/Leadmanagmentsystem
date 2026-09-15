@@ -20,77 +20,82 @@ import {
   ShieldAlert,
   CalendarCheck,
 } from "lucide-react";
-import { useAppSelector } from "@/app/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import {
+  markAsRead,
+  markAllAsRead,
+  toggleReadStatus,
+  dismissNotification,
+  clearCategory,
+  clearAllNotifications,
+  restoreDefaultNotifications,
+  type NotificationItem,
+  type NotificationCategory,
+  type NotificationPriority,
+} from "@/app/redux/notifications";
 
-export type NotificationCategory = "all" | "unread" | "leads" | "followups" | "tasks" | "system";
-export type NotificationPriority = "urgent" | "high" | "medium" | "low";
-
-export interface NotificationItem {
-  id: string;
-  category: "leads" | "followups" | "tasks" | "system";
-  type:
-    | "hot_lead"
-    | "new_lead"
-    | "deal_won"
-    | "followup_overdue"
-    | "followup_upcoming"
-    | "task_assigned"
-    | "task_deadline"
-    | "system_alert";
-  title: string;
-  message: string;
-  time: string;
-  timestamp: number;
-  unread: boolean;
-  priority?: NotificationPriority;
-  actionLabel?: string;
-  actionUrl?: string;
-  meta?: {
-    leadName?: string;
-    amount?: string;
-    dueDate?: string;
-    assignee?: string;
-  };
-}
-
-const STORAGE_KEY = "leadwise_dashboard_notifications_v1";
+export type { NotificationItem, NotificationCategory, NotificationPriority };
 
 export default function NotificationDropdown() {
+  const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
-  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [activeCategory, setActiveCategory] = useState<NotificationCategory>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Redux leads integration to supplement dynamic notifications if leads exist
+  // Redux state
+  const notifications = useAppSelector(
+    (store) => store?.notifications?.notifications || store?.notificationSlice?.notifications || []
+  );
   const reduxLeads = useAppSelector((store) => store?.LeadSlice?.Lead || []);
-  console.log("Redux Leads in NotificationDropdown:", reduxLeads);
 
-  // Load from local storage on mount
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setNotifications(parsed);
-          return;
+  // Combined notifications: Redux notifications + Dynamic notifications for newly added leads
+  const combinedNotifications = useMemo<NotificationItem[]>(() => {
+    const result = [...notifications];
+
+    if (Array.isArray(reduxLeads)) {
+      reduxLeads.forEach((lead, idx) => {
+        const leadId = lead._id || lead.id || `lead-idx-${idx}`;
+        const alreadyExists = result.some(
+          (n) => n.id === `lead-${leadId}` || (lead.personId && n.meta?.leadName === lead.personId)
+        );
+
+        if (!alreadyExists && (lead.status === "new" || lead.priority === "high" || lead.status === "won")) {
+          result.unshift({
+            id: `lead-${leadId}`,
+            category: "leads",
+            type: lead.status === "won" ? "deal_won" : lead.priority === "high" ? "hot_lead" : "new_lead",
+            title:
+              lead.status === "won"
+                ? `Deal Closed: ${lead.personId || "Won Lead"}`
+                : lead.priority === "high"
+                ? `High Priority Lead: ${lead.personId || "Hot Lead"}`
+                : `New Lead: ${lead.personId || "Inquiry"}`,
+            message:
+              lead.message ||
+              `New lead received from ${lead.source || "inbound"}. Status: ${lead.status || "new"}.`,
+            time: lead.createdAt
+              ? new Date(lead.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+              : "Just now",
+            timestamp: lead.createdAt ? new Date(lead.createdAt).getTime() : Date.now(),
+            unread: true,
+            priority: lead.priority === "high" ? "urgent" : "medium",
+            actionLabel: "View Lead",
+            actionUrl: "/dashboard/leads",
+            meta: {
+              leadName: lead.personId,
+              amount:
+                lead.estimatedValue && Number(lead.estimatedValue) > 0
+                  ? `$${Number(lead.estimatedValue).toLocaleString()}`
+                  : undefined,
+            },
+          });
         }
-      }
-    } catch {
-      // ignore
+      });
     }
-  }, []);
 
-  // Persist to local storage when notifications change
-  const updateNotifications = (newList: NotificationItem[]) => {
-    setNotifications(newList);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newList));
-    } catch {
-      // ignore
-    }
-  };
+    return result;
+  }, [notifications, reduxLeads]);
 
   // Close dropdown on outside click or Escape
   useEffect(() => {
@@ -117,22 +122,25 @@ export default function NotificationDropdown() {
   }, [isOpen]);
 
   // Counts
-  const unreadCount = useMemo(() => notifications.filter((n) => n.unread).length, [notifications]);
+  const unreadCount = useMemo(
+    () => combinedNotifications.filter((n) => n.unread).length,
+    [combinedNotifications]
+  );
 
   const categoryCounts = useMemo(() => {
     return {
-      all: notifications.length,
-      unread: notifications.filter((n) => n.unread).length,
-      leads: notifications.filter((n) => n.category === "leads").length,
-      followups: notifications.filter((n) => n.category === "followups").length,
-      tasks: notifications.filter((n) => n.category === "tasks").length,
-      system: notifications.filter((n) => n.category === "system").length,
+      all: combinedNotifications.length,
+      unread: combinedNotifications.filter((n) => n.unread).length,
+      leads: combinedNotifications.filter((n) => n.category === "leads").length,
+      followups: combinedNotifications.filter((n) => n.category === "followups").length,
+      tasks: combinedNotifications.filter((n) => n.category === "tasks").length,
+      system: combinedNotifications.filter((n) => n.category === "system").length,
     };
-  }, [notifications]);
+  }, [combinedNotifications]);
 
   // Filtered notifications
   const filteredNotifications = useMemo(() => {
-    return notifications.filter((n) => {
+    return combinedNotifications.filter((n) => {
       // Category filter
       if (activeCategory === "unread" && !n.unread) return false;
       if (activeCategory !== "all" && activeCategory !== "unread" && n.category !== activeCategory) {
@@ -148,45 +156,33 @@ export default function NotificationDropdown() {
       }
       return true;
     });
-  }, [notifications, activeCategory, searchQuery]);
+  }, [combinedNotifications, activeCategory, searchQuery]);
 
-  // Actions
-  const markAsRead = (id: string) => {
-    const updated = notifications.map((n) => (n.id === id ? { ...n, unread: false } : n));
-    updateNotifications(updated);
+  // Actions wrapped in Redux dispatch
+  const handleMarkAsRead = (id: string) => {
+    dispatch(markAsRead(id));
   };
 
-  const toggleReadStatus = (id: string, e: React.MouseEvent) => {
+  const handleToggleReadStatus = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    const updated = notifications.map((n) => (n.id === id ? { ...n, unread: !n.unread } : n));
-    updateNotifications(updated);
+    dispatch(toggleReadStatus(id));
   };
 
-  const markAllAsRead = () => {
-    const updated = notifications.map((n) => ({ ...n, unread: false }));
-    updateNotifications(updated);
+  const handleMarkAllAsRead = () => {
+    dispatch(markAllAsRead());
   };
 
-  const dismissNotification = (id: string, e: React.MouseEvent) => {
+  const handleDismissNotification = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    const updated = notifications.filter((n) => n.id !== id);
-    updateNotifications(updated);
+    dispatch(dismissNotification(id));
   };
 
-  const clearAllInView = () => {
-    if (activeCategory === "all") {
-      updateNotifications([]);
-    } else if (activeCategory === "unread") {
-      const updated = notifications.map((n) => ({ ...n, unread: false }));
-      updateNotifications(updated);
-    } else {
-      const updated = notifications.filter((n) => n.category !== activeCategory);
-      updateNotifications(updated);
-    }
+  const handleClearAllInView = () => {
+    dispatch(clearCategory(activeCategory));
   };
 
-  const resetSampleNotifications = () => {
-    updateNotifications([]);
+  const handleResetSampleNotifications = () => {
+    dispatch(restoreDefaultNotifications());
   };
 
   // Helper for notification icons and color tags
@@ -330,7 +326,7 @@ export default function NotificationDropdown() {
               <div className="flex items-center gap-1">
                 {unreadCount > 0 && (
                   <button
-                    onClick={markAllAsRead}
+                    onClick={handleMarkAllAsRead}
                     title="Mark all as read"
                     className="flex items-center gap-1 rounded-md px-2 py-1 text-[11.5px] font-medium text-[#458393] hover:bg-[#458393]/10 transition-colors"
                   >
@@ -402,9 +398,12 @@ export default function NotificationDropdown() {
                       : `No notifications in ${activeCategory === "all" ? "the inbox" : activeCategory}.`}
                   </p>
                   {notifications.length === 0 && (
-                    <div className="mt-4 rounded-lg border border-dashed border-[#E5CB90] bg-[#FFF9EC] px-3 py-2 text-xs text-[#5C6D71]">
-                      No notifications yet.
-                    </div>
+                    <button
+                      onClick={handleResetSampleNotifications}
+                      className="mt-4 rounded-lg bg-[#458393]/10 px-3 py-1.5 text-xs font-medium text-[#458393] hover:bg-[#458393]/20 transition-colors"
+                    >
+                      Restore demo alerts
+                    </button>
                   )}
                 </div>
               ) : (
@@ -417,7 +416,7 @@ export default function NotificationDropdown() {
                   return (
                     <div
                       key={item.id}
-                      onClick={() => markAsRead(item.id)}
+                      onClick={() => handleMarkAsRead(item.id)}
                       className={`
                         group relative flex items-start gap-3 p-3.5 transition-all duration-150 cursor-pointer
                         ${
@@ -491,7 +490,7 @@ export default function NotificationDropdown() {
                             <Link
                               href={item.actionUrl}
                               onClick={(e) => {
-                                markAsRead(item.id);
+                                handleMarkAsRead(item.id);
                                 setIsOpen(false);
                               }}
                               className="inline-flex items-center gap-1 rounded-md bg-[#458393] px-2.5 py-1 text-[11.5px] font-semibold text-white shadow-xs hover:bg-[#346a78] transition-colors"
@@ -507,7 +506,7 @@ export default function NotificationDropdown() {
                       <div className="flex flex-col items-center gap-1 self-start opacity-70 group-hover:opacity-100 transition-opacity">
                         <button
                           type="button"
-                          onClick={(e) => toggleReadStatus(item.id, e)}
+                          onClick={(e) => handleToggleReadStatus(item.id, e)}
                           title={item.unread ? "Mark as read" : "Mark as unread"}
                           className="rounded p-1 text-[#8A999D] hover:bg-white hover:text-[#458393] transition-colors"
                         >
@@ -518,7 +517,7 @@ export default function NotificationDropdown() {
                         </button>
                         <button
                           type="button"
-                          onClick={(e) => dismissNotification(item.id, e)}
+                          onClick={(e) => handleDismissNotification(item.id, e)}
                           title="Dismiss notification"
                           className="rounded p-1 text-[#8A999D] hover:bg-rose-50 hover:text-rose-600 transition-colors"
                         >
@@ -536,7 +535,7 @@ export default function NotificationDropdown() {
               <div className="flex items-center gap-2">
                 {filteredNotifications.length > 0 && (
                   <button
-                    onClick={clearAllInView}
+                    onClick={handleClearAllInView}
                     className="flex items-center gap-1 text-[11.5px] text-[#5C6D71] hover:text-rose-600 transition-colors"
                   >
                     <Trash2 size={12} />

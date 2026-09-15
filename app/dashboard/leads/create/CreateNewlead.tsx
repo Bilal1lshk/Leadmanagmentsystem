@@ -22,6 +22,9 @@ import {
     type LucideIcon,
 } from "lucide-react";
 import axios from "axios";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { setAllLeads, addLead } from "@/app/redux/leads";
+import { addNotification } from "@/app/redux/notifications";
 
 /* ---------------------------------- Types --------------------------------- */
 
@@ -139,6 +142,7 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
 
 export default function CreateLeadPage() {
     const router = useRouter();
+    const dispatch = useAppDispatch();
 
     const [users, setUsers] = useState<AssignableUser[]>([]);
     const [usersLoading, setUsersLoading] = useState(true);
@@ -225,6 +229,34 @@ export default function CreateLeadPage() {
             );
 
             if (response.status === 201 || response.status === 200) {
+                if (Array.isArray(response.data?.allLeads)) {
+                    dispatch(setAllLeads(response.data.allLeads));
+                } else if (Array.isArray(response.data?.leads)) {
+                    dispatch(setAllLeads(response.data.leads));
+                } else if (response.data?.data) {
+                    dispatch(addLead(response.data.data));
+                }
+
+                dispatch(
+                    addNotification({
+                        id: `lead-${response.data?.data?._id || Date.now()}`,
+                        category: "leads",
+                        type: payload.priority === "high" ? "hot_lead" : "new_lead",
+                        title: "New Lead Created",
+                        message: `${payload.personId} was added to your pipeline.`,
+                        time: "Just now",
+                        timestamp: Date.now(),
+                        unread: true,
+                        priority: payload.priority || "medium",
+                        actionLabel: "View Lead",
+                        actionUrl: "/dashboard/leads",
+                        meta: {
+                            leadName: payload.personId,
+                            amount: payload.estimatedValue ? `$${payload.estimatedValue.toLocaleString()}` : undefined,
+                        },
+                    })
+                );
+
                 if (isMounted.current) setStatus("saved");
                 router.push("/dashboard/leads");
                 return;

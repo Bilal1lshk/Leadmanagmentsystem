@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import {
   Bell,
@@ -25,88 +25,96 @@ import {
 } from "lucide-react";
 import Header from "@/app/components/Dashboard/Homepage/Header";
 import Card from "@/app/components/Dashboard/Homepage/Card";
-import type { NotificationItem, NotificationCategory, NotificationPriority } from "@/app/components/Dashboard/Homepage/NotificationDropdown";
-import { useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
-import { useAppSelector } from "@/app/redux/hooks";
-import type { Lead } from "@/app/redux/leads";
-
-const STORAGE_KEY = "leadwise_dashboard_notifications_v1";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import {
+  markAsRead,
+  markAllAsRead,
+  toggleReadStatus,
+  dismissNotification,
+  clearCategory,
+  clearAllNotifications,
+  restoreDefaultNotifications,
+  type NotificationItem,
+  type NotificationCategory,
+  type NotificationPriority,
+} from "@/app/redux/notifications";
 
 export default function NotificationPage() {
-  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const dispatch = useAppDispatch();
   const [activeCategory, setActiveCategory] = useState<NotificationCategory>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [priorityFilter, setPriorityFilter] = useState<string>("all");
 
-  const leads = useAppSelector((state) => state.LeadSlice.Lead) as Lead[];
+  const notifications = useAppSelector(
+    (store) => store?.notifications?.notifications || store?.notificationSlice?.notifications || []
+  );
+  const reduxLeads = useAppSelector((store) => store?.LeadSlice?.Lead || []);
 
-  const leadNotifications = useMemo<NotificationItem[]>(() => {
-    if (!Array.isArray(leads) || leads.length === 0) {
-      return [];
-    }
+  const combinedNotifications = useMemo<NotificationItem[]>(() => {
+    const result = [...notifications];
 
-    return leads.map((lead, index) => ({
-      id: `lead-${lead._id ?? index}`,
-      category: "leads",
-      type: lead.status === "won" ? "deal_won" : lead.priority === "high" ? "hot_lead" : "new_lead",
-      title: lead.personId ? `${lead.personId} Lead` : "New Lead",
-      message:
-        lead.message ||
-        `${lead.email || "Contact"} is ready for review in ${lead.source || "your pipeline"}.`,
-      time: lead.lastContactedAt ? new Date(lead.lastContactedAt).toLocaleDateString() : "New",
-      timestamp: lead.lastContactedAt ? new Date(lead.lastContactedAt).getTime() : Date.now(),
-      unread: false,
-      priority: lead.priority === "high" ? "high" : lead.priority === "medium" ? "medium" : "low",
-      actionLabel: "View Lead",
-      actionUrl: lead._id ? `/dashboard/leads/${lead._id}` : "/dashboard/leads",
-      meta: {
-        leadName: lead.personId,
-        amount: typeof lead.estimatedValue === "number" && lead.estimatedValue > 0 ? `$${lead.estimatedValue.toLocaleString()}` : undefined,
-      },
-    }));
-  }, [leads]);
+    if (Array.isArray(reduxLeads)) {
+      reduxLeads.forEach((lead, idx) => {
+        const leadId = lead._id || lead.id || `lead-idx-${idx}`;
+        const alreadyExists = result.some(
+          (n) => n.id === `lead-${leadId}` || (lead.personId && n.meta?.leadName === lead.personId)
+        );
 
-  const visibleNotifications = notifications.length > 0 ? notifications : leadNotifications;
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setNotifications(parsed);
+        if (!alreadyExists && (lead.status === "new" || lead.priority === "high" || lead.status === "won")) {
+          result.unshift({
+            id: `lead-${leadId}`,
+            category: "leads",
+            type: lead.status === "won" ? "deal_won" : lead.priority === "high" ? "hot_lead" : "new_lead",
+            title:
+              lead.status === "won"
+                ? `Deal Closed: ${lead.personId || "Won Lead"}`
+                : lead.priority === "high"
+                ? `High Priority Lead: ${lead.personId || "Hot Lead"}`
+                : `New Lead: ${lead.personId || "Inquiry"}`,
+            message:
+              lead.message ||
+              `New lead received from ${lead.source || "inbound"}. Status: ${lead.status || "new"}.`,
+            time: lead.createdAt
+              ? new Date(lead.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+              : "Just now",
+            timestamp: lead.createdAt ? new Date(lead.createdAt).getTime() : Date.now(),
+            unread: true,
+            priority: lead.priority === "high" ? "urgent" : "medium",
+            actionLabel: "View Lead",
+            actionUrl: "/dashboard/leads",
+            meta: {
+              leadName: lead.personId,
+              amount:
+                lead.estimatedValue && Number(lead.estimatedValue) > 0
+                  ? `$${Number(lead.estimatedValue).toLocaleString()}`
+                  : undefined,
+            },
+          });
         }
-      }
-    } catch {
-      // ignore
+      });
     }
-  }, []);
 
-  const updateNotifications = (newList: NotificationItem[]) => {
-    setNotifications(newList);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newList));
-    } catch {
-      // ignore
-    }
-  };
+    return result;
+  }, [notifications, reduxLeads]);
 
-  const unreadCount = useMemo(() => visibleNotifications.filter((n) => n.unread).length, [visibleNotifications]);
+  const unreadCount = useMemo(
+    () => combinedNotifications.filter((n) => n.unread).length,
+    [combinedNotifications]
+  );
 
   const categoryCounts = useMemo(() => {
     return {
-      all: visibleNotifications.length,
-      unread: visibleNotifications.filter((n) => n.unread).length,
-      leads: visibleNotifications.filter((n) => n.category === "leads").length,
-      followups: visibleNotifications.filter((n) => n.category === "followups").length,
-      tasks: visibleNotifications.filter((n) => n.category === "tasks").length,
-      system: visibleNotifications.filter((n) => n.category === "system").length,
+      all: combinedNotifications.length,
+      unread: combinedNotifications.filter((n) => n.unread).length,
+      leads: combinedNotifications.filter((n) => n.category === "leads").length,
+      followups: combinedNotifications.filter((n) => n.category === "followups").length,
+      tasks: combinedNotifications.filter((n) => n.category === "tasks").length,
+      system: combinedNotifications.filter((n) => n.category === "system").length,
     };
-  }, [visibleNotifications]);
+  }, [combinedNotifications]);
 
   const filteredNotifications = useMemo(() => {
-    return visibleNotifications.filter((n) => {
+    return combinedNotifications.filter((n) => {
       if (activeCategory === "unread" && !n.unread) return false;
       if (activeCategory !== "all" && activeCategory !== "unread" && n.category !== activeCategory) {
         return false;
@@ -123,34 +131,30 @@ export default function NotificationPage() {
       }
       return true;
     });
-  }, [visibleNotifications, activeCategory, priorityFilter, searchQuery]);
+  }, [combinedNotifications, activeCategory, priorityFilter, searchQuery]);
 
-  const markAsRead = (id: string) => {
-    const updated = notifications.map((n) => (n.id === id ? { ...n, unread: false } : n));
-    updateNotifications(updated);
+  const handleMarkAsRead = (id: string) => {
+    dispatch(markAsRead(id));
   };
 
-  const toggleReadStatus = (id: string) => {
-    const updated = notifications.map((n) => (n.id === id ? { ...n, unread: !n.unread } : n));
-    updateNotifications(updated);
+  const handleToggleReadStatus = (id: string) => {
+    dispatch(toggleReadStatus(id));
   };
 
-  const markAllAsRead = () => {
-    const updated = notifications.map((n) => ({ ...n, unread: false }));
-    updateNotifications(updated);
+  const handleMarkAllAsRead = () => {
+    dispatch(markAllAsRead());
   };
 
-  const dismissNotification = (id: string) => {
-    const updated = notifications.filter((n) => n.id !== id);
-    updateNotifications(updated);
+  const handleDismissNotification = (id: string) => {
+    dispatch(dismissNotification(id));
   };
 
-  const clearAll = () => {
-    updateNotifications([]);
+  const handleClearAll = () => {
+    dispatch(clearAllNotifications());
   };
 
-  const resetSample = () => {
-    updateNotifications([]);
+  const handleResetSample = () => {
+    dispatch(restoreDefaultNotifications());
   };
 
   const getIconAndBadges = (type: NotificationItem["type"]) => {
@@ -251,16 +255,16 @@ export default function NotificationPage() {
           <div className="flex items-center gap-2">
             {unreadCount > 0 && (
               <button
-                onClick={markAllAsRead}
+                onClick={handleMarkAllAsRead}
                 className="flex items-center gap-1.5 rounded-lg border border-[#E5CB90]/60 bg-white px-3 py-1.5 text-xs font-semibold text-[#458393] shadow-xs hover:bg-[#FFFDF8] hover:border-[#458393] transition-colors"
               >
                 <CheckCheck size={14} />
                 <span>Mark All Read</span>
               </button>
             )}
-            {notifications.length > 0 ? (
+            {combinedNotifications.length > 0 ? (
               <button
-                onClick={clearAll}
+                onClick={handleClearAll}
                 className="flex items-center gap-1.5 rounded-lg border border-[#E5CB90]/60 bg-white px-3 py-1.5 text-xs font-semibold text-[#5C6D71] shadow-xs hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-colors"
               >
                 <Trash2 size={14} />
@@ -268,7 +272,7 @@ export default function NotificationPage() {
               </button>
             ) : (
               <button
-                onClick={resetSample}
+                onClick={handleResetSample}
                 className="flex items-center gap-1.5 rounded-lg border border-[#E5CB90]/60 bg-white px-3 py-1.5 text-xs font-semibold text-[#458393] shadow-xs hover:bg-[#FFFDF8] transition-colors"
               >
                 <RefreshCw size={14} />
@@ -437,7 +441,7 @@ export default function NotificationPage() {
                           {item.actionUrl && (
                             <Link
                               href={item.actionUrl}
-                              onClick={() => markAsRead(item.id)}
+                              onClick={() => handleMarkAsRead(item.id)}
                               className="inline-flex items-center gap-1.5 rounded-lg bg-[#458393] px-3 py-1 text-xs font-semibold text-white shadow-xs hover:bg-[#346a78] transition-colors"
                             >
                               <span>{item.actionLabel || "View"}</span>
@@ -445,7 +449,7 @@ export default function NotificationPage() {
                             </Link>
                           )}
                           <button
-                            onClick={() => toggleReadStatus(item.id)}
+                            onClick={() => handleToggleReadStatus(item.id)}
                             className="rounded-lg border border-[#E5CB90]/60 bg-white px-2.5 py-1 text-xs font-medium text-[#5C6D71] hover:text-[#22303A] hover:bg-[#FFFDF8] transition-colors"
                           >
                             {item.unread ? "Mark read" : "Mark unread"}
@@ -455,7 +459,7 @@ export default function NotificationPage() {
 
                       {/* Right Action buttons */}
                       <button
-                        onClick={() => dismissNotification(item.id)}
+                        onClick={() => handleDismissNotification(item.id)}
                         title="Dismiss"
                         className="rounded-lg p-1.5 text-[#8A999D] hover:bg-rose-50 hover:text-rose-600 transition-colors"
                       >

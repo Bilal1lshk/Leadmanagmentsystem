@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import {
   useEffect,
@@ -22,6 +22,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { setAllLeads } from "@/app/redux/leads";
 
 /* =========================================================
    TYPES
@@ -157,6 +159,7 @@ const getInitials = (name?: string): string => {
 ========================================================= */
 
 export default function LeadsPage() {
+  const dispatch = useAppDispatch();
   const [leads, setLeads] = useState<Lead[]>([]);
 
   const [search, setSearch] = useState<string>("");
@@ -198,6 +201,7 @@ export default function LeadsPage() {
         : [];
 
       setLeads(apiLeads);
+      dispatch(setAllLeads(apiLeads));
     } catch (error) {
 
       setLeads([]);
