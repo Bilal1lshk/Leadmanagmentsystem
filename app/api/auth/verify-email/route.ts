@@ -54,7 +54,6 @@ export async function POST(request: Request) {
     await user.save();
     return NextResponse.json({ success: true, message: "Email verified successfully." });
   } catch (error) {
-    console.error("Error verifying email:", error);
     return NextResponse.json(
       { success: false, message: "Unable to verify your email." },
       { status: 500 },

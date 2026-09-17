@@ -169,7 +169,7 @@ export default function LeadDetailPage() {
     if (!lead) {
         return (
             <div className="min-h-screen bg-[#FFF3C8] flex flex-col items-center justify-center gap-2 text-[#5C6D71]">
-                <p className="text-sm">This lead couldn't be found.</p>
+                <p className="text-sm">This lead couldn&apos;t be found.</p>
 
                 <button
                     onClick={() => router.push("/dashboard/leads")}

@@ -19,6 +19,7 @@ import {
   CircleDollarSign,
   X,
   RefreshCw,
+  Download,
 } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
@@ -383,6 +384,36 @@ export default function LeadsPage() {
   };
 
   /* =======================================================
+     EXPORT TO CSV
+  ======================================================= */
+
+  const handleExportCSV = (): void => {
+    const list = filteredLeads.length > 0 ? filteredLeads : leads;
+    if (list.length === 0) return;
+
+    const headers = ["Lead ID", "Email", "Assigned To", "Status", "Priority", "Source", "Estimated Value", "Created At"];
+    const rows = list.map((lead) => [
+      `"${lead.personId || lead._id || ""}"`,
+      `"${lead.email || ""}"`,
+      `"${lead.assignedTo || ""}"`,
+      `"${lead.status || ""}"`,
+      `"${lead.priority || ""}"`,
+      `"${lead.source || ""}"`,
+      lead.estimatedValue ?? 0,
+      `"${lead.createdAt ? new Date(lead.createdAt).toISOString().split("T")[0] : ""}"`,
+    ]);
+
+    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `leads_export_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  /* =======================================================
      RENDER
   ======================================================= */
 
@@ -401,7 +432,7 @@ export default function LeadsPage() {
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-3">
                     <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                      Leads
+                       Leads
                     </h1>
 
                     <span className="rounded-full border border-blue-500/20 px-2.5 py-1 text-xs font-medium text-blue-400">
@@ -415,13 +446,26 @@ export default function LeadsPage() {
                   </p>
                 </div>
 
-                <Link
-                  href="/dashboard/leads/create"
-                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium shadow-lg shadow-blue-600/10 transition-all hover:bg-blue-500 hover:shadow-blue-500/20 active:scale-[0.98]"
-                >
-                  <Plus size={17} />
-                  Add New Lead
-                </Link>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={handleExportCSV}
+                    disabled={leads.length === 0}
+                    className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-800/80 px-4 py-2.5 text-sm font-medium text-slate-200 shadow-sm transition-all hover:bg-slate-700 hover:text-white disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.98]"
+                    title="Export leads to CSV"
+                  >
+                    <Download size={16} />
+                    Export CSV
+                  </button>
+
+                  <Link
+                    href="/dashboard/leads/create"
+                    className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium shadow-lg shadow-blue-600/10 transition-all hover:bg-blue-500 hover:shadow-blue-500/20 active:scale-[0.98]"
+                  >
+                    <Plus size={17} />
+                    Add New Lead
+                  </Link>
+                </div>
               </div>
             </header>
 

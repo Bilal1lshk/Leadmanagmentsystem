@@ -3,20 +3,20 @@
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 
 export default function VerifyEmailPage() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(() => {
+    if (typeof window !== "undefined") {
+      return new URLSearchParams(window.location.search).get("email")?.trim().toLowerCase() || "";
+    }
+    return "";
+  });
   const [code, setCode] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [resending, setResending] = useState(false);
-
-  useEffect(() => {
-    const queryEmail = new URLSearchParams(window.location.search).get("email");
-    if (queryEmail) setEmail(queryEmail.trim().toLowerCase());
-  }, []);
 
   const getErrorMessage = (value: unknown, fallback: string) => {
     if (axios.isAxiosError(value)) {

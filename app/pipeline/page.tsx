@@ -76,7 +76,7 @@ export default function PipelinePage() {
               Move deals forward with a single click.
             </h2>
             <p className="text-[#4A5A5F] mb-8 leading-relaxed">
-              Updating your CRM shouldn't feel like a chore. Leadwise lets you effortlessly drag and drop opportunities across customized stages, so your CRM is always up to date without the hassle.
+              Updating your CRM shouldn&apos;t feel like a chore. Leadwise lets you effortlessly drag and drop opportunities across customized stages, so your CRM is always up to date without the hassle.
             </p>
             
             <ul className="space-y-4">
