@@ -7,11 +7,13 @@ A full-stack lead management dashboard built with Next.js, TypeScript, Tailwind 
 - User signup, login, logout, and authenticated sessions
 - Organization and workspace setup
 - Lead creation, status updates, editing, and deletion
+- Lead export to CSV for data backups and spreadsheet reporting
 - Pipeline view for tracking lead progress
 - Task creation, editing, and deletion
 - Follow-up scheduling and status management
 - Dashboard analytics, notifications, and search
 - Responsive desktop and mobile dashboard layouts
+- Production-ready Docker containerization support
 
 ## Tech Stack
 
@@ -23,6 +25,7 @@ A full-stack lead management dashboard built with Next.js, TypeScript, Tailwind 
 - NextAuth, JWT, and bcrypt-based authentication utilities
 - Axios for client-side API requests
 - Framer Motion and Lucide React for interface interactions
+- Docker (multi-stage standalone build)
 
 ## Getting Started
 
@@ -31,6 +34,7 @@ A full-stack lead management dashboard built with Next.js, TypeScript, Tailwind 
 - Node.js 20 or newer
 - npm
 - A MongoDB database, either local or hosted with MongoDB Atlas
+- Docker (optional, for containerized execution)
 
 ### Install
 
@@ -60,6 +64,30 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+## Docker Deployment
+
+You can build and run LeadWise in a production container using the provided multi-stage `Dockerfile`:
+
+### 1. Build the Docker image
+
+```bash
+docker build -t leadmanagementsystem .
+```
+
+### 2. Run the container
+
+```bash
+docker run -d -p 3000:3000 \
+  --name leadwise \
+  -e MONGODB_URI="your-mongodb-connection-string" \
+  -e NEXTAUTH_SECRET="your-nextauth-secret" \
+  -e NEXTAUTH_URL="http://localhost:3000" \
+  -e JWT_SECRET="your-jwt-secret" \
+  leadmanagementsystem
+```
+
+Open [http://localhost:3000](http://localhost:3000) to view the running container.
 
 ## Available Scripts
 

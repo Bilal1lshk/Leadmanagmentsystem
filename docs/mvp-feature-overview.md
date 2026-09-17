@@ -41,6 +41,7 @@ The current feature set is broad enough for an MVP demonstration, portfolio proj
 - Edit lead information.
 - Delete leads.
 - Update lead status.
+- Export all or filtered leads to CSV for spreadsheet workflows and reporting.
 - Organize lead information for sales follow-up.
 
 ### 4. Sales Pipeline
@@ -95,6 +96,7 @@ The current feature set is broad enough for an MVP demonstration, portfolio proj
 - TypeScript application code.
 - MongoDB persistence through Mongoose models.
 - Redux state management for authentication, organizations, leads, tasks, and users.
+- Multi-stage Docker containerization support (`Dockerfile`) for scalable deployment.
 - Shared UI components and dashboard navigation.
 - Privacy Policy and Terms of Service routes for public trust and authentication review.
 - Site-wide metadata, sitemap, and robots configuration for SEO.
