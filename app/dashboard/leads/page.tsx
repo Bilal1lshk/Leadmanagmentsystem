@@ -413,9 +413,7 @@ export default function LeadsPage() {
     document.body.removeChild(link);
   };
 
-  /* =======================================================
-     RENDER
-  ======================================================= */
+
 
   return (
     <main className="min-h-screen bg-[#0D1421] text-white">

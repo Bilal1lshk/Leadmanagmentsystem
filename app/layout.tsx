@@ -7,7 +7,7 @@ import ChatbotWidget from "./components/ui/ChatbotWidget";
 export const metadata: Metadata = {
   metadataBase: new URL("https://leadmanagmentsystem-nu.vercel.app"),
   title: {
-    default: "LeadWise — Lead Management System",
+    default: "LeadWise | Lead Management System",
     template: "%s | LeadWise",
   },
   description:
