@@ -27,7 +27,6 @@ import {
   clearCategory,
   clearAllNotifications,
   restoreDefaultNotifications,
-  syncLeadsToNotifications,
   type NotificationItem,
   type NotificationCategory,
   type NotificationPriority,
@@ -46,14 +45,6 @@ export default function NotificationDropdown() {
   const notifications = useAppSelector(
     (store) => store?.notifications?.notifications || store?.notificationSlice?.notifications || []
   );
-  const reduxLeads = useAppSelector((store) => store?.LeadSlice?.Lead || []);
-
-  // Sync leads into Redux notifications if any new leads appear
-  useEffect(() => {
-    if (Array.isArray(reduxLeads) && reduxLeads.length > 0) {
-      dispatch(syncLeadsToNotifications(reduxLeads));
-    }
-  }, [reduxLeads, dispatch]);
 
   const unreadCount = useMemo(
     () => notifications.filter((n) => n.unread).length,

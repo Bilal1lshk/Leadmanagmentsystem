@@ -10,8 +10,10 @@ export interface NotificationItem {
     | "hot_lead"
     | "new_lead"
     | "deal_won"
+    | "deal_lost"
     | "followup_overdue"
     | "followup_upcoming"
+    | "followup_created"
     | "task_assigned"
     | "task_deadline"
     | "system_alert";
@@ -95,48 +97,6 @@ const notificationSlice = createSlice({
     restoreDefaultNotifications: (state) => {
       state.notifications = DEFAULT_NOTIFICATIONS;
     },
-    syncLeadsToNotifications: (state, action: PayloadAction<any[]>) => {
-      if (!Array.isArray(action.payload)) return;
-      action.payload.forEach((lead: any, idx: number) => {
-        const leadId = lead._id || lead.id || `lead-idx-${idx}`;
-        const targetId = `lead-${leadId}`;
-        const alreadyExists = state.notifications.some(
-          (n) => n.id === targetId || (lead.personId && n.meta?.leadName === lead.personId)
-        );
-
-        if (!alreadyExists && (lead.status === "new" || lead.priority === "high" || lead.status === "won")) {
-          state.notifications.unshift({
-            id: targetId,
-            category: "leads",
-            type: lead.status === "won" ? "deal_won" : lead.priority === "high" ? "hot_lead" : "new_lead",
-            title:
-              lead.status === "won"
-                ? `Deal Closed: ${lead.personId || "Won Lead"}`
-                : lead.priority === "high"
-                ? `High Priority Lead: ${lead.personId || "Hot Lead"}`
-                : `New Lead: ${lead.personId || "Inquiry"}`,
-            message:
-              lead.message ||
-              `New lead received from ${lead.source || "inbound"}. Status: ${lead.status || "new"}.`,
-            time: lead.createdAt
-              ? new Date(lead.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-              : "Just now",
-            timestamp: lead.createdAt ? new Date(lead.createdAt).getTime() : Date.now(),
-            unread: true,
-            priority: lead.priority === "high" ? "urgent" : "medium",
-            actionLabel: "View Lead",
-            actionUrl: "/dashboard/leads",
-            meta: {
-              leadName: lead.personId,
-              amount:
-                lead.estimatedValue && Number(lead.estimatedValue) > 0
-                  ? `$${Number(lead.estimatedValue).toLocaleString()}`
-                  : undefined,
-            },
-          });
-        }
-      });
-    },
   },
 });
 
@@ -150,7 +110,6 @@ export const {
   clearCategory,
   clearAllNotifications,
   restoreDefaultNotifications,
-  syncLeadsToNotifications,
 } = notificationSlice.actions;
 
 export default notificationSlice.reducer;
