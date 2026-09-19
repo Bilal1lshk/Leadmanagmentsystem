@@ -14,6 +14,8 @@ export interface IUser extends Document {
   verified: boolean;
   verificationCodeHash?: string;
   verificationCodeExpiry?: Date;
+  resetPasswordCodeHash?: string;
+  resetPasswordExpiry?: Date;
 }
 
 const userSchema = new Schema<IUser>(
@@ -26,6 +28,8 @@ const userSchema = new Schema<IUser>(
     verified: { type: Boolean, default: false },
     verificationCodeHash: { type: String },
     verificationCodeExpiry: { type: Date },
+    resetPasswordCodeHash: { type: String },
+    resetPasswordExpiry: { type: Date },
   },
   { timestamps: true }
 );

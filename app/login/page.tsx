@@ -7,11 +7,6 @@ import { signIn } from "next-auth/react";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { setUser } from "@/app/redux/auth";
 import Link from "next/link";
-import events from "node:events";
-import { NextError } from "next/dist/lib/is-error";
-interface Errorlocal{
-  message?:string
-}
 
 export default function Login() {
   const dispatch = useAppDispatch();
@@ -183,12 +178,12 @@ export default function Login() {
                   Password
                 </label>
 
-                <a
+                <Link
                   href="/forgot-password"
                   className="text-xs font-medium text-[#458393] transition-colors hover:text-[#2A3F45]"
                 >
                   Forgot password?
-                </a>
+                </Link>
               </div>
 
               <input
@@ -215,13 +210,13 @@ export default function Login() {
 
           {/* Signup */}
           <p className="mt-6 text-center text-xs text-[#8A8A82]">
-            Dont have an account?
-            <a
+            Dont have an account?{" "}
+            <Link
               href="/signup"
               className="font-medium text-[#458393] transition-colors hover:text-[#2A3F45]"
             >
               Create an account
-            </a>
+            </Link>
           </p>
 
         </div>
