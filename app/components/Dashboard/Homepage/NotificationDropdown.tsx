@@ -10,6 +10,7 @@ import {
   Clock,
   UserPlus,
   TrendingUp,
+  TrendingDown,
   Trash2,
   CheckCheck,
   X,
@@ -17,6 +18,7 @@ import {
   SlidersHorizontal,
   ShieldAlert,
   CalendarCheck,
+  CalendarPlus,
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import {
@@ -148,8 +150,12 @@ export default function NotificationDropdown() {
         return { icon: UserPlus, tag: "New Lead" };
       case "deal_won":
         return { icon: TrendingUp, tag: "Won Deal" };
+      case "deal_lost":
+        return { icon: TrendingDown, tag: "Lost Deal" };
       case "followup_overdue":
         return { icon: AlertTriangle, tag: "Overdue" };
+      case "followup_created":
+        return { icon: CalendarPlus, tag: "New Follow-up" };
       case "followup_upcoming":
         return { icon: CalendarCheck, tag: "Follow-up" };
       case "task_deadline":

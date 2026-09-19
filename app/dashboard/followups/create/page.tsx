@@ -1,6 +1,7 @@
 "use client";
 
-import { useAppSelector } from "@/app/redux/hooks";
+import { useAppSelector, useAppDispatch } from "@/app/redux/hooks";
+import { addNotification } from "@/app/redux/notifications";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -26,7 +27,8 @@ interface CreateFollowupFormProps {
 }
 
 export default function CreateFollowupForm() {
-  const router = useRouter()
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   interface User {
     _id: string;
     name: string;
@@ -70,8 +72,43 @@ export default function CreateFollowupForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = await axios.post(`/api/followups/Create`, formData);
-    router.push("/dashboard/followups/")
+    try {
+      const res = await axios.post(`/api/followups/Create`, formData);
+      const selectedLead = leads?.find((l) => l._id === formData.lead);
+      const leadName = selectedLead?.personId || selectedLead?.name || "Lead";
+
+      dispatch(
+        addNotification({
+          id: `followup-${res.data?.data?._id || Date.now()}`,
+          category: "followups",
+          type: "followup_created",
+          title: "New Follow-up Created",
+          message: `Follow-up scheduled for ${leadName}${
+            formData.comments ? `: "${formData.comments}"` : "."
+          }`,
+          time: "Just now",
+          timestamp: Date.now(),
+          unread: true,
+          priority: "medium",
+          actionLabel: "View Follow-ups",
+          actionUrl: "/dashboard/followups",
+          meta: {
+            leadName: leadName,
+            dueDate: formData.duedate
+              ? new Date(formData.duedate).toLocaleDateString([], {
+                  month: "short",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
+              : undefined,
+          },
+        })
+      );
+
+      router.push("/dashboard/followups/");
+    } catch (err) {
+    }
   };
 
   return (

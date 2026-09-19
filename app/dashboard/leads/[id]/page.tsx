@@ -22,6 +22,8 @@ import {
     type LucideIcon,
 } from "lucide-react";
 import axios from "axios";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { addNotification } from "@/app/redux/notifications";
 
 type LeadSource = "website" | "referral" | "ad" | "cold_call" | "other";
 type LeadPriority = "low" | "medium" | "high";
@@ -97,6 +99,7 @@ function InfoRow({ icon: Icon, label, value }: InfoRowProps) {
 export default function LeadDetailPage() {
     const { id } = useParams<{ id: string }>();
     const router = useRouter();
+    const dispatch = useAppDispatch();
 
     const [lead, setLead] = useState<Lead | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -139,6 +142,49 @@ export default function LeadDetailPage() {
                 leadId: lead._id,
                 status: newStatus,
             });
+
+            if (newStatus === "won") {
+                dispatch(
+                    addNotification({
+                        id: `deal-won-${lead._id || Date.now()}`,
+                        category: "leads",
+                        type: "deal_won",
+                        title: "Deal Won!",
+                        message: `${lead.personId || lead.name || "Lead"} was marked as Won${
+                            lead.estimatedValue ? ` ($${Number(lead.estimatedValue).toLocaleString()})` : ""
+                        }.`,
+                        time: "Just now",
+                        timestamp: Date.now(),
+                        unread: true,
+                        priority: "high",
+                        actionLabel: "View Lead",
+                        actionUrl: `/dashboard/leads/${lead._id}`,
+                        meta: {
+                            leadName: lead.personId || lead.name,
+                            amount: lead.estimatedValue ? `$${Number(lead.estimatedValue).toLocaleString()}` : undefined,
+                        },
+                    })
+                );
+            } else if (newStatus === "lost") {
+                dispatch(
+                    addNotification({
+                        id: `deal-lost-${lead._id || Date.now()}`,
+                        category: "leads",
+                        type: "deal_lost",
+                        title: "Deal Lost",
+                        message: `${lead.personId || lead.name || "Lead"} was marked as Lost.`,
+                        time: "Just now",
+                        timestamp: Date.now(),
+                        unread: true,
+                        priority: "medium",
+                        actionLabel: "View Lead",
+                        actionUrl: `/dashboard/leads/${lead._id}`,
+                        meta: {
+                            leadName: lead.personId || lead.name,
+                        },
+                    })
+                );
+            }
         } catch (err) {
             setLead((l) => (l ? { ...l, status: previous } : l));
         } finally {

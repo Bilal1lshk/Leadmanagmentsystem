@@ -9,6 +9,7 @@ import {
   Clock,
   UserPlus,
   TrendingUp,
+  TrendingDown,
   Trash2,
   CheckCheck,
   X,
@@ -16,6 +17,7 @@ import {
   Search,
   ShieldAlert,
   CalendarCheck,
+  CalendarPlus,
   ArrowLeft,
   RefreshCw,
 } from "lucide-react";
@@ -115,8 +117,12 @@ export default function NotificationPage() {
         return { icon: UserPlus, dot: "bg-[#458393]", tag: "New Lead" };
       case "deal_won":
         return { icon: TrendingUp, dot: "bg-emerald-500", tag: "Won Deal" };
+      case "deal_lost":
+        return { icon: TrendingDown, dot: "bg-rose-500", tag: "Lost Deal" };
       case "followup_overdue":
         return { icon: AlertTriangle, dot: "bg-rose-500", tag: "Overdue" };
+      case "followup_created":
+        return { icon: CalendarPlus, dot: "bg-[#458393]", tag: "New Follow-up" };
       case "followup_upcoming":
         return { icon: CalendarCheck, dot: "bg-[#458393]", tag: "Follow-up" };
       case "task_deadline":

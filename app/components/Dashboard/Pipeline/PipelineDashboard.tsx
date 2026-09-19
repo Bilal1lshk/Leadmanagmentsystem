@@ -1,8 +1,9 @@
-﻿"use client";
+"use client";
 
 import { useState, useCallback, type DragEvent } from "react";
 import { useAppSelector, useAppDispatch } from "@/app/redux/hooks";
 import { setAllLeads, type Lead } from "@/app/redux/leads";
+import { addNotification } from "@/app/redux/notifications";
 import axios from "axios";
 import Sidebar from "../Homepage/Sidebar";
 import PipelineStats from "./PipelineStats";
@@ -105,6 +106,51 @@ export default function PipelineDashboard() {
           status: newStatus,
           lostReason: reason,
         });
+
+        if (newStatus === "won") {
+          dispatch(
+            addNotification({
+              id: `deal-won-${lead._id || Date.now()}`,
+              category: "leads",
+              type: "deal_won",
+              title: "Deal Won!",
+              message: `${lead.personId || lead.name || "Lead"} was marked as Won${
+                lead.estimatedValue ? ` ($${Number(lead.estimatedValue).toLocaleString()})` : ""
+              }.`,
+              time: "Just now",
+              timestamp: Date.now(),
+              unread: true,
+              priority: "high",
+              actionLabel: "View Lead",
+              actionUrl: lead._id ? `/dashboard/leads/${lead._id}` : "/dashboard/leads",
+              meta: {
+                leadName: lead.personId || lead.name,
+                amount: lead.estimatedValue ? `$${Number(lead.estimatedValue).toLocaleString()}` : undefined,
+              },
+            })
+          );
+        } else if (newStatus === "lost") {
+          dispatch(
+            addNotification({
+              id: `deal-lost-${lead._id || Date.now()}`,
+              category: "leads",
+              type: "deal_lost",
+              title: "Deal Lost",
+              message: `${lead.personId || lead.name || "Lead"} was marked as Lost${
+                reason ? `: ${reason}` : "."
+              }`,
+              time: "Just now",
+              timestamp: Date.now(),
+              unread: true,
+              priority: "medium",
+              actionLabel: "View Lead",
+              actionUrl: lead._id ? `/dashboard/leads/${lead._id}` : "/dashboard/leads",
+              meta: {
+                leadName: lead.personId || lead.name,
+              },
+            })
+          );
+        }
       } catch (err) {
         dispatch(setAllLeads(leads)); // rollback
       }
